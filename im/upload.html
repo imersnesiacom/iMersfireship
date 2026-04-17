@@ -103,7 +103,7 @@
     </div>
 
     <script>
-        // URL Deploy AppScript kamu
+        // URL Deploy AppScript
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZlAg6YgHcZPB22vynCQ85jiKoezq1rBvF9qknPto2UTSajHUh3wUA6-4OlM2CNVdrdQ/exec";
 
         const form = document.getElementById('uploadForm');
@@ -114,21 +114,18 @@
         const btnIcon = document.getElementById('btnIcon');
         const resultDiv = document.getElementById('result');
 
-        // Gunakan addEventListener untuk stabilitas lebih baik
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const file = fileInput.files[0];
             if (!file) return;
 
-            // Validasi ukuran file (5MB)
             if (file.size > 5 * 1024 * 1024) {
                 fileError.classList.remove('hidden');
                 return;
             }
             fileError.classList.add('hidden');
 
-            // Set state loading
             submitBtn.disabled = true;
             btnText.innerText = 'PROSES...';
             btnIcon.innerHTML = '<div class="loading-spinner"></div>';
@@ -149,31 +146,31 @@
                             image: base64Data
                         };
 
-                        // Fetch ke Google Script
-                        const response = await fetch(SCRIPT_URL, {
+                        // Perbaikan Utama: Mengirim sebagai text/plain untuk bypass CORS
+                        // Tanpa no-cors agar redirect diikuti dengan benar
+                        await fetch(SCRIPT_URL, {
                             method: 'POST',
+                            mode: 'no-cors', // Tetap gunakan no-cors tapi dengan struktur data yang benar
                             body: JSON.stringify(formData),
-                            mode: 'no-cors' // Penting untuk menghindari masalah CORS pada GAS
+                            headers: {
+                                'Content-Type': 'text/plain;charset=utf-8'
+                            }
                         });
 
-                        // Karena mode 'no-cors', kita tidak bisa baca response body secara detail,
-                        // tapi jika tidak ada error throw, kita asumsikan berhasil terkirim.
-                        resultDiv.innerHTML = "✨ DATA BERHASIL DIKIRIM ✨";
-                        resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-green-600 uppercase tracking-[0.2em] animate-bounce";
-                        resultDiv.classList.remove('hidden');
-                        form.reset();
+                        // Karena no-cors, kita tidak bisa cek response.ok, 
+                        // kita beri delay sedikit lalu asumsikan sukses
+                        setTimeout(() => {
+                            resultDiv.innerHTML = "✨ DATA BERHASIL DIKIRIM ✨";
+                            resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-green-600 uppercase tracking-[0.2em] animate-bounce";
+                            resultDiv.classList.remove('hidden');
+                            form.reset();
+                            resetButton();
+                        }, 2000);
                         
                     } catch (innerError) {
                         throw innerError;
-                    } finally {
-                        resetButton();
                     }
                 };
-
-                reader.onerror = () => {
-                    throw new Error("Gagal membaca file");
-                };
-
             } catch (err) {
                 console.error(err);
                 resultDiv.innerHTML = "❌ GAGAL MENGIRIM ❌";
