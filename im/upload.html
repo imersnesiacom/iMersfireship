@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iMersFireship - Data Upload</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Background Gradasi Pastel Sesuai Gambar */
+        body {
+            background: linear-gradient(135deg, #fce7f3 0%, #fff7ed 25%, #f0f9ff 50%, #e0e7ff 75%, #fae8ff 100%);
+            background-attachment: fixed;
+        }
+
+        /* Efek Loading */
+        .loading-spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Kustomisasi Sudut Card */
+        .card-custom {
+            border-radius: 2.5rem;
+        }
+
+        /* Kustomisasi Input File */
+        input[type="file"]::file-selector-button {
+            background-color: rgba(124, 58, 237, 0.1);
+            color: #7c3aed;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            font-weight: 700;
+            font-size: 0.75rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        input[type="file"]::file-selector-button:hover {
+            background-color: rgba(124, 58, 237, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+
+    <!-- Glassmorphism Card -->
+    <!-- Menggunakan bg-white/30 dan backdrop-blur agar terlihat seperti kaca transparan -->
+    <div class="bg-white/40 backdrop-blur-xl w-full max-w-[450px] card-custom shadow-[0_20px_50px_rgba(0,0,0,0.05)] p-10 border border-white/60">
+        
+        <!-- Brand & Icon -->
+        <div class="flex flex-col items-center mb-8 text-center">
+            <div class="bg-[#7c3aed] p-3 rounded-2xl shadow-[0_8px_20px_rgba(124,58,237,0.3)] mb-4">
+                <!-- Rocket Icon SVG -->
+                <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+                    <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+                    <path d="M9 12H4s.5-1 1-4c1.5 0 3 .5 3 .5L12 9l-3 3z"></path>
+                    <path d="M15 12v5s1 .5 4 1c0-1.5-.5-3-.5-3L15 12l-3 3z"></path>
+                </svg>
+            </div>
+            <h1 class="text-[32px] font-black text-[#7c3aed] tracking-tight leading-tight">iMersFireship</h1>
+            <p class="text-[#7c3aed]/70 text-[13px] mt-2 font-bold leading-relaxed max-w-[280px]">silahkan upload file anda pastikan nama dan email aktif</p>
+        </div>
+
+        <!-- Form Section -->
+        <form id="uploadForm" class="space-y-6">
+            <div class="space-y-2">
+                <!-- Warna label diubah menjadi Ungu Brand agar serasi -->
+                <label class="text-[14px] font-extrabold text-[#7c3aed] ml-1 tracking-wide uppercase">Nama Lengkap</label>
+                <input type="text" name="nama" required placeholder="Masukkan nama" 
+                    class="w-full px-5 py-3.5 bg-white/50 border border-white/80 rounded-2xl focus:ring-2 focus:ring-[#7c3aed] focus:bg-white/80 outline-none transition-all text-sm font-semibold text-[#7c3aed] placeholder:text-[#7c3aed]/30">
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[14px] font-extrabold text-[#7c3aed] ml-1 tracking-wide uppercase">Email</label>
+                <input type="email" name="email" required placeholder="admin@imersfireship.com" 
+                    class="w-full px-5 py-3.5 bg-white/50 border border-white/80 rounded-2xl focus:ring-2 focus:ring-[#7c3aed] focus:bg-white/80 outline-none transition-all text-sm font-semibold text-[#7c3aed] placeholder:text-[#7c3aed]/30">
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[14px] font-extrabold text-[#7c3aed] ml-1 tracking-wide uppercase">Bukti Gambar (Maks 5MB)</label>
+                <input type="file" id="imageInput" accept="image/*" required 
+                    class="w-full text-xs text-[#7c3aed]/60 font-bold cursor-pointer">
+                <p id="fileError" class="text-red-500 text-[10px] font-bold mt-1 hidden uppercase tracking-widest">Error: File terlalu besar!</p>
+            </div>
+
+            <button type="submit" id="submitBtn" 
+                class="w-full bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-black py-4 rounded-2xl shadow-[0_15px_30px_rgba(124,58,237,0.4)] transition-all transform active:scale-[0.95] flex justify-center items-center gap-3 mt-6">
+                <span class="text-sm uppercase tracking-[0.15em]">Kirim Data</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+        </form>
+
+        <div id="result" class="mt-6 hidden p-4 rounded-2xl text-center text-[10px] font-black uppercase tracking-[0.2em] animate-bounce"></div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "URL_WEB_APP_ANDA_DISINI";
+
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('imageInput');
+        const fileError = document.getElementById('fileError');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultDiv = document.getElementById('result');
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const file = fileInput.files[0];
+            if (file && file.size > 5 * 1024 * 1024) {
+                fileError.classList.remove('hidden');
+                return;
+            }
+            fileError.classList.add('hidden');
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<div class="loading-spinner"></div> <span>PROSES...</span>';
+            resultDiv.classList.add('hidden');
+
+            try {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = async () => {
+                    const base64Data = reader.result.split(',')[1];
+                    const formData = {
+                        nama: form.nama.value,
+                        email: form.email.value,
+                        filename: file.name,
+                        mimeType: file.type,
+                        image: base64Data
+                    };
+
+                    const response = await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(formData)
+                    });
+
+                    const res = await response.json();
+                    
+                    if(res.status === "success") {
+                        resultDiv.innerHTML = "✨ DATA BERHASIL DIKIRIM ✨";
+                        resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-green-600 uppercase tracking-[0.2em]";
+                        form.reset();
+                    } else {
+                        throw new Error();
+                    }
+                    resultDiv.classList.remove('hidden');
+                };
+            } catch (err) {
+                resultDiv.innerHTML = "❌ GAGAL MENGIRIM ❌";
+                resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-red-600 uppercase tracking-[0.2em]";
+                resultDiv.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="text-sm uppercase tracking-[0.15em]">Kirim Data</span> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>';
+            }
+        };
+    </script>
+</body>
+</html>
