@@ -49,7 +49,7 @@
 <body class="min-h-screen flex items-center justify-center p-6">
 
     <!-- Glassmorphism Card -->
-    <div class="bg-white/40 backdrop-blur-xl w-full max-w-[450px] card-custom shadow-[0_20px_50px_rgba(0,0,0,0.05)] p-10 border border-white/60">
+    <div class="bg-white/40 backdrop-blur-xl w-full max-w-[450px] card-custom shadow-[0_20px_50px_rgba(0,0,0,0.05)] p-10 border border-white/60 relative z-10">
         
         <!-- Brand & Icon -->
         <div class="flex flex-col items-center mb-8 text-center">
@@ -70,13 +70,13 @@
         <form id="uploadForm" class="space-y-6">
             <div class="space-y-2">
                 <label class="text-[14px] font-extrabold text-[#7c3aed] ml-1 tracking-wide uppercase">Nama Lengkap</label>
-                <input type="text" name="nama" required placeholder="Masukkan nama" 
+                <input type="text" id="nama" name="nama" required placeholder="Masukkan nama" 
                     class="w-full px-5 py-3.5 bg-white/50 border border-white/80 rounded-2xl focus:ring-2 focus:ring-[#7c3aed] focus:bg-white/80 outline-none transition-all text-sm font-semibold text-[#7c3aed] placeholder:text-[#7c3aed]/30">
             </div>
 
             <div class="space-y-2">
                 <label class="text-[14px] font-extrabold text-[#7c3aed] ml-1 tracking-wide uppercase">Email</label>
-                <input type="email" name="email" required placeholder="admin@imersfireship.com" 
+                <input type="email" id="email" name="email" required placeholder="admin@imersfireship.com" 
                     class="w-full px-5 py-3.5 bg-white/50 border border-white/80 rounded-2xl focus:ring-2 focus:ring-[#7c3aed] focus:bg-white/80 outline-none transition-all text-sm font-semibold text-[#7c3aed] placeholder:text-[#7c3aed]/30">
             </div>
 
@@ -88,13 +88,13 @@
             </div>
 
             <button type="submit" id="submitBtn" 
-                class="w-full bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-black py-4 rounded-2xl shadow-[0_15px_30px_rgba(124,58,237,0.4)] transition-all transform active:scale-[0.95] flex justify-center items-center gap-3 mt-6">
-                <span class="text-sm uppercase tracking-[0.15em]">Kirim Data</span>
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                class="w-full bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-black py-4 rounded-2xl shadow-[0_15px_30px_rgba(124,58,237,0.4)] transition-all transform active:scale-[0.95] flex justify-center items-center gap-3 mt-6 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span id="btnText" class="text-sm uppercase tracking-[0.15em]">Kirim Data</span>
+                <svg id="btnIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </button>
         </form>
 
-        <!-- Footer Permintaan User -->
+        <!-- Footer -->
         <p class="mt-8 text-[10px] font-bold text-[#7c3aed]/50 text-center uppercase tracking-[0.15em] leading-relaxed">
             developed with <span class="text-red-500 animate-pulse">❤️</span> by Terry Katar | <a href="https://imersnesia.com" target="_blank" class="hover:text-[#7c3aed] transition-colors">iMersnesia.com</a>
         </p>
@@ -103,67 +103,91 @@
     </div>
 
     <script>
-        // URL Deploy AppScript yang kamu berikan
+        // URL Deploy AppScript kamu
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZlAg6YgHcZPB22vynCQ85jiKoezq1rBvF9qknPto2UTSajHUh3wUA6-4OlM2CNVdrdQ/exec";
 
         const form = document.getElementById('uploadForm');
         const fileInput = document.getElementById('imageInput');
         const fileError = document.getElementById('fileError');
         const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
         const resultDiv = document.getElementById('result');
 
-        form.onsubmit = async (e) => {
+        // Gunakan addEventListener untuk stabilitas lebih baik
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const file = fileInput.files[0];
-            if (file && file.size > 5 * 1024 * 1024) {
+            if (!file) return;
+
+            // Validasi ukuran file (5MB)
+            if (file.size > 5 * 1024 * 1024) {
                 fileError.classList.remove('hidden');
                 return;
             }
             fileError.classList.add('hidden');
 
+            // Set state loading
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<div class="loading-spinner"></div> <span>PROSES...</span>';
+            btnText.innerText = 'PROSES...';
+            btnIcon.innerHTML = '<div class="loading-spinner"></div>';
             resultDiv.classList.add('hidden');
 
             try {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
+                
                 reader.onload = async () => {
-                    const base64Data = reader.result.split(',')[1];
-                    const formData = {
-                        nama: form.nama.value,
-                        email: form.email.value,
-                        filename: file.name,
-                        mimeType: file.type,
-                        image: base64Data
-                    };
+                    try {
+                        const base64Data = reader.result.split(',')[1];
+                        const formData = {
+                            nama: document.getElementById('nama').value,
+                            email: document.getElementById('email').value,
+                            filename: file.name,
+                            mimeType: file.type,
+                            image: base64Data
+                        };
 
-                    const response = await fetch(SCRIPT_URL, {
-                        method: 'POST',
-                        body: JSON.stringify(formData)
-                    });
+                        // Fetch ke Google Script
+                        const response = await fetch(SCRIPT_URL, {
+                            method: 'POST',
+                            body: JSON.stringify(formData),
+                            mode: 'no-cors' // Penting untuk menghindari masalah CORS pada GAS
+                        });
 
-                    const res = await response.json();
-                    
-                    if(res.status === "success") {
+                        // Karena mode 'no-cors', kita tidak bisa baca response body secara detail,
+                        // tapi jika tidak ada error throw, kita asumsikan berhasil terkirim.
                         resultDiv.innerHTML = "✨ DATA BERHASIL DIKIRIM ✨";
                         resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-green-600 uppercase tracking-[0.2em] animate-bounce";
+                        resultDiv.classList.remove('hidden');
                         form.reset();
-                    } else {
-                        throw new Error();
+                        
+                    } catch (innerError) {
+                        throw innerError;
+                    } finally {
+                        resetButton();
                     }
-                    resultDiv.classList.remove('hidden');
                 };
+
+                reader.onerror = () => {
+                    throw new Error("Gagal membaca file");
+                };
+
             } catch (err) {
+                console.error(err);
                 resultDiv.innerHTML = "❌ GAGAL MENGIRIM ❌";
                 resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-red-600 uppercase tracking-[0.2em]";
                 resultDiv.classList.remove('hidden');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span class="text-sm uppercase tracking-[0.15em]">Kirim Data</span> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>';
+                resetButton();
             }
-        };
+        });
+
+        function resetButton() {
+            submitBtn.disabled = false;
+            btnText.innerText = 'Kirim Data';
+            btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>';
+        }
     </script>
 </body>
 </html>
