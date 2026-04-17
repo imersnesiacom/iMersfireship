@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iMersAccess Page - Ultimate Visual Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        coral: {
+                            DEFAULT: '#f88379',
+                            hover: '#e0746b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .card {
+            transition: all 0.3s ease;
+        }
+        #preview-frame {
+            width: 100%;
+            height: 800px;
+            border-radius: 1.25rem;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #334155; }
+        
+        .form-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+        .dark .form-label { color: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-6 px-4 min-h-screen">
+    <div class="max-w-[1650px] mx-auto">
+        <!-- HEADER UTAMA -->
+        <header class="flex items-center justify-between mb-6 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-coral rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                </div>
+                <h1 class="text-2xl font-black tracking-tight">iMersAccess <span class="text-coral">Page</span></h1>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button onclick="toggleTheme()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all text-slate-600 dark:text-slate-300">
+                    <svg id="sun-icon" class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+                    <svg id="moon-icon" class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                </button>
+
+                <div class="h-6 w-[1px] bg-slate-200 dark:bg-slate-700"></div>
+
+                <div class="flex gap-2">
+                    <button onclick="copyHTML()" class="px-5 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs font-bold rounded-xl hover:opacity-90 transition">Copy HTML</button>
+                    <button onclick="downloadHTML()" class="px-5 py-2 bg-coral text-white text-xs font-bold rounded-xl hover:bg-coral-hover transition shadow-md shadow-coral/20">Download .html</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- SIDEBAR KIRI -->
+            <div class="lg:col-span-4 space-y-5 overflow-y-auto max-h-[88vh] pr-2 pb-10">
+                
+                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                    <span class="section-label">Informasi Utama</span>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="form-label">Judul Halaman</label>
+                            <input type="text" id="prodTitle" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-bold" value="Premium Masterclass 2024">
+                        </div>
+                        <div>
+                            <label class="form-label">Deskripsi</label>
+                            <textarea id="prodDesc" rows="2" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs">Akses materi eksklusif Anda di bawah ini secara lengkap.</textarea>
+                        </div>
+                        <div>
+                            <label class="form-label">Image URL (Opsional)</label>
+                            <input type="text" id="prodImage" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="section-label m-0">Download Files</span>
+                        <button onclick="addItem('files')" class="text-[10px] font-black text-coral uppercase">+ Tambah</button>
+                    </div>
+                    <div id="files-list" class="space-y-4"></div>
+                </section>
+
+                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="section-label m-0">Modul E-Course</span>
+                        <button onclick="addItem('modules')" class="text-[10px] font-black text-coral uppercase">+ Tambah</button>
+                    </div>
+                    <div id="modules-list" class="space-y-4"></div>
+                </section>
+
+                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="section-label m-0">Bonus Items</span>
+                        <button onclick="addItem('bonuses')" class="text-[10px] font-black text-coral uppercase">+ Tambah</button>
+                    </div>
+                    <div id="bonuses-list" class="space-y-4"></div>
+                </section>
+
+                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                    <span class="section-label">Footer & Support</span>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="form-label">Versi</label>
+                                <input type="text" id="version" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" value="v1.0">
+                            </div>
+                            <div>
+                                <label class="form-label">Teks Bantuan</label>
+                                <input type="text" id="supportText" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" value="Butuh Bantuan?">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">Link Admin (WA/Email)</label>
+                            <input type="text" id="supportLink" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" value="#">
+                        </div>
+                    </div>
+                </section>
+
+                <button onclick="generate()" class="w-full py-4 bg-coral text-white font-black rounded-2xl hover:bg-coral-hover transition shadow-lg uppercase text-xs tracking-widest">Generate Preview</button>
+            </div>
+
+            <!-- AREA PREVIEW KANAN -->
+            <div class="lg:col-span-8">
+                <div id="empty-state" class="card h-[800px] flex flex-col items-center justify-center border-dashed border-2 border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 text-center px-10 rounded-2xl">
+                    <div class="w-20 h-20 bg-white dark:bg-slate-800 rounded-3xl flex items-center justify-center mb-6 shadow-sm">
+                        <svg class="w-10 h-10 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="text-slate-500 dark:text-slate-400 font-bold text-lg">Area Editor Visual</h3>
+                    <p class="text-slate-400 dark:text-slate-500 text-sm mt-2 max-w-sm">Isi data secara vertikal di kiri, lalu klik <b>Generate Preview</b> untuk melakukan pengeditan visual.</p>
+                </div>
+
+                <div id="preview-wrapper" class="hidden">
+                    <div class="flex items-center justify-between mb-4 px-2">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            <h2 class="text-sm font-black text-slate-400 uppercase tracking-widest">Editor Visual Aktif</h2>
+                        </div>
+                    </div>
+                    <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl">
+                        <iframe id="preview-frame" class="w-full"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 px-6 py-3 bg-slate-900 text-white rounded-xl shadow-2xl opacity-0 transition-all duration-300 pointer-events-none z-50">Berhasil!</div>
+
+    <script>
+        let state = {
+            files: [],
+            modules: [],
+            bonuses: []
+        };
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            const frame = document.getElementById('preview-frame');
+            if (frame && frame.contentWindow) {
+                frame.contentWindow.postMessage({ type: 'SYNC_THEME', theme: isDark ? 'dark' : 'light' }, '*');
+            }
+        }
+
+        function addItem(type) {
+            const id = Date.now() + Math.random();
+            const placeholders = {
+                files: { title: 'Download File', desc: 'Asset zip siap unduh.', btn: 'UNDUH', url: '#' },
+                modules: { title: '01. Modul Materi', desc: 'Materi video tutorial.', btn: 'BUKA', url: '#' },
+                bonuses: { title: 'Bonus Item', desc: 'Bonus eksklusif tambahan.', btn: 'KLAIM', url: '#' }
+            };
+            state[type].push({ 
+                id, 
+                title: placeholders[type].title, 
+                desc: placeholders[type].desc,
+                url: placeholders[type].url, 
+                btnText: placeholders[type].btn 
+            });
+            renderList(type);
+        }
+
+        function removeItem(type, id) {
+            state[type] = state[type].filter(i => i.id !== id);
+            renderList(type);
+        }
+
+        function updateItem(type, id, field, val) {
+            const item = state[type].find(i => i.id === id);
+            if(item) item[field] = val;
+        }
+
+        function renderList(type) {
+            const container = document.getElementById(`${type}-list`);
+            container.innerHTML = '';
+            state[type].forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 relative group shadow-sm space-y-3';
+                div.innerHTML = `
+                    <div>
+                        <label class="form-label">Judul Item</label>
+                        <input type="text" value="${item.title}" oninput="updateItem('${type}', ${item.id}, 'title', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[11px] font-bold">
+                    </div>
+                    <div>
+                        <label class="form-label">Deskripsi Kecil</label>
+                        <input type="text" value="${item.desc}" oninput="updateItem('${type}', ${item.id}, 'desc', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[10px]">
+                    </div>
+                    <div>
+                        <label class="form-label">Teks Tombol</label>
+                        <input type="text" value="${item.btnText}" oninput="updateItem('${type}', ${item.id}, 'btnText', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[10px]">
+                    </div>
+                    <div>
+                        <label class="form-label">Link URL</label>
+                        <input type="text" value="${item.url}" oninput="updateItem('${type}', ${item.id}, 'url', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[10px]">
+                    </div>
+                    <button onclick="removeItem('${type}', ${item.id})" class="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition shadow-md">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function generateTemplate() {
+            const title = document.getElementById('prodTitle').value || 'Judul Produk';
+            const desc = document.getElementById('prodDesc').value || 'Deskripsi singkat.';
+            const imgUrl = document.getElementById('prodImage').value || '';
+            const ver = document.getElementById('version').value || 'v1.0';
+            const sText = document.getElementById('supportText').value || 'Contact Support';
+            const sLink = document.getElementById('supportLink').value || '#';
+            const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+
+            const mapItems = (arr, tag) => arr.length > 0 ? `
+                <span class="section-tag">${tag}</span>
+                ${arr.map(m => `
+                <div class="card-item bg-white dark:bg-slate-800 dark:border-slate-700">
+                    <div style="flex-grow:1; text-align:left;">
+                        <h3 contenteditable="true" class="text-slate-900 dark:text-slate-100" style="margin:0; font-size:15px; font-weight:800; outline:none;">${m.title}</h3>
+                        <p contenteditable="true" class="text-slate-500 dark:text-slate-400" style="margin:4px 0 0; font-size:11px; outline:none;">${m.desc}</p>
+                    </div>
+                    <a href="${m.url || '#'}" style="background:#f88379; color:#fff; text-decoration:none; padding:10px 18px; border-radius:10px; font-weight:800; font-size:11px;">${m.btnText}</a>
+                </div>`).join('')}
+                <div style="margin-bottom: 30px;"></div>
+            ` : '';
+
+            const imageTag = imgUrl ? `
+                <div style="margin: 30px auto; max-width: 480px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15);">
+                    <img src="${imgUrl}" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'">
+                </div>
+            ` : '';
+
+            return `<!DOCTYPE html>
+<html lang="id" class="${currentTheme}">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Roboto:wght@400;700&family=Poppins:wght@400;600;700&family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;700&family=Lato:wght@400;700&family=Playfair+Display:wght@700&family=Oswald:wght@400;700&family=Raleway:wght@400;700&family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { darkMode: 'class' };
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'SYNC_THEME') {
+                if (e.data.theme === 'dark') document.documentElement.classList.add('dark');
+                else document.documentElement.classList.remove('dark');
+            }
+        });
+    <\/script>
+    <style>
+        body { font-family: 'Inter', sans-serif; transition: all 0.3s ease; }
+        .container { max-width: 550px; margin: 0 auto; text-align: center; }
+        h1 { font-size: 38px; font-weight: 800; margin: 0 0 12px; outline:none; letter-spacing:-1px; }
+        .desc { font-size: 16px; margin: 0 0 20px; outline:none; }
+        .section-tag { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: block; margin-bottom: 12px; text-align: left; letter-spacing:1px; }
+        .card-item { border-radius: 18px; padding: 20px 24px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; border-width: 1px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border-color: #f1f5f9; }
+        .dark .card-item { border-color: #1e293b; }
+        .footer { margin-top: 80px; padding-top: 40px; border-top-width: 1px; border-color: #e2e8f0; }
+        .dark .footer { border-color: #1e293b; }
+        .badge { background: #f1f5f9; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; color: #64748b; margin-bottom: 15px; display: inline-block; outline:none; }
+        .dark .badge { background: #1e293b; color: #94a3b8; }
+        .support-link { color: #f88379; font-weight: 800; text-decoration: none; font-size: 18px; outline:none; }
+        [contenteditable]:hover { background: rgba(248,131,121,0.05); border-radius: 4px; }
+        
+        #imers-toolbar { 
+            display:none; position:fixed; background:#fff; border:1px solid #e2e8f0; padding:12px; 
+            border-radius:14px; box-shadow:0 15px 35px rgba(0,0,0,0.2); z-index:9999; 
+            flex-direction:column; gap:10px; min-width:240px; color: #334155;
+        }
+        .dark #imers-toolbar { background: #0f172a; border-color: #1e293b; color: #f1f5f9; }
+        .tool-row { display:flex; gap:8px; align-items:center; }
+        .tool-btn { padding:5px 12px; border:1px solid #e2e8f0; border-radius:6px; background:#fff; font-weight:bold; cursor:pointer; font-size:11px; }
+        .dark .tool-btn { background: #1e293b; border-color: #334155; color: white; }
+        .tool-label { font-size:8px; font-weight:800; color:#94a3b8; text-transform:uppercase; margin-bottom:4px; display:block; }
+        select.tool-select { font-size:10px; padding:5px; border-radius:6px; border:1px solid #e2e8f0; width:100%; cursor:pointer; font-weight:bold; background: transparent; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-16 px-4 md:px-12">
+    <div id="imers-toolbar">
+        <div style="border-bottom:1px solid #f1f5f9; padding-bottom:8px; display:flex; justify-content:space-between; align-items:center;" class="border-slate-200 dark:border-slate-800">
+            <span style="font-size:9px; font-weight:800; color:#f88379;">STYLING TOOLS</span>
+            <button onclick="document.getElementById('imers-toolbar').style.display='none'" style="border:none; background:none; cursor:pointer; color:#cbd5e1;">&times;</button>
+        </div>
+        
+        <div>
+            <span class="tool-label">Font Family</span>
+            <select id="font-family-selector" class="tool-select dark:border-slate-700">
+                <option value="">Pilih Font...</option>
+                <option value="Inter">Inter</option>
+                <option value="Roboto">Roboto</option>
+                <option value="Poppins">Poppins</option>
+                <option value="Montserrat">Montserrat</option>
+                <option value="Open Sans">Open Sans</option>
+                <option value="Lato">Lato</option>
+                <option value="Playfair Display">Playfair</option>
+                <option value="Oswald">Oswald</option>
+                <option value="Raleway">Raleway</option>
+                <option value="Ubuntu">Ubuntu</option>
+            </select>
+        </div>
+
+        <div>
+            <span class="tool-label">Style & Solid Color</span>
+            <div class="tool-row">
+                <button onclick="document.execCommand('bold', false, null)" class="tool-btn">B</button>
+                <button onclick="document.execCommand('italic', false, null)" class="tool-btn"><i>I</i></button>
+                <div style="width:1px; height:20px; background:#f1f5f9;" class="bg-slate-700"></div>
+                <input type="color" id="p-color" title="Solid Color" style="width:30px; height:30px; border:none; cursor:pointer; background:none;">
+            </div>
+        </div>
+
+        <div style="border-top:1px solid #f1f5f9; padding-top:8px;" class="border-slate-800">
+            <span class="tool-label">Gradient Mode</span>
+            <div class="tool-row">
+                <input type="color" id="g-color1" value="#f88379" style="width:24px; height:24px; border:none; cursor:pointer;">
+                <input type="color" id="g-color2" value="#9333ea" style="width:24px; height:24px; border:none; cursor:pointer;">
+                <button id="btn-apply-gradient" class="tool-btn" style="background:#f88379; color:#fff; border:none;">APPLY</button>
+            </div>
+            <input type="range" id="g-angle" min="0" max="360" value="135" style="width:100%; height:4px; accent-color:#f88379; margin-top:8px;">
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 contenteditable="true" class="text-slate-900 dark:text-slate-100">${title}</h1>
+        <p class="desc text-slate-600 dark:text-slate-400" contenteditable="true">${desc}</p>
+        
+        ${imageTag}
+        
+        <div style="margin-top: 30px;">
+            ${mapItems(state.modules, 'Modul Materi')}
+            ${mapItems(state.files, 'Unduh Asset')}
+            ${mapItems(state.bonuses, 'Bonus Eksklusif')}
+        </div>
+
+        <div class="footer">
+            <span class="badge" contenteditable="true">${ver}</span>
+            <p style="margin:0 0 10px; font-size:14px;" class="text-slate-500 dark:text-slate-500" contenteditable="true">${sText}</p>
+            <a href="${sLink}" class="support-link" contenteditable="true">Hubungi Admin &rarr;</a>
+            <div style="margin-top: 40px; font-size: 10px; font-weight: 700; text-transform:uppercase;" class="text-slate-400 dark:text-slate-700">Powered by iMersAccess Page</div>
+        </div>
+    </div>
+
+    <script>
+        const toolbar = document.getElementById('imers-toolbar');
+        document.addEventListener('mouseup', (e) => {
+            const sel = window.getSelection();
+            if (sel.toString().length > 0) {
+                const rect = sel.getRangeAt(0).getBoundingClientRect();
+                toolbar.style.display = 'flex';
+                toolbar.style.left = rect.left + 'px';
+                if (rect.top < 180) {
+                    toolbar.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+                } else {
+                    toolbar.style.top = (rect.top + window.scrollY - toolbar.offsetHeight - 15) + 'px';
+                }
+            } else if (!toolbar.contains(e.target)) {
+                toolbar.style.display = 'none';
+            }
+        });
+        document.getElementById('font-family-selector').onchange = (e) => {
+            const font = e.target.value;
+            if(!font) return;
+            document.execCommand('fontName', false, font);
+        };
+        document.getElementById('p-color').oninput = (e) => {
+            document.execCommand('foreColor', false, e.target.value);
+        };
+        document.getElementById('btn-apply-gradient').onclick = () => {
+            const c1 = document.getElementById('g-color1').value;
+            const c2 = document.getElementById('g-color2').value;
+            const ang = document.getElementById('g-angle').value;
+            const sel = window.getSelection();
+            if (sel.rangeCount) {
+                const span = document.createElement('span');
+                span.style.background = 'linear-gradient(' + ang + 'deg, ' + c1 + ', ' + c2 + ')';
+                span.style.webkitBackgroundClip = 'text';
+                span.style.webkitTextFillColor = 'transparent';
+                span.style.display = 'inline-block';
+                const range = sel.getRangeAt(0);
+                range.surroundContents(span);
+            }
+        };
+    <\/script>
+</body>
+</html>`;
+        }
+
+        function generate() {
+            const frame = document.getElementById('preview-frame');
+            const doc = frame.contentWindow.document;
+            doc.open();
+            doc.write(generateTemplate());
+            doc.close();
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('preview-wrapper').classList.remove('hidden');
+            showToast("Preview Siap Diedit!");
+        }
+
+        function getCleanHTML() {
+            const frame = document.getElementById('preview-frame');
+            if(!frame.contentWindow.document.body) return '';
+            let html = frame.contentWindow.document.documentElement.outerHTML;
+            html = html.replace(/contenteditable="true"/g, '');
+            html = html.replace(/<div id="imers-toolbar"[\s\S]*?<\/script>/g, '');
+            return html;
+        }
+
+        function copyHTML() {
+            const clean = getCleanHTML();
+            if(!clean) return;
+            const el = document.createElement('textarea');
+            el.value = clean;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showToast("HTML Bersih Disalin!");
+        }
+
+        function downloadHTML() {
+            const clean = getCleanHTML();
+            if(!clean) return;
+            const blob = new Blob([clean], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'imers-access-page.html';
+            a.click();
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.opacity = '1';
+            t.style.transform = 'translate(-50%, 0)';
+            setTimeout(() => {
+                t.style.opacity = '0';
+                t.style.transform = 'translate(-50%, 10px)';
+            }, 2000);
+        }
+
+        window.onload = () => {
+            addItem('modules');
+        };
+    </script>
+</body>
+</html>
