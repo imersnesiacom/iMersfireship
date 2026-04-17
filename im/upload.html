@@ -12,7 +12,7 @@
             background-attachment: fixed;
         }
 
-        /* Efek Loading */
+        /* Efek Loading Spinner */
         .loading-spinner {
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-top: 2px solid white;
@@ -49,7 +49,6 @@
 <body class="min-h-screen flex items-center justify-center p-6">
 
     <!-- Glassmorphism Card -->
-    <!-- Menggunakan bg-white/30 dan backdrop-blur agar terlihat seperti kaca transparan -->
     <div class="bg-white/40 backdrop-blur-xl w-full max-w-[450px] card-custom shadow-[0_20px_50px_rgba(0,0,0,0.05)] p-10 border border-white/60">
         
         <!-- Brand & Icon -->
@@ -63,14 +62,13 @@
                     <path d="M15 12v5s1 .5 4 1c0-1.5-.5-3-.5-3L15 12l-3 3z"></path>
                 </svg>
             </div>
-            <h1 class="text-[32px] font-black text-[#7c3aed] tracking-tight leading-tight">iMersFireship</h1>
+            <h1 class="text-[32px] font-black text-[#7c3aed] tracking-tight leading-tight uppercase">iMersFireship</h1>
             <p class="text-[#7c3aed]/70 text-[13px] mt-2 font-bold leading-relaxed max-w-[280px]">silahkan upload file anda pastikan nama dan email aktif</p>
         </div>
 
         <!-- Form Section -->
         <form id="uploadForm" class="space-y-6">
             <div class="space-y-2">
-                <!-- Warna label diubah menjadi Ungu Brand agar serasi -->
                 <label class="text-[14px] font-extrabold text-[#7c3aed] ml-1 tracking-wide uppercase">Nama Lengkap</label>
                 <input type="text" name="nama" required placeholder="Masukkan nama" 
                     class="w-full px-5 py-3.5 bg-white/50 border border-white/80 rounded-2xl focus:ring-2 focus:ring-[#7c3aed] focus:bg-white/80 outline-none transition-all text-sm font-semibold text-[#7c3aed] placeholder:text-[#7c3aed]/30">
@@ -96,11 +94,17 @@
             </button>
         </form>
 
-        <div id="result" class="mt-6 hidden p-4 rounded-2xl text-center text-[10px] font-black uppercase tracking-[0.2em] animate-bounce"></div>
+        <!-- Footer Permintaan User -->
+        <p class="mt-8 text-[10px] font-bold text-[#7c3aed]/50 text-center uppercase tracking-[0.15em] leading-relaxed">
+            developed with <span class="text-red-500 animate-pulse">❤️</span> by Terry Katar | <a href="https://imersnesia.com" target="_blank" class="hover:text-[#7c3aed] transition-colors">iMersnesia.com</a>
+        </p>
+
+        <div id="result" class="mt-6 hidden p-4 rounded-2xl text-center text-[10px] font-black uppercase tracking-[0.2em]"></div>
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzaknl_F2pXtOHzSOUmQEPPAWYMXZOYuoaAhG8WxuupS_SwXPuiGnPW5PtsiY4wryHV/exec";
+        // URL Deploy AppScript yang kamu berikan
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZlAg6YgHcZPB22vynCQ85jiKoezq1rBvF9qknPto2UTSajHUh3wUA6-4OlM2CNVdrdQ/exec";
 
         const form = document.getElementById('uploadForm');
         const fileInput = document.getElementById('imageInput');
@@ -144,7 +148,7 @@
                     
                     if(res.status === "success") {
                         resultDiv.innerHTML = "✨ DATA BERHASIL DIKIRIM ✨";
-                        resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-green-600 uppercase tracking-[0.2em]";
+                        resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-green-600 uppercase tracking-[0.2em] animate-bounce";
                         form.reset();
                     } else {
                         throw new Error();
