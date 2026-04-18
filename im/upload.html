@@ -6,7 +6,7 @@
     <title>iMersFireship - Data Upload</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Background Gradasi Pastel Sesuai Gambar */
+        /* Background Gradasi Pastel Sesuai Tema */
         body {
             background: linear-gradient(135deg, #fce7f3 0%, #fff7ed 25%, #f0f9ff 50%, #e0e7ff 75%, #fae8ff 100%);
             background-attachment: fixed;
@@ -62,7 +62,7 @@
                     <path d="M15 12v5s1 .5 4 1c0-1.5-.5-3-.5-3L15 12l-3 3z"></path>
                 </svg>
             </div>
-            <h1 class="text-[32px] font-black text-[#7c3aed] tracking-tight leading-tight uppercase">iMersFireship</h1>
+            <h1 class="text-[32px] font-black text-[#7c3aed] tracking-tight leading-tight uppercase text-center w-full">iMersFireship</h1>
             <p class="text-[#7c3aed]/70 text-[13px] mt-2 font-bold leading-relaxed max-w-[280px]">silahkan upload file anda pastikan nama dan email aktif</p>
         </div>
 
@@ -90,7 +90,9 @@
             <button type="submit" id="submitBtn" 
                 class="w-full bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-black py-4 rounded-2xl shadow-[0_15px_30px_rgba(124,58,237,0.4)] transition-all transform active:scale-[0.95] flex justify-center items-center gap-3 mt-6 disabled:opacity-50 disabled:cursor-not-allowed">
                 <span id="btnText" class="text-sm uppercase tracking-[0.15em]">Kirim Data</span>
-                <svg id="btnIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <div id="btnIconContainer">
+                    <svg id="btnIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </div>
             </button>
         </form>
 
@@ -103,15 +105,15 @@
     </div>
 
     <script>
-        // URL Deploy AppScript
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZlAg6YgHcZPB22vynCQ85jiKoezq1rBvF9qknPto2UTSajHUh3wUA6-4OlM2CNVdrdQ/exec";
+        // URL Deploy AppScript Terbaru
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzaknl_F2pXtOHzSOUmQEPPAWYMXZOYuoaAhG8WxuupS_SwXPuiGnPW5PtsiY4wryHV/exec";
 
         const form = document.getElementById('uploadForm');
         const fileInput = document.getElementById('imageInput');
         const fileError = document.getElementById('fileError');
         const submitBtn = document.getElementById('submitBtn');
         const btnText = document.getElementById('btnText');
-        const btnIcon = document.getElementById('btnIcon');
+        const btnIconContainer = document.getElementById('btnIconContainer');
         const resultDiv = document.getElementById('result');
 
         form.addEventListener('submit', async (e) => {
@@ -126,9 +128,10 @@
             }
             fileError.classList.add('hidden');
 
+            // UI State Loading
             submitBtn.disabled = true;
             btnText.innerText = 'PROSES...';
-            btnIcon.innerHTML = '<div class="loading-spinner"></div>';
+            btnIconContainer.innerHTML = '<div class="loading-spinner"></div>';
             resultDiv.classList.add('hidden');
 
             try {
@@ -146,44 +149,45 @@
                             image: base64Data
                         };
 
-                        // Perbaikan Utama: Mengirim sebagai text/plain untuk bypass CORS
-                        // Tanpa no-cors agar redirect diikuti dengan benar
-                        await fetch(SCRIPT_URL, {
+                        // Menggunakan mode no-cors untuk bypass batasan browser pada Google Apps Script
+                        fetch(SCRIPT_URL, {
                             method: 'POST',
-                            mode: 'no-cors', // Tetap gunakan no-cors tapi dengan struktur data yang benar
-                            body: JSON.stringify(formData),
-                            headers: {
-                                'Content-Type': 'text/plain;charset=utf-8'
-                            }
+                            mode: 'no-cors', 
+                            headers: { 'Content-Type': 'text/plain' },
+                            body: JSON.stringify(formData)
+                        }).then(() => {
+                            // Delay simulasi karena no-cors tidak memberikan respon balik ke JS
+                            setTimeout(() => {
+                                resultDiv.innerHTML = "✨ DATA BERHASIL DIKIRIM ✨";
+                                resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-green-600 uppercase tracking-[0.2em] animate-bounce";
+                                resultDiv.classList.remove('hidden');
+                                form.reset();
+                                resetButton();
+                            }, 2000);
+                        }).catch(err => {
+                            console.error("Fetch Error:", err);
+                            showError("Gagal menghubungi server");
                         });
-
-                        // Karena no-cors, kita tidak bisa cek response.ok, 
-                        // kita beri delay sedikit lalu asumsikan sukses
-                        setTimeout(() => {
-                            resultDiv.innerHTML = "✨ DATA BERHASIL DIKIRIM ✨";
-                            resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-green-600 uppercase tracking-[0.2em] animate-bounce";
-                            resultDiv.classList.remove('hidden');
-                            form.reset();
-                            resetButton();
-                        }, 2000);
-                        
                     } catch (innerError) {
-                        throw innerError;
+                        showError("Terjadi kesalahan sistem");
                     }
                 };
             } catch (err) {
-                console.error(err);
-                resultDiv.innerHTML = "❌ GAGAL MENGIRIM ❌";
-                resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-red-600 uppercase tracking-[0.2em]";
-                resultDiv.classList.remove('hidden');
-                resetButton();
+                showError("Gagal membaca gambar");
             }
         });
+
+        function showError(msg) {
+            resultDiv.innerHTML = "❌ " + msg + " ❌";
+            resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-red-600 uppercase tracking-[0.2em]";
+            resultDiv.classList.remove('hidden');
+            resetButton();
+        }
 
         function resetButton() {
             submitBtn.disabled = false;
             btnText.innerText = 'Kirim Data';
-            btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>';
+            btnIconContainer.innerHTML = '<svg id="btnIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>';
         }
     </script>
 </body>
