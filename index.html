@@ -3390,6 +3390,8 @@
             const e = document.getElementById('coEmail').value.trim();
             const w = window.formatPhoneNumber(document.getElementById('coWA').value);
             const p = document.getElementById('coPassword').value;
+            const selectedRadio = document.querySelector('input[name="paymentMethod"]:checked');
+            const selectedMethod = selectedRadio ? selectedRadio.value : 'Bank Transfer';
             
             // Hitung ulang untuk pengiriman data ke Google Sheets
             const c = window.appState.currentCheckoutCoupon;
@@ -3420,7 +3422,7 @@
                 discountApplied: d,
                 uniqueCode: unique, 
                 totalPay: t,
-                paymentMethod: 'Bank Transfer',
+                paymentMethod: selectedMethod,
                 status: finalStatus,
                 userPasswordHash: window.appState.user ? window.appState.user.password : await window.hashPassword(p),
                 affiliateRef: localStorage.getItem('affiliateRef') || null
