@@ -1639,29 +1639,32 @@
         const userRoleDisplayEl = document.getElementById('userRoleDisplay');
         if (userRoleDisplayEl) userRoleDisplayEl.innerText = user.role;
         
+        // --- PERBAIKAN MULTI-LICENSE (BARIS 1642-1644) ---
         const userLicenseCodeEl = document.getElementById('userLicenseCode');
         if (userLicenseCodeEl) {
             const rawLicense = user.license || '';
             if (!rawLicense || rawLicense === 'TIDAK-ADA-LISENSI') {
                 userLicenseCodeEl.innerText = 'TIDAK-ADA-LISENSI';
             } else {
-                // Kita pecah kodenya berdasarkan koma biar jadi list
+                // 1. Pecah lisensi berdasarkan koma
                 const licenseArray = rawLicense.split(',').map(item => item.trim());
                 
-                // Render jadi kotak-kotak keren (Badge)
+                // 2. Render jadi list kotak (badge) yang rapi
                 userLicenseCodeEl.innerHTML = licenseArray.map(code => `
-                    <div class="flex items-center justify-between bg-slate-100 dark:bg-slate-800/50 p-3 rounded-xl mb-2 border border-slate-200 dark:border-slate-700 font-mono text-sm">
-                        <span class="text-brand dark:text-brandHover font-bold">${code}</span>
-                        <button onclick="navigator.clipboard.writeText('${code}'); alert('Kode Disalin!')" 
-                                class="bg-brand text-white px-3 py-1 rounded-lg text-[10px] hover:opacity-80 transition-all">
+                    <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl mb-3 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <span class="font-mono text-brand dark:text-brandHover font-bold tracking-tight">${code}</span>
+                        <button onclick="navigator.clipboard.writeText('${code}'); alert('Lisensi Berhasil Disalin!')" 
+                                class="bg-brand hover:bg-brandHover text-white text-[10px] px-3 py-1.5 rounded-lg transition-all shadow-sm">
                             Salin
                         </button>
                     </div>
                 `).join('');
                 
-                // Sembunyikan tombol salin bawaan yang ada di luar biar gak double
-                const oldCopyBtn = userLicenseCodeEl.nextElementSibling;
-                if (oldCopyBtn && oldCopyBtn.tagName === 'BUTTON') oldCopyBtn.style.display = 'none';
+                // 3. Sembunyikan tombol salin bawaan yang besar di sebelah kanan
+                const originalCopyBtn = userLicenseCodeEl.nextElementSibling;
+                if (originalCopyBtn && originalCopyBtn.tagName === 'BUTTON') {
+                    originalCopyBtn.style.display = 'none';
+                }
             }
         }
         
