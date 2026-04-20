@@ -1803,6 +1803,7 @@
        
         if(set.appName) {
             document.querySelectorAll('.app-name-display').forEach(el => el.innerText = set.appName);
+            document.title = set.appName + " - Digital Product Platform";
         }
         window.applyLogo(set.logoUrl);
         
