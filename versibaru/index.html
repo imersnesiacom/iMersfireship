@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iMersFireship - Data Upload</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Background Gradasi Pastel Sesuai Tema */
+        body {
+            background: linear-gradient(135deg, #fce7f3 0%, #fff7ed 25%, #f0f9ff 50%, #e0e7ff 75%, #fae8ff 100%);
+            background-attachment: fixed;
+        }
+
+        /* Efek Loading Spinner */
+        .loading-spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Kustomisasi Sudut Card */
+        .card-custom {
+            border-radius: 2.5rem;
+        }
+
+        /* Kustomisasi Input File */
+        input[type="file"]::file-selector-button {
+            background-color: rgba(124, 58, 237, 0.1);
+            color: #7c3aed;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            font-weight: 700;
+            font-size: 0.75rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        input[type="file"]::file-selector-button:hover {
+            background-color: rgba(124, 58, 237, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+
+    <!-- Glassmorphism Card -->
+    <div class="bg-white/40 backdrop-blur-xl w-full max-w-[450px] card-custom shadow-[0_20px_50px_rgba(0,0,0,0.05)] p-10 border border-white/60 relative z-10">
+        
+        <!-- Brand & Icon -->
+        <div class="flex flex-col items-center mb-8 text-center">
+            <div class="bg-[#7c3aed] p-3 rounded-2xl shadow-[0_8px_20px_rgba(124,58,237,0.3)] mb-4">
+                <!-- Rocket Icon SVG -->
+                <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+                    <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+                    <path d="M9 12H4s.5-1 1-4c1.5 0 3 .5 3 .5L12 9l-3 3z"></path>
+                    <path d="M15 12v5s1 .5 4 1c0-1.5-.5-3-.5-3L15 12l-3 3z"></path>
+                </svg>
+            </div>
+            <h1 class="text-[32px] font-black text-[#7c3aed] tracking-tight leading-tight uppercase text-center w-full">iMersFireship</h1>
+            <p class="text-[#7c3aed]/70 text-[13px] mt-2 font-bold leading-relaxed max-w-[280px]">silahkan upload file anda pastikan nama dan email aktif</p>
+        </div>
+
+        <!-- Form Section -->
+        <form id="uploadForm" class="space-y-6">
+            <div class="space-y-2">
+                <label class="text-[14px] font-extrabold text-[#7c3aed] ml-1 tracking-wide uppercase">Nama Lengkap</label>
+                <input type="text" id="nama" name="nama" required placeholder="Masukkan nama" 
+                    class="w-full px-5 py-3.5 bg-white/50 border border-white/80 rounded-2xl focus:ring-2 focus:ring-[#7c3aed] focus:bg-white/80 outline-none transition-all text-sm font-semibold text-[#7c3aed] placeholder:text-[#7c3aed]/30">
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[14px] font-extrabold text-[#7c3aed] ml-1 tracking-wide uppercase">Nomor WhatsApp</label>
+                <input type="tel" id="wa" name="wa" required placeholder="Contoh: 0812..." 
+                    class="w-full px-5 py-3.5 bg-white/50 border border-white/80 rounded-2xl focus:ring-2 focus:ring-[#7c3aed] focus:bg-white/80 outline-none transition-all text-sm font-semibold text-[#7c3aed] placeholder:text-[#7c3aed]/30">
+                <!-- Hint Text Below WA -->
+                <p class="text-[10px] text-[#7c3aed]/60 font-medium leading-tight ml-1">
+                    * Gunakan nomor aktif agar kami mudah mengirimkan notifikasi akses iMersFireship untuk Anda.
+                </p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[14px] font-extrabold text-[#7c3aed] ml-1 tracking-wide uppercase">Email</label>
+                <input type="email" id="email" name="email" required placeholder="admin@imersfireship.com" 
+                    class="w-full px-5 py-3.5 bg-white/50 border border-white/80 rounded-2xl focus:ring-2 focus:ring-[#7c3aed] focus:bg-white/80 outline-none transition-all text-sm font-semibold text-[#7c3aed] placeholder:text-[#7c3aed]/30">
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[14px] font-extrabold text-[#7c3aed] ml-1 tracking-wide uppercase">Bukti Gambar (Maks 5MB)</label>
+                <input type="file" id="imageInput" accept="image/*" required 
+                    class="w-full text-xs text-[#7c3aed]/60 font-bold cursor-pointer">
+                <p id="fileError" class="text-red-500 text-[10px] font-bold mt-1 hidden uppercase tracking-widest">Error: File terlalu besar!</p>
+            </div>
+
+            <button type="submit" id="submitBtn" 
+                class="w-full bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-black py-4 rounded-2xl shadow-[0_15px_30px_rgba(124,58,237,0.4)] transition-all transform active:scale-[0.95] flex justify-center items-center gap-3 mt-6 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span id="btnText" class="text-sm uppercase tracking-[0.15em]">Kirim Data</span>
+                <div id="btnIconContainer">
+                    <svg id="btnIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </div>
+            </button>
+        </form>
+
+        <!-- Footer -->
+        <p class="mt-8 text-[10px] font-bold text-[#7c3aed]/50 text-center uppercase tracking-[0.15em] leading-relaxed">
+            developed with <span class="text-red-500 animate-pulse">❤️</span> by Terry Katar | <a href="https://imersnesia.com" target="_blank" class="hover:text-[#7c3aed] transition-colors">iMersnesia.com</a>
+        </p>
+
+        <div id="result" class="mt-6 hidden p-4 rounded-2xl text-center text-[10px] font-black uppercase tracking-[0.2em]"></div>
+    </div>
+
+    <script>
+        // URL Deploy AppScript Terbaru
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzaknl_F2pXtOHzSOUmQEPPAWYMXZOYuoaAhG8WxuupS_SwXPuiGnPW5PtsiY4wryHV/exec";
+
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('imageInput');
+        const fileError = document.getElementById('fileError');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnIconContainer = document.getElementById('btnIconContainer');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                fileError.classList.remove('hidden');
+                return;
+            }
+            fileError.classList.add('hidden');
+
+            // UI State Loading
+            submitBtn.disabled = true;
+            btnText.innerText = 'PROSES...';
+            btnIconContainer.innerHTML = '<div class="loading-spinner"></div>';
+            resultDiv.classList.add('hidden');
+
+            try {
+                // Logika Pemformatan Nomor WA
+                let rawWa = document.getElementById('wa').value.replace(/[^0-9+]/g, '');
+                let formattedWa = rawWa;
+                
+                if (rawWa.startsWith('0')) {
+                    formattedWa = '62' + rawWa.substring(1);
+                } else if (rawWa.startsWith('+62')) {
+                    formattedWa = rawWa.substring(1);
+                }
+
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                
+                reader.onload = async () => {
+                    try {
+                        const base64Data = reader.result.split(',')[1];
+                        const formData = {
+                            nama: document.getElementById('nama').value,
+                            wa: formattedWa,
+                            email: document.getElementById('email').value,
+                            filename: file.name,
+                            mimeType: file.type,
+                            image: base64Data
+                        };
+
+                        // Menggunakan mode no-cors untuk bypass batasan browser pada Google Apps Script
+                        fetch(SCRIPT_URL, {
+                            method: 'POST',
+                            mode: 'no-cors', 
+                            headers: { 'Content-Type': 'text/plain' },
+                            body: JSON.stringify(formData)
+                        }).then(() => {
+                            // Delay simulasi karena no-cors tidak memberikan respon balik ke JS
+                            setTimeout(() => {
+                                resultDiv.innerHTML = "✨ DATA BERHASIL DIKIRIM ✨";
+                                resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-green-600 uppercase tracking-[0.2em] animate-bounce";
+                                resultDiv.classList.remove('hidden');
+                                form.reset();
+                                resetButton();
+                            }, 2000);
+                        }).catch(err => {
+                            console.error("Fetch Error:", err);
+                            showError("Gagal menghubungi server");
+                        });
+                    } catch (innerError) {
+                        showError("Terjadi kesalahan sistem");
+                    }
+                };
+            } catch (err) {
+                showError("Gagal membaca gambar");
+            }
+        });
+
+        function showError(msg) {
+            resultDiv.innerHTML = "❌ " + msg + " ❌";
+            resultDiv.className = "mt-6 p-4 rounded-2xl text-center text-[10px] font-black bg-white/40 text-red-600 uppercase tracking-[0.2em]";
+            resultDiv.classList.remove('hidden');
+            resetButton();
+        }
+
+        function resetButton() {
+            submitBtn.disabled = false;
+            btnText.innerText = 'Kirim Data';
+            btnIconContainer.innerHTML = '<svg id="btnIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>';
+        }
+    </script>
+</body>
+</html>
