@@ -557,6 +557,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div id="orderPaginationUI" class="p-4 border-t border-white/10 flex justify-center gap-2 bg-white/5 dark:bg-slate-800/50"></div>
                     </div>
                 </div>
 
@@ -1441,6 +1442,7 @@
 
     window.appState = {
         user: null, products: [], orders: [], coupons: [], templates: [], usersData: [], isSidebarOpen: false,
+        orderPage: { current: 1, perPage: 20 },
         settings: {
             banks: [],
             notifications: { waProvider: 'fonnte', waToken: '', adminWa: '', emailProvider: 'google', emailToken: '', telegramToken: '', telegramChatId: '' }
@@ -3534,16 +3536,84 @@
     };
 
     window.renderOrdersTable = () => { 
-        const tb=document.getElementById('ordersTableBody'); 
+        const tb = document.getElementById('ordersTableBody'); 
         if(!tb) return; 
-        tb.innerHTML=''; 
-        window.appState.orders.forEach(o=>{ 
-            const b=o.status==='Paid'?`<span class="text-green-500 font-bold">Paid</span>`:`<span class="text-yellow-500 font-bold">Pending</span>`; 
-            const a=o.status==='Paid'?`<button disabled class="text-slate-400">Aktif</button>`:`<button onclick="window.approveOrder('${o.id}')" class="bg-brand text-white px-2 py-1 rounded text-xs">Approve</button>`; 
-            tb.innerHTML+=`<tr class="border-b border-white/10"><td class="px-6 py-4 font-mono text-xs dark:text-white">#${String(o.id).substring(0,6)}</td><td class="px-6 py-4"><p class="font-bold dark:text-white">${o.customerName}</p><p class="text-xs">${o.paymentMethod}</p></td><td class="px-6 py-4 dark:text-white text-xs">${o.productTitle}</td><td class="px-6 py-4 dark:text-white font-bold">${window.formatRp(o.totalPay||o.basePrice)}</td><td class="px-6 py-4">${b}</td><td class="px-6 py-4 text-right">${a}</td></tr>`; 
+        
+        // 1. Ambil state pagination
+        const state = window.appState.orderPage;
+        const allOrders = window.appState.orders;
+
+        // 2. Hitung data mana aja yang muncul di halaman ini
+        const start = (state.current - 1) * state.perPage;
+        const end = start + state.perPage;
+        const paginatedOrders = allOrders.slice(start, end);
+
+        tb.innerHTML = ''; 
+        
+        if(paginatedOrders.length === 0) {
+            tb.innerHTML = `<tr><td colspan="6" class="px-6 py-10 text-center text-slate-500 font-bold">Tidak ada data di halaman ini.</td></tr>`;
+            return;
+        }
+
+        // 3. Render data yang sudah dipotong (paginatedOrders)
+        paginatedOrders.forEach(o => { 
+            const b = o.status === 'Paid' ? `<span class="text-green-500 font-bold">Paid</span>` : `<span class="text-yellow-500 font-bold">Pending</span>`; 
+            const a = o.status === 'Paid' ? `<button disabled class="text-slate-400">Aktif</button>` : `<button onclick="window.approveOrder('${o.id}')" class="bg-brand text-white px-2 py-1 rounded text-xs">Approve</button>`; 
+            tb.innerHTML += `
+                <tr class="border-b border-white/10">
+                    <td class="px-6 py-4 font-mono text-xs dark:text-white">#${String(o.id).substring(0,6)}</td>
+                    <td class="px-6 py-4">
+                        <p class="font-bold dark:text-white">${o.customerName}</p>
+                        <p class="text-[10px] text-slate-400 italic">${o.paymentMethod}</p>
+                    </td>
+                    <td class="px-6 py-4 dark:text-white text-xs">${o.productTitle}</td>
+                    <td class="px-6 py-4 dark:text-white font-bold">${window.formatRp(o.totalPay||o.basePrice)}</td>
+                    <td class="px-6 py-4">${b}</td>
+                    <td class="px-6 py-4 text-right">${a}</td>
+                </tr>`; 
         }); 
+
+        // 4. Panggil fungsi navigasi (Langkah Berikutnya)
+        if(typeof window.renderOrderPaginationUI === 'function') {
+            window.renderOrderPaginationUI();
+        }
     };
 
+    // --- LOGIKA NAVIGASI HALAMAN ORDER (LANGKAH 3) ---
+    window.renderOrderPaginationUI = () => {
+        const container = document.getElementById('orderPaginationUI');
+        if (!container) return;
+
+        const state = window.appState.orderPage;
+        const totalItems = window.appState.orders.length;
+        const totalPages = Math.ceil(totalItems / state.perPage);
+
+        if (totalPages <= 1) {
+            container.innerHTML = ''; 
+            return;
+        }
+
+        let html = '';
+        for (let i = 1; i <= totalPages; i++) {
+            const isActive = i === state.current;
+            html += `
+                <button onclick="window.changeOrderPage(${i})" 
+                        class="px-3 py-1.5 rounded-lg text-xs font-black transition-all ${isActive ? 'bg-brand text-white shadow-lg shadow-brand/30' : 'bg-white/10 text-slate-500 hover:bg-white/20'}">
+                    ${i}
+                </button>`;
+        }
+        container.innerHTML = html;
+    };
+
+    window.changeOrderPage = (page) => {
+        window.appState.orderPage.current = page;
+        window.renderOrdersTable(); 
+        
+        // Scroll otomatis ke atas tabel biar admin gak bingung
+        const contentOrders = document.getElementById('content-orders');
+        if(contentOrders) contentOrders.scrollTop = 0;
+    };
+    
     window.approveOrder = async (id) => { 
         if(confirm("Approve order ini?")){ 
             try{ 
