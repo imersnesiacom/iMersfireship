@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id" class="light">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iMersFireship - Sistem Penjualan Produk Digital & Affiliate</title>
+    <title>iMersFireship - Jual Produk Digital Tanpa Server</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,8 +11,8 @@
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <!-- Google Fonts: Montserrat, Poppins, Nunito -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Montserrat (Heading), Poppins (Sub), Nunito (Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -20,8 +20,10 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: '#4f46e5',
-                        brandHover: '#4338ca',
+                        brand: '#6366f1',
+                        brandHover: '#4f46e5',
+                        accent: '#a855f7',
+                        gold: '#fbbf24',
                     },
                     fontFamily: {
                         heading: ['Montserrat', 'sans-serif'],
@@ -39,88 +41,118 @@
             padding: 0 !important;
             min-height: 100% !important;
             width: 100% !important;
-            background: transparent !important;
             font-family: 'Nunito', sans-serif;
             scroll-behavior: smooth;
         }
 
+        /* Base Page Wrapper */
         .page-wrapper {
             min-height: 100vh;
             width: 100%;
-            background-color: #f0fdf4;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        /* Light Mode Background */
+        .page-wrapper {
+            background-color: #f8fafc;
             background-image: 
-                radial-gradient(at 40% 20%, hsla(28,100%,74%,0.4) 0px, transparent 50%),
-                radial-gradient(at 80% 0%, hsla(189,100%,56%,0.4) 0px, transparent 50%),
-                radial-gradient(at 0% 50%, hsla(355,100%,93%,0.4) 0px, transparent 50%),
-                radial-gradient(at 80% 50%, hsla(340,100%,76%,0.4) 0px, transparent 50%),
-                radial-gradient(at 0% 100%, hsla(22,100%,77%,0.4) 0px, transparent 50%),
-                radial-gradient(at 80% 100%, hsla(242,100%,70%,0.4) 0px, transparent 50%),
-                radial-gradient(at 0% 0%, hsla(343,100%,76%,0.4) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, hsla(262,100%,74%,0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(189,100%,56%,0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(340,100%,76%,0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(22,100%,77%,0.1) 0px, transparent 50%);
             background-attachment: fixed;
-            background-size: cover;
-            transition: background 0.5s ease;
         }
 
+        /* Dark Mode Background (Promo Style) */
         .dark .page-wrapper {
-            background-color: #0f172a;
+            background-color: #05050a;
             background-image: 
-                radial-gradient(at 40% 20%, hsla(28,100%,40%,0.2) 0px, transparent 50%),
-                radial-gradient(at 80% 0%, hsla(189,100%,30%,0.2) 0px, transparent 50%),
-                radial-gradient(at 0% 50%, hsla(355,100%,40%,0.15) 0px, transparent 50%),
-                radial-gradient(at 80% 50%, hsla(340,100%,40%,0.2) 0px, transparent 50%),
-                radial-gradient(at 0% 100%, hsla(22,100%,30%,0.2) 0px, transparent 50%),
-                radial-gradient(at 80% 100%, hsla(242,100%,40%,0.2) 0px, transparent 50%),
-                radial-gradient(at 0% 0%, hsla(343,100%,30%,0.15) 0px, transparent 50%);
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.15) 0%, transparent 50%);
         }
-        
-        .glass {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+
+        .promo-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 10px 40px -10px rgba(31, 38, 135, 0.08);
+            transition: all 0.3s ease;
         }
 
-        .dark .glass {
-            background: rgba(30, 41, 59, 0.7);
+        .dark .promo-card {
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .btn-shadow {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        .dark .promo-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-5px);
+        }
+
+        /* Pricing Highlighting with extra glow */
+        .pricing-glow {
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
+            border: 2px solid rgba(99, 102, 241, 0.2);
+        }
+        .dark .pricing-glow {
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.2);
+            border: 2px solid rgba(99, 102, 241, 0.4);
+        }
+
+        .gold-badge {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            color: #000;
         }
 
         /* Anti font miring */
         * { font-style: normal !important; }
 
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
     </style>
 </head>
 <body class="antialiased overflow-x-hidden transition-colors duration-300">
 
-    <div class="page-wrapper text-slate-800 dark:text-slate-100 flex flex-col items-center">
+    <div class="page-wrapper text-slate-800 dark:text-slate-200 flex flex-col items-center">
         
-        <!-- Promo Bar -->
-        <div class="w-full bg-slate-900 text-white py-2 text-[10px] md:text-xs font-black text-center uppercase tracking-widest z-[110] font-sub">
-            ⚡ Promo Terbatas: Amankan Lisensi Lifetime Hanya Rp 49.000 Sekarang
+        <!-- Header Promo Bar -->
+        <div class="w-full bg-indigo-600/10 dark:bg-indigo-600/20 backdrop-blur-md border-b border-indigo-500/20 dark:border-indigo-500/30 py-2.5 text-center z-[110] relative">
+            <p class="text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase text-indigo-600 dark:text-indigo-300">
+                🚀 Update fitur baru: qris statis & checkout dinamis sudah aktif!
+            </p>
         </div>
 
         <!-- Navbar -->
-        <nav class="sticky top-0 w-full z-[100] px-4 py-4 flex justify-center">
-            <div class="w-full max-w-4xl flex justify-between items-center glass rounded-2xl px-5 py-3 shadow-xl">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-brand flex items-center justify-center text-white shadow-lg">
-                        <i class="ph ph-rocket-launch text-xl font-bold"></i>
-                    </div>
-                    <span class="font-heading font-black text-lg md:text-xl tracking-tighter text-brand dark:text-indigo-400">iMersFireship</span>
+        <nav class="sticky top-4 w-full z-[100] px-4 flex justify-center mb-8">
+            <div class="w-full max-w-5xl flex justify-between items-center promo-card rounded-2xl px-6 py-3">
+                <div class="flex items-center gap-3">
+                    <img src="https://imersnesia.com/wp-content/uploads/2026/05/icon-imersfireship.webp" alt="Logo" class="w-9 h-9 object-contain">
+                    <span class="font-heading font-black text-lg md:text-xl tracking-tight text-slate-900 dark:text-white uppercase">iMers<span class="gradient-text">Fireship</span></span>
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl glass flex items-center justify-center text-yellow-500 dark:text-blue-400 border border-white/40 dark:border-slate-700/50 shadow-sm transition-transform hover:scale-110">
-                        <i id="themeIcon" class="ph ph-moon text-xl"></i>
+                    <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-white/50 dark:bg-white/5 flex items-center justify-center text-indigo-600 dark:text-yellow-400 border border-white/20 shadow-sm transition-transform hover:scale-110">
+                        <i id="themeIcon" class="ph ph-moon-stars text-xl"></i>
                     </button>
-                    <a href="#pricing" class="bg-brand text-white px-4 py-2 rounded-xl font-sub font-bold text-xs md:text-sm hover:scale-105 transition-all shadow-lg">
+                    <a href="#pricing" class="bg-indigo-600 text-white px-5 py-2 rounded-xl font-sub font-bold text-xs md:text-sm hover:bg-brandHover transition-all shadow-lg shadow-indigo-500/20">
                         Beli Sekarang
                     </a>
                 </div>
@@ -128,26 +160,33 @@
         </nav>
 
         <!-- Hero Section -->
-        <header class="pt-8 pb-12 px-6 flex flex-col items-center w-full max-w-4xl text-center">
-            <div class="flex justify-center mb-8">
-                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border border-white/50 text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest font-sub shadow-sm">
-                    Professional Digital Marketplace Solution
-                </span>
+        <header class="pt-10 pb-16 px-6 flex flex-col items-center w-full max-w-5xl mx-auto text-center relative">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-[11px] font-black tracking-widest uppercase mb-8 animate-float">
+                <i class="ph ph-sparkle-fill"></i> Tools eksklusif khusus member
             </div>
             
-            <h1 class="font-heading text-4xl md:text-6xl font-black text-slate-900 dark:text-white leading-[1.1] tracking-tight mb-6 uppercase">
-                Jual Produk Digital <span class="text-brand dark:text-indigo-400">Tanpa Biaya</span> Server Mahal
+            <h1 class="font-heading text-4xl md:text-7xl font-black text-slate-900 dark:text-white leading-[1.1] tracking-tight mb-8">
+                Jual produk digital <span class="gradient-text">tanpa hosting</span> & biaya bulanan
             </h1>
 
-            <p class="font-body text-sm md:text-lg text-slate-500 dark:text-slate-400 font-semibold max-w-2xl mx-auto leading-relaxed mb-10 px-4">
-                Bangun infrastruktur mandiri menggunakan Google Apps Script. Hemat biaya operasional dengan database gratis selamanya, bisa deploy di mana saja seperti Cloudflare, Vercel, maupun Hosting sendiri.
+            <p class="font-sub text-base md:text-xl text-slate-500 dark:text-slate-400 font-medium max-w-3xl mx-auto leading-relaxed mb-12">
+                Bangun sistem jualan lo sendiri cukup pakai Google Sheet + AppScript. Deploy bebas di Vercel, Cloudflare, atau domain sendiri tanpa ribet setup server.
             </p>
             
-            <!-- Video Embed Area (Format Fixed to Embed) -->
-            <div class="w-full max-w-3xl px-4 mb-10">
-                <div class="aspect-video glass rounded-3xl overflow-hidden shadow-2xl border border-white/60 dark:border-slate-700/50 bg-black">
+            <div class="w-full flex flex-col items-center gap-5 font-sub">
+                <a href="#pricing" class="w-full max-w-md bg-slate-900 dark:bg-white text-white dark:text-indigo-950 px-8 py-5 rounded-2xl font-black shadow-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 text-lg uppercase tracking-tight">
+                    Mulai Jualan Sekarang <i class="ph ph-rocket-launch text-2xl"></i>
+                </a>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none">Bukan sekadar tools — Ini adalah engine automation lengkap</p>
+            </div>
+        </header>
+
+        <!-- Video Demo Section -->
+        <section class="w-full max-w-4xl px-6 pb-20">
+            <div class="promo-card p-2 rounded-[2.5rem] border border-white/10 overflow-hidden shadow-2xl bg-black">
+                <div class="aspect-video relative">
                     <iframe 
-                        class="w-full h-full" 
+                        class="absolute inset-0 w-full h-full rounded-[2rem]" 
                         src="https://www.youtube.com/embed/BIl2x4GKrk8" 
                         title="iMerfireship membership produk digital tanpa domain dan hosting - modal gratis selamanya" 
                         frameborder="0" 
@@ -156,218 +195,300 @@
                         allowfullscreen>
                     </iframe>
                 </div>
-                <p class="text-[10px] font-bold text-slate-400 mt-3 uppercase tracking-widest">Tonton video demo instalasi dan fitur platform</p>
             </div>
+            <p class="text-center mt-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Tonton video demo instalasi dan fitur</p>
+        </section>
 
-            <div class="w-full flex flex-col items-center gap-4 px-4 font-sub text-center">
-                <a href="#pricing" class="w-full max-w-md bg-slate-900 dark:bg-brand text-white px-8 py-5 rounded-2xl font-black btn-shadow hover:scale-105 transition-all flex items-center justify-center gap-3 text-lg uppercase tracking-tight">
-                    Lihat Pilihan Lisensi <i class="ph ph-arrow-down font-bold"></i>
-                </a>
-                <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none">Investasi Sekali • Tanpa Biaya Bulanan</p>
-            </div>
-        </header>
+        <!-- Section Update Fitur #1 -->
+        <section class="py-10 px-6 w-full max-w-5xl mx-auto">
+            <div class="promo-card rounded-[3.5rem] p-8 md:p-14 relative overflow-hidden border-2 border-indigo-500/20 dark:border-indigo-500/30">
+                <div class="absolute -top-12 -right-12 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px]"></div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row items-center gap-12">
+                    <div class="w-full md:w-1/2">
+                        <div class="promo-card p-2 rounded-[2.5rem] shadow-xl">
+                            <img src="https://imersnesia.com/wp-content/uploads/2026/05/QRisStatisready.jpg" alt="Aset Digital Update" class="rounded-[2.2rem] w-full h-full object-cover">
+                        </div>
+                    </div>
 
-        <!-- What You Get Section -->
-        <section class="py-12 px-6 w-full max-w-4xl">
-            <div class="text-center mb-10">
-                <h2 class="font-heading text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white uppercase leading-none text-center">Yang Anda Dapatkan</h2>
-                <p class="text-xs md:text-sm font-bold text-slate-500 mt-2 text-center">Paket Lengkap Siap Pakai Untuk Bisnis Anda</p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-body">
-                <div class="glass p-6 rounded-3xl border border-white/60 dark:border-slate-700/50 flex gap-4 items-center">
-                    <div class="w-12 h-12 rounded-2xl bg-brand/10 flex items-center justify-center text-brand shrink-0">
-                        <i class="ph ph-code text-2xl font-bold"></i>
-                    </div>
-                    <div>
-                        <p class="font-black text-sm text-slate-800 dark:text-white uppercase leading-none">File Front-End Modern</p>
-                        <p class="text-xs text-slate-500 mt-1">Source code HTML5 & Tailwind CSS yang responsif dan elegan.</p>
-                    </div>
-                </div>
-                <div class="glass p-6 rounded-3xl border border-white/60 dark:border-slate-700/50 flex gap-4 items-center">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 shrink-0">
-                        <i class="ph ph-table text-2xl font-bold"></i>
-                    </div>
-                    <div>
-                        <p class="font-black text-sm text-slate-800 dark:text-white uppercase leading-none">Google Sheet Engine</p>
-                        <p class="text-xs text-slate-500 mt-1">Backend Google Apps Script siap pakai, cukup salin dan deploy.</p>
-                    </div>
-                </div>
-                <div class="glass p-6 rounded-3xl border border-white/60 dark:border-slate-700/50 flex gap-4 items-center">
-                    <div class="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-600 shrink-0">
-                        <i class="ph ph-magic-wand text-2xl font-bold"></i>
-                    </div>
-                    <div>
-                        <p class="font-black text-sm text-slate-800 dark:text-white uppercase leading-none">Access Page Generator</p>
-                        <p class="text-xs text-slate-500 mt-1">Alat bantu untuk membuat halaman akses produk otomatis.</p>
-                    </div>
-                </div>
-                <div class="glass p-6 rounded-3xl border border-white/60 dark:border-slate-700/50 flex gap-4 items-center">
-                    <div class="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-600 shrink-0">
-                        <i class="ph ph-copy-simple text-2xl font-bold"></i>
-                    </div>
-                    <div>
-                        <p class="font-black text-sm text-slate-800 dark:text-white uppercase leading-none">Metode Copy-Paste</p>
-                        <p class="text-xs text-slate-500 mt-1">Instalasi mudah tanpa perlu keahlian koding yang mendalam.</p>
+                    <div class="flex-1 space-y-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center shadow-lg"><i class="ph ph-sparkle text-xl"></i></div>
+                            <h2 class="font-heading text-lg md:text-xl font-black gradient-text uppercase leading-none">Update fitur membership #1</h2>
+                        </div>
+
+                        <h3 class="font-heading text-2xl md:text-3xl font-black text-slate-800 dark:text-white leading-tight">💥 QRIS STATIS dan CUSTOM BUTTON & URL.</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4 text-slate-600 dark:text-slate-300 font-bold">
+                                <i class="ph ph-caret-circle-right-fill text-indigo-500 text-2xl"></i>
+                                <span class="text-sm md:text-base">👉 Scan 👉 Bayar 👉 Selesai</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-slate-600 dark:text-slate-300 font-bold">
+                                <i class="ph ph-caret-circle-right-fill text-indigo-500 text-2xl"></i>
+                                <span class="text-sm md:text-base">Setelah checkout, lo bisa arahkan user ke mana aja</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-slate-600 dark:text-slate-300 font-bold">
+                                <i class="ph ph-caret-circle-right-fill text-indigo-500 text-2xl"></i>
+                                <span class="text-sm md:text-base">🚀 Grup WA 📥 Halaman download 🔐 Member area 🎯 Funnel lanjutan</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Core Features Grid -->
-        <section class="py-12 px-6 w-full max-w-5xl text-center">
-            <div class="text-center mb-12 text-center">
-                <h2 class="font-heading text-2xl md:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Fitur Unggulan Platform</h2>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 font-sub text-center">
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 flex flex-col items-center group hover:border-brand transition-all">
-                    <i class="ph ph-layout text-4xl text-brand dark:text-indigo-400 mb-3 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-slate-800 dark:text-slate-200 text-xs leading-tight uppercase">Dashboard Glassmorphism</h3>
-                </div>
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 flex flex-col items-center group hover:border-brand transition-all">
-                    <i class="ph ph-paint-brush text-4xl text-brand dark:text-indigo-400 mb-3 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-slate-800 dark:text-slate-200 text-xs leading-tight uppercase">White Label Branding</h3>
-                </div>
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 flex flex-col items-center group hover:border-brand transition-all">
-                    <i class="ph ph-users-four text-4xl text-brand dark:text-indigo-400 mb-3 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-slate-800 dark:text-slate-200 text-xs leading-tight uppercase">Advanced Affiliate System</h3>
-                </div>
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 flex flex-col items-center group hover:border-brand transition-all">
-                    <i class="ph ph-broadcast text-4xl text-brand dark:text-indigo-400 mb-3 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-slate-800 dark:text-slate-200 text-xs leading-tight uppercase">WA Broadcast & Follow-up</h3>
-                </div>
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 flex flex-col items-center group hover:border-brand transition-all">
-                    <i class="ph ph-graduation-cap text-4xl text-brand dark:text-indigo-400 mb-3 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-slate-800 dark:text-slate-200 text-xs leading-tight uppercase">LMS & Digital Assets</h3>
-                </div>
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 flex flex-col items-center group hover:border-brand transition-all">
-                    <i class="ph ph-bell-ringing text-4xl text-brand dark:text-indigo-400 mb-3 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-slate-800 dark:text-slate-200 text-xs leading-tight uppercase">Multi-Channel Notif</h3>
-                </div>
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 flex flex-col items-center group hover:border-brand transition-all">
-                    <i class="ph ph-ticket text-4xl text-brand dark:text-indigo-400 mb-3 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-slate-800 dark:text-slate-200 text-xs leading-tight uppercase">Smart Coupon Logic</h3>
-                </div>
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 flex flex-col items-center group hover:border-brand transition-all">
-                    <i class="ph ph-key text-4xl text-brand dark:text-indigo-400 mb-3 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-slate-800 dark:text-slate-200 text-xs leading-tight uppercase">Auto-Reset Password</h3>
+        <!-- Section Update Fitur #2 (NEW) -->
+        <section class="py-10 px-6 w-full max-w-5xl mx-auto">
+            <div class="promo-card rounded-[3.5rem] p-8 md:p-14 relative overflow-hidden border-2 border-purple-500/20 dark:border-purple-500/30">
+                <div class="absolute -bottom-12 -left-12 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px]"></div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row-reverse items-center gap-12">
+                    <div class="w-full md:w-1/2">
+                        <div class="promo-card p-2 rounded-[2.5rem] shadow-xl">
+                            <img src="https://imersnesia.com/wp-content/uploads/2026/05/WhatsApp-Image-2026-05-03-at-11.13.21.jpeg" alt="Aset Digital Update 2" class="rounded-[2.2rem] w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <div class="flex-1 space-y-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-purple-600 text-white rounded-xl flex items-center justify-center shadow-lg"><i class="ph ph-lightning text-xl"></i></div>
+                            <h2 class="font-heading text-lg md:text-xl font-black gradient-text uppercase leading-none">Update fitur membership #2</h2>
+                        </div>
+
+                        <h3 class="font-heading text-2xl md:text-3xl font-black text-slate-800 dark:text-white leading-tight">🧠 SMART VALIDATION SYSTEM.</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4 text-slate-600 dark:text-slate-300 font-bold">
+                                <i class="ph ph-caret-circle-right-fill text-purple-500 text-2xl"></i>
+                                <span class="text-sm md:text-base">Tidak ada order ganda</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-slate-600 dark:text-slate-300 font-bold">
+                                <i class="ph ph-caret-circle-right-fill text-purple-500 text-2xl"></i>
+                                <span class="text-sm md:text-base">Tidak ada manipulasi komisi</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-slate-600 dark:text-slate-300 font-bold">
+                                <i class="ph ph-caret-circle-right-fill text-purple-500 text-2xl"></i>
+                                <span class="text-sm md:text-base">Sistem lebih rapi & profesional</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Conviction Section -->
-        <section class="py-12 px-6 w-full max-w-4xl font-body text-center md:text-left">
-            <div class="glass p-8 md:p-12 rounded-[2.5rem] border border-white/80 dark:border-slate-700/50 relative overflow-hidden shadow-xl">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-full -mr-16 -mt-16 blur-2xl font-heading"></div>
-                <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div>
-                        <h2 class="font-heading text-xl md:text-2xl font-black mb-6 uppercase tracking-tight text-slate-900 dark:text-white leading-none">Keunggulan Sistem</h2>
-                        <div class="space-y-4 text-xs md:text-sm font-bold text-slate-600 dark:text-slate-400 tracking-wide uppercase">
-                            <p class="flex items-center gap-2">🚀 Database Sheets Selamanya Gratis</p>
-                            <p class="flex items-center gap-2">🚀 Bebas Deploy Di Mana Saja</p>
-                            <p class="flex items-center gap-2">🚀 Keamanan Data Dengan Smart Sync</p>
-                            <p class="flex items-center gap-2">🚀 Enkripsi Industri SHA-256 Aman</p>
+        <!-- Features Grid -->
+        <section class="py-12 px-6 w-full max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="promo-card p-8 rounded-[2.5rem] flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-3xl flex items-center justify-center mb-6"><i class="ph ph-layout text-4xl"></i></div>
+                    <h3 class="font-heading text-base font-black gradient-text uppercase mb-3 text-center">Sistem jualan</h3>
+                    <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 leading-relaxed">Dashboard lengkap untuk mengelola produk dan pesanan secara mandiri.</p>
+                </div>
+                <div class="promo-card p-8 rounded-[2.5rem] flex flex-col items-center text-center border-t-2 border-indigo-500/30 dark:border-indigo-500/50">
+                    <div class="w-16 h-16 bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-3xl flex items-center justify-center mb-6"><i class="ph ph-lightning text-4xl"></i></div>
+                    <h3 class="font-heading text-base font-black gradient-text uppercase mb-3 text-center">Engine automation</h3>
+                    <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 leading-relaxed">Otomasi pengiriman akses dan data menggunakan Google Appscript.</p>
+                </div>
+                <div class="promo-card p-8 rounded-[2.5rem] flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-3xl flex items-center justify-center mb-6"><i class="ph ph-package text-4xl"></i></div>
+                    <h3 class="font-heading text-base font-black gradient-text uppercase mb-3 text-center">Produk siap jual</h3>
+                    <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 leading-relaxed">Langsung pasarkan iMersbiOS dan dapatkan profit 100% milik anda.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bonus Grid (5 Cards) -->
+        <section class="py-16 px-6 w-full max-w-5xl mx-auto font-body">
+            <div class="text-center mb-16">
+                <h2 class="font-heading text-3xl md:text-5xl font-black gradient-text leading-none uppercase">Bonus eksklusif member</h2>
+                <p class="text-indigo-600 dark:text-indigo-400 font-bold mt-4 uppercase tracking-widest text-xs leading-none">Dapatkan total value jutaan rupiah secara gratis</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="promo-card rounded-[2rem] overflow-hidden flex flex-col">
+                    <div class="h-44 w-full relative overflow-hidden bg-indigo-900/20"><img src="https://imersnesia.com/wp-content/uploads/2026/05/Bonus-2-IMersAccess-Page.webp" class="w-full h-full object-cover opacity-60 mix-blend-overlay" alt="Access Page Generator"></div>
+                    <div class="p-6 pt-5"><h3 class="font-heading text-base font-black text-indigo-500 dark:text-indigo-400 mb-2 uppercase">iMers access page generator</h3><p class="text-xs font-semibold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tighter">Bikin halaman akses instan dan export ke file HTML dalam hitungan detik.</p></div>
+                </div>
+                <div class="promo-card rounded-[2rem] overflow-hidden flex flex-col">
+                    <div class="h-44 w-full relative overflow-hidden bg-purple-900/20"><img src="https://imersnesia.com/wp-content/uploads/2026/05/Bonus-3-iMers-banner-Json-Generator.webp" class="w-full h-full object-cover opacity-60 mix-blend-overlay" alt="JSON Banner Generator"></div>
+                    <div class="p-6 pt-5"><h3 class="font-heading text-base font-black text-purple-500 dark:text-purple-400 mb-2 uppercase">iMers JSON banner generator</h3><p class="text-xs font-semibold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tighter">Generate prompt AI profesional buat bikin banner promosi gahar otomatis.</p></div>
+                </div>
+                <div class="promo-card rounded-[2rem] overflow-hidden flex flex-col">
+                    <div class="h-44 w-full relative overflow-hidden bg-blue-900/20"><img src="https://imersnesia.com/wp-content/uploads/2026/05/Bonus-1-iMers-Ai-Landing-Builder.webp" class="w-full h-full object-cover opacity-60 mix-blend-overlay" alt="AI Landing Builder"></div>
+                    <div class="p-6 pt-5"><h3 class="font-heading text-base font-black text-blue-500 dark:text-blue-400 mb-2 uppercase">iMers AI landing builder</h3><p class="text-xs font-semibold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tighter">Magic builder bertenaga AI untuk isi semua data landing page secara otomatis.</p></div>
+                </div>
+                <div class="promo-card rounded-[2rem] overflow-hidden flex flex-col">
+                    <div class="h-44 w-full relative overflow-hidden bg-emerald-900/20"><img src="https://imersnesia.com/wp-content/uploads/2026/04/webgems.jpg" class="w-full h-full object-cover opacity-60 mix-blend-overlay" alt="App Builder GEMS"></div>
+                    <div class="p-6 pt-5"><h3 class="font-heading text-base font-black text-emerald-500 dark:text-emerald-400 mb-2 uppercase">iMers app builder GEMS</h3><p class="text-xs font-semibold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tighter">Bangun aplikasi fungsional tanpa ngoding sama sekali lewat perintah AI instan.</p></div>
+                </div>
+                <div class="promo-card rounded-[2rem] overflow-hidden flex flex-col border-2 border-gold/30">
+                    <div class="h-44 w-full relative overflow-hidden bg-yellow-900/20"><img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover opacity-60 mix-blend-overlay" alt="Commercial License"></div>
+                    <div class="p-6 pt-5"><h3 class="font-heading text-base font-black text-gold mb-2 uppercase tracking-tighter">Commercial license</h3><p class="text-xs font-semibold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tighter">Hak eksklusif untuk menjual ulang sistem iMersFireship dan produk iMersbiOS.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bonus Pamungkas iMersbiOS -->
+        <section class="py-16 px-6 w-full max-w-5xl mx-auto">
+            <div class="bg-indigo-50 dark:bg-gradient-to-br dark:from-indigo-950 dark:to-[#05050a] border border-indigo-200 dark:border-white/10 rounded-[3.5rem] p-8 md:p-16 relative overflow-hidden shadow-2xl">
+                <div class="absolute -top-24 -right-24 w-80 h-80 bg-indigo-600/10 dark:bg-indigo-600/20 rounded-full blur-[100px]"></div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row gap-12 items-center">
+                    <div class="flex-1 text-left">
+                        <div class="inline-block px-4 py-1.5 gold-badge rounded-full text-[10px] font-black uppercase tracking-widest mb-8">Bonus pamungkas sudah masuk! 🔥</div>
+                        <h2 class="font-heading text-4xl md:text-6xl font-black gradient-text mb-6 uppercase tracking-tight leading-none">iMersbiOS</h2>
+                        <p class="font-sub text-lg md:text-xl text-slate-600 dark:text-slate-400 font-medium max-w-2xl mb-12 uppercase leading-relaxed tracking-tight">Bukan produk PLR. Dibangun dari nol khusus untuk member. Bio link yang bisa lo jadiin mini landing page siap jualan.</p>
+                        <div class="flex items-center gap-4 bg-white/40 dark:bg-white/5 p-4 rounded-2xl border border-indigo-100 dark:border-white/5 w-max">
+                            <i class="ph ph-check-circle-fill text-emerald-500 dark:text-emerald-400 text-2xl"></i>
+                            <span class="font-bold text-sm text-slate-700 dark:text-slate-200 uppercase tracking-tighter">Produk premium hasilkan cuan instan</span>
                         </div>
                     </div>
-                    <div>
-                        <h2 class="font-heading text-xl md:text-2xl font-black mb-6 uppercase tracking-tight text-slate-900 dark:text-white leading-none">Manfaat Utama</h2>
-                        <div class="space-y-4 text-xs md:text-sm font-bold text-slate-600 dark:text-slate-400 tracking-wide uppercase">
-                            <p class="flex items-center gap-2">💎 Meningkatkan Konversi Sales</p>
-                            <p class="flex items-center gap-2">💎 Membangun Passive Income Otomatis</p>
-                            <p class="flex items-center gap-2">💎 Otoritas Brand Lebih Terpercaya</p>
-                            <p class="flex items-center gap-2">💎 Manajemen Admin Lebih Praktis</p>
+                    <div class="w-full md:w-1/2">
+                        <div class="promo-card p-3 rounded-[2.5rem] shadow-2xl"><img src="https://imersnesia.com/wp-content/uploads/2026/04/Gemini_Generated_Image_70qndm70qndm70qn-1.webp" class="rounded-[2rem] w-full h-auto" alt="iMersbiOS Preview"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bonus Member AiBox Tools -->
+        <section class="py-16 px-6 w-full max-w-5xl mx-auto">
+            <div class="bg-indigo-50 dark:bg-gradient-to-br dark:from-indigo-900/40 dark:to-[#05050a] border border-indigo-200 dark:border-white/10 rounded-[3.5rem] p-8 md:p-16 relative overflow-hidden shadow-2xl">
+                <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-brand/10 dark:bg-indigo-600/20 rounded-full blur-[100px]"></div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row-reverse gap-12 items-center">
+                    <div class="flex-1 text-left">
+                        <div class="inline-block px-4 py-1.5 bg-indigo-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest mb-8 shadow-lg shadow-indigo-600/20">Bonus Super Premium member iMership 💎</div>
+                        <h2 class="font-heading text-4xl md:text-6xl font-black gradient-text mb-6 uppercase tracking-tight leading-none">iMers AiBox Tools</h2>
+                        <p class="font-sub text-lg md:text-xl text-slate-600 dark:text-slate-400 font-medium max-w-2xl mb-12 uppercase leading-relaxed tracking-tight">Alat bantu canggih yang bakal ubah cara lo bikin asset digital secara instan. Lo bukan cuma pakai... lo yang pegang kontrolnya.</p>
+                        
+                        <div class="grid grid-cols-1 gap-4 mb-10">
+                            <div class="flex items-center gap-3 text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-tighter">
+                                <i class="ph ph-check-circle-fill text-indigo-500 text-2xl"></i> Bikin mockup keren sekejap
+                            </div>
+                            <div class="flex items-center gap-4 text-slate-700 dark:text-slate-200 font-bold uppercase text-sm tracking-tighter">
+                                <i class="ph ph-check-circle-fill text-indigo-500 text-2xl"></i> Branding produk profesional
+                            </div>
+                            <div class="flex items-center gap-4 text-slate-700 dark:text-slate-200 font-bold uppercase text-sm tracking-tighter">
+                                <i class="ph ph-check-circle-fill text-indigo-500 text-2xl"></i> Siap jual dalam hitungan menit
+                            </div>
                         </div>
+
+                        <div class="bg-indigo-600/5 dark:bg-indigo-600/10 p-7 rounded-[2.5rem] border border-indigo-500/20 shadow-inner">
+                            <p class="font-heading text-2xl font-black gradient-text uppercase leading-none mb-3">Lisensi suka suka lo!</p>
+                            <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-relaxed">Pegang kendali penuh aset digital lo tanpa batasan lisensi yang kaku.</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2">
+                        <div class="promo-card p-3 rounded-[2.5rem] shadow-2xl border-indigo-500/20"><img src="https://imersnesia.com/wp-content/uploads/2026/05/aimersbox.jpg" class="rounded-[2rem] w-full h-auto" alt="AiBox Tools Preview"></div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Pricing Section -->
-        <section id="pricing" class="py-16 px-6 w-full max-w-5xl">
-            <div class="text-center mb-12">
-                <h2 class="font-heading text-2xl md:text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none text-center">Investasi Terbaik Anda</h2>
-                <p class="text-xs md:text-sm font-bold text-slate-500 mt-3 text-center uppercase tracking-widest">Pilih Paket Yang Paling Sesuai Dengan Kebutuhan Anda</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto px-4">
-                <!-- Yearly License -->
-                <div class="glass p-10 rounded-[3rem] border border-white/60 dark:border-slate-700/50 flex flex-col items-center relative overflow-hidden transition-all hover:scale-[1.02]">
-                    <h3 class="font-sub font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] text-xs mb-4">Lisensi Tahunan</h3>
-                    <div class="flex items-baseline gap-1 mb-8">
-                        <span class="text-xl font-black">Rp</span>
-                        <span class="text-5xl font-black text-slate-900 dark:text-white">39.000</span>
-                        <span class="text-slate-500 font-bold">/tahun</span>
-                    </div>
-                    <ul class="space-y-4 w-full mb-10 text-sm font-semibold text-slate-600 dark:text-slate-300">
-                        <li class="flex items-center gap-3"><i class="ph ph-check-circle-fill text-brand"></i> Akses Semua Fitur Platform</li>
-                        <li class="flex items-center gap-3"><i class="ph ph-check-circle-fill text-brand"></i> Free Database Google Sheets</li>
-                        <li class="flex items-center gap-3"><i class="ph ph-check-circle-fill text-brand"></i> Support Deploy Cloudflare/Vercel</li>
-                        <li class="flex items-center gap-3"><i class="ph ph-check-circle-fill text-brand"></i> Update Sistem Selama 1 Tahun</li>
-                    </ul>
-                    <a href="https://imersfireship.vercel.app/?checkout=99e7c0f5-e21e-42a0-9799-301ebc1cc7aa" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-white py-4 rounded-2xl font-black border border-slate-200 dark:border-slate-700 text-center transition-all hover:bg-slate-50 uppercase tracking-tight">
-                        Pilih Paket Tahunan
-                    </a>
-                </div>
-
-                <!-- Lifetime Promo -->
-                <div class="glass p-10 rounded-[3rem] border-2 border-brand dark:border-indigo-400 flex flex-col items-center relative overflow-hidden transition-all hover:scale-[1.02] shadow-2xl shadow-brand/10">
-                    <div class="absolute top-0 right-0 bg-brand text-white px-6 py-2 rounded-bl-3xl font-black text-[10px] uppercase tracking-widest leading-none">Best Value</div>
-                    <h3 class="font-sub font-bold text-brand dark:text-indigo-400 uppercase tracking-[0.2em] text-xs mb-4">Promo Spesial Lifetime</h3>
-                    <div class="flex flex-col items-center mb-8 text-center">
-                        <span class="text-sm font-bold text-slate-400 line-through">Rp 499.000</span>
-                        <div class="flex items-baseline gap-1">
-                            <span class="text-xl font-black text-brand">Rp</span>
-                            <span class="text-6xl font-black text-brand">49.000</span>
-                        </div>
-                    </div>
-                    <ul class="space-y-4 w-full mb-10 text-sm font-bold text-slate-700 dark:text-slate-100">
-                        <li class="flex items-center gap-3"><i class="ph ph-check-circle-fill text-emerald-500"></i> Semua Fitur Lisensi Tahunan</li>
-                        <li class="flex items-center gap-3"><i class="ph ph-check-circle-fill text-emerald-500"></i> Satu Kali Bayar Seumur Hidup</li>
-                        <li class="flex items-center gap-3"><i class="ph ph-check-circle-fill text-emerald-500"></i> Bonus Access Page Generator</li>
-                        <li class="flex items-center gap-3"><i class="ph ph-check-circle-fill text-emerald-500"></i> Prioritas Update Selamanya</li>
-                    </ul>
-                    <a href="https://imersfireship.vercel.app/?checkout=e1fdec19-480e-44c2-8fc3-f4147b35ac90" class="w-full bg-brand text-white py-5 rounded-2xl font-black shadow-lg shadow-brand/30 text-center transition-all hover:bg-brandHover uppercase tracking-tight">
-                        Miliki Akses Lifetime
-                    </a>
-                </div>
-            </div>
+        <section id="pricing" class="py-20 px-6 w-full max-w-5xl mx-auto text-center">
+            <h2 class="font-heading text-3xl md:text-5xl font-black gradient-text leading-none uppercase">Investasi terbaik anda</h2>
+            <p class="text-indigo-600 dark:text-indigo-400 font-bold mt-4 uppercase tracking-[0.3em] text-xs leading-none">Makin ditunggu, harga makin tinggi</p>
             
-            <div class="max-w-lg mx-auto mt-10 text-center font-body bg-red-500/5 p-4 rounded-2xl border border-red-500/10">
-                <p class="text-[10px] md:text-xs font-black text-red-600 dark:text-red-400 uppercase tracking-widest leading-relaxed">
-                    ⚠️ Perhatian: Harga Promo Rp 24.000 Hanya Berlaku Selama Masa Pre-Launch. Segera Amankan Sebelum Harga Kembali Normal.
-                </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mt-16 text-left">
+                <!-- Yearly -->
+                <div class="promo-card pricing-glow p-10 rounded-[3rem] flex flex-col items-center text-center group">
+                    <p class="text-[11px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-6">Lisensi tahunan</p>
+                    <div class="mb-10">
+                        <p class="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">Rp 39.000</p>
+                        <p class="text-xs font-bold text-slate-400 dark:text-slate-500 mt-2 uppercase tracking-widest leading-none">Per tahun</p>
+                    </div>
+                    <ul class="text-sm font-bold text-slate-600 dark:text-slate-400 space-y-4 mb-12 text-left w-full uppercase text-[11px] tracking-tight">
+                        <li class="flex items-center gap-3"><i class="ph ph-rocket-launch text-indigo-500 text-xl"></i> Semua Fitur iMersfireship</li>
+                        <li class="flex items-center gap-3"><i class="ph ph-calendar-check text-blue-500 text-xl"></i> Perpanjangan Pertahun Rp. 39.000,-</li>
+                        <li class="flex items-center gap-3"><i class="ph ph-shield-check text-emerald-500 text-xl"></i> Satu Kali Bayar Seumur Hidup</li>
+                        <li class="flex items-center gap-3"><i class="ph ph-gift text-purple-500 text-xl"></i> Bonus Ekslusive Member</li>
+                        <li class="flex items-center gap-3"><i class="ph ph-star text-gold text-xl"></i> Bonus Pamungkas iMersbiOS</li>
+                        <li class="flex items-center gap-3"><i class="ph ph-key text-rose-500 text-xl"></i> Bonus Super Premium Lisensi Suka Suka Lo</li>
+                        <li class="flex items-center gap-3"><i class="ph ph-lightning text-sky-500 text-xl"></i> Prioritas Update Selamanya</li>
+                    </ul>
+                    <a href="https://imersfireship.vercel.app/?checkout=99e7c0f5-e21e-42a0-9799-301ebc1cc7aa" class="w-full bg-slate-900 dark:bg-slate-800 text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-xl">Pilih tahunan</a>
+                </div>
+
+                <!-- Lifetime -->
+                <div class="promo-card pricing-glow p-10 rounded-[3rem] border-2 border-indigo-600 dark:border-indigo-500 relative flex flex-col items-center text-center bg-white dark:bg-indigo-600/5 shadow-2xl">
+                    <div class="absolute -top-4 gold-badge px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl">Paling hemat</div>
+                    <p class="text-[11px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-6">Lisensi lifetime</p>
+                    <div class="mb-10">
+                        <p class="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">Rp 49.000</p>
+                        <p class="text-xs font-bold text-indigo-600 dark:text-indigo-400 mt-2 uppercase tracking-widest italic leading-none">Sekali bayar seumur hidup</p>
+                    </div>
+                    <ul class="text-sm font-bold text-slate-700 dark:text-slate-300 space-y-4 mb-12 text-left w-full uppercase text-[11px] tracking-tight">
+                        <li class="flex items-center gap-3"><i class="ph ph-rocket-launch text-indigo-500 text-xl"></i> Semua Fitur iMersfireship</li>
+                        <li class="flex items-center gap-3"><i class="ph ph-shield-check text-emerald-500 text-xl"></i> Satu Kali Bayar Seumur Hidup</li>
+                        <li class="flex items-center gap-3"><i class="ph ph-gift text-purple-500 text-xl"></i> Bonus Ekslusive Member</li>
+                        <li class="flex items-center gap-3"><i class="ph ph-star text-gold text-xl"></i> Bonus Pamungkas iMersbiOS</li>
+                        <li class="flex items-center gap-3"><i class="ph ph-key text-rose-500 text-xl"></i> Bonus Super Premium Lisensi Suka Suka Lo</li>
+                        <li class="flex items-center gap-3"><i class="ph ph-lightning text-sky-500 text-xl"></i> Prioritas Update Selamanya</li>
+                    </ul>
+                    <a href="https://imersfireship.vercel.app/?checkout=e1fdec19-480e-44c2-8fc3-f4147b35ac90" class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-indigo-500/30">Miliki lifetime</a>
+                </div>
             </div>
         </section>
 
         <!-- FAQ Section -->
-        <section class="py-16 px-6 w-full max-w-4xl">
-            <div class="text-center mb-12">
-                <h2 class="font-heading text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase leading-none text-center">Pertanyaan Umum (FAQ)</h2>
-                <p class="text-xs md:text-sm font-bold text-slate-500 mt-2 text-center uppercase tracking-widest">Masih Ragu? Ini Yang Sering Ditanyakan</p>
-            </div>
+        <section class="py-20 px-6 w-full max-w-4xl mx-auto text-center">
+            <h2 class="font-heading text-3xl md:text-5xl font-black gradient-text leading-none uppercase tracking-tight">Pertanyaan umum (FAQ)</h2>
+            <p class="text-indigo-600 dark:text-indigo-400 font-bold mt-4 uppercase tracking-widest text-xs leading-none">Masih ragu? Ini yang sering ditanyakan</p>
             
-            <div class="space-y-4 font-body text-center md:text-left px-4">
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 shadow-sm transition-all hover:shadow-md">
-                    <p class="font-black text-sm text-slate-800 dark:text-white mb-2 underline decoration-brand/30 decoration-2 underline-offset-4">Apa itu iMersFireship?</p>
-                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-semibold">iMersFireship adalah platform marketplace produk digital dan affiliate berbasis Google Sheets. Menggunakan teknologi Apps Script untuk menangani database secara tangguh tanpa biaya bulanan.</p>
+            <div class="grid grid-cols-1 gap-4 mt-16 text-left">
+                <div class="promo-card p-6 rounded-2xl">
+                    <p class="font-black text-sm text-slate-900 dark:text-white mb-2 underline decoration-indigo-500 decoration-2 underline-offset-4 uppercase tracking-tighter">Apa itu iMersFireship?</p>
+                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-semibold italic uppercase tracking-tighter">Platform marketplace produk digital dan affiliate berbasis Google Sheets. Menggunakan teknologi Apps Script untuk database tangguh tanpa biaya bulanan.</p>
                 </div>
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 shadow-sm transition-all hover:shadow-md">
-                    <p class="font-black text-sm text-slate-800 dark:text-white mb-2 underline decoration-brand/30 decoration-2 underline-offset-4">Apakah saya harus beli hosting dan domain?</p>
-                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-semibold">Tidak wajib. Anda bisa menggunakan subdomain gratis dari layanan seperti Vercel atau Cloudflare. Namun sistem ini tetap mendukung penggunaan domain kustom jika Anda membutuhkannya.</p>
+                <div class="promo-card p-6 rounded-2xl">
+                    <p class="font-black text-sm text-slate-900 dark:text-white mb-2 underline decoration-indigo-500 decoration-2 underline-offset-4 uppercase tracking-tighter">Apakah saya harus beli hosting dan domain?</p>
+                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-semibold italic uppercase tracking-tighter">Tidak wajib. Anda bisa menggunakan subdomain gratis dari Vercel atau Cloudflare. Namun sistem ini tetap mendukung domain kustom.</p>
                 </div>
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 shadow-sm transition-all hover:shadow-md">
-                    <p class="font-black text-sm text-slate-800 dark:text-white mb-2 underline decoration-brand/30 decoration-2 underline-offset-4">Bagaimana jika sistem diperbarui?</p>
-                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-semibold">Sangat aman. Sistem menggunakan teknologi Smart Sync yang memisahkan data inti kustomer dengan update fitur sistem, sehingga data tidak akan terhapus atau berantakan.</p>
+                <div class="promo-card p-6 rounded-2xl">
+                    <p class="font-black text-sm text-slate-900 dark:text-white mb-2 underline decoration-indigo-500 decoration-2 underline-offset-4 uppercase tracking-tighter">Bagaimana jika sistem diperbarui?</p>
+                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-semibold italic uppercase tracking-tighter">Sangat aman. Sistem menggunakan teknologi Smart Sync yang memisahkan data inti kustomer dengan update fitur sistem, data lo gak akan berantakan.</p>
                 </div>
-                <div class="glass p-6 rounded-2xl border border-white/60 dark:border-slate-700/50 shadow-sm transition-all hover:shadow-md">
-                    <p class="font-black text-sm text-slate-800 dark:text-white mb-2 underline decoration-brand/30 decoration-2 underline-offset-4">Apakah ada biaya tambahan lainnya?</p>
-                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-semibold">Tidak ada. Setelah membeli lisensi, operasional platform sepenuhnya menggunakan infrastruktur gratis dari Google dan penyedia hosting frontend pilihan Anda.</p>
+                <div class="promo-card p-6 rounded-2xl">
+                    <p class="font-black text-sm text-slate-900 dark:text-white mb-2 underline decoration-indigo-500 decoration-2 underline-offset-4 uppercase tracking-tighter">Apakah ada biaya tambahan lainnya?</p>
+                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-semibold italic uppercase tracking-tighter">Tidak ada. Setelah membeli lisensi, operasional platform sepenuhnya menggunakan infrastruktur gratis dari Google dan penyedia hosting pilihan lo.</p>
+                </div>
+                <div class="promo-card p-6 rounded-2xl">
+                    <p class="font-black text-sm text-slate-900 dark:text-white mb-2 underline decoration-indigo-500 decoration-2 underline-offset-4 uppercase tracking-tighter">Apa itu Commercial License di bonus lo?</p>
+                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-semibold italic uppercase tracking-tighter">Izin komersial artinya lo boleh jual ulang produk iMersFireship dan iMersbiOS ke orang lain dan ambil untungnya 100% buat lo sendiri.</p>
+                </div>
+                <div class="promo-card p-6 rounded-2xl">
+                    <p class="font-black text-sm text-slate-900 dark:text-white mb-2 underline decoration-indigo-500 decoration-2 underline-offset-4 uppercase tracking-tighter">Apakah pemula benar-benar bisa pakai?</p>
+                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-semibold italic uppercase tracking-tighter">Tentu! Tutorialnya sudah gue bikin sejelas mungkin buat pemula. Gak perlu jago coding, cukup copy-paste dan jalankan instruksi AI.</p>
                 </div>
             </div>
         </section>
 
+        <!-- Access Links -->
+        <section class="pb-20 px-6 w-full max-w-4xl mx-auto text-center">
+            <h3 class="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.4em] mb-10">Pintu akses member</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <a href="https://imersfireship.vercel.app/" target="_blank" class="promo-card px-6 py-4 rounded-2xl flex items-center justify-between group">
+                    <span class="text-xs font-black uppercase text-slate-500 dark:text-slate-400">Pintu 1 (Vercel)</span>
+                    <i class="ph ph-arrow-square-out text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors"></i>
+                </a>
+                <a href="https://imersfireship.imersnesia-com.workers.dev/" target="_blank" class="promo-card px-6 py-4 rounded-2xl flex items-center justify-between group">
+                    <span class="text-xs font-black uppercase text-slate-500 dark:text-slate-400">Pintu 2 (Cloudflare)</span>
+                    <i class="ph ph-arrow-square-out text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors"></i>
+                </a>
+                <a href="https://imersone.my.id/" target="_blank" class="promo-card px-6 py-4 rounded-2xl flex items-center justify-between group">
+                    <span class="text-xs font-black uppercase text-slate-500 dark:text-slate-400">Pintu utama (Custom)</span>
+                    <i class="ph ph-arrow-square-out text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors"></i>
+                </a>
+            </div>
+        </section>
+
         <!-- Footer -->
-        <footer class="py-12 text-center text-slate-400 text-[10px] font-black uppercase tracking-[0.4em] w-full font-sub border-t border-white/10 dark:border-slate-800">
-            &copy; 2026 iMersFireship Team. All Rights Reserved.
+        <footer class="py-12 border-t border-slate-200 dark:border-white/5 w-full text-center">
+            <p class="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.6em]">
+                &copy; 2026 iMersFireship — Developed by Terry Katar
+            </p>
         </footer>
     </div>
 
@@ -380,19 +501,14 @@
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
             updateIcon(isDark);
         }
-
         function updateIcon(isDark) {
             const icon = document.getElementById('themeIcon');
-            if (icon) {
-                icon.className = isDark ? 'ph ph-sun text-xl' : 'ph ph-moon text-xl';
-            }
+            if (icon) icon.className = isDark ? 'ph ph-sun text-xl' : 'ph ph-moon-stars text-xl';
         }
-
         window.onload = () => {
             const savedTheme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            
-            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark) || !savedTheme) {
                 document.documentElement.classList.add('dark');
                 updateIcon(true);
             } else {
@@ -401,6 +517,5 @@
             }
         }
     </script>
-
 </body>
 </html>
