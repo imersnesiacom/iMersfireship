@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>iMersWAMEL</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+  scroll-behavior:smooth;
+}
+
+body{
+  background:#020617;
+  display:flex;
+  justify-content:center;
+  color:#e2e8f0;
+}
+
+.wrapper{
+  width:100%;
+  max-width:430px;
+}
+
+/* HERO */
+
+.hero{
+  padding:45px 20px;
+  text-align:center;
+  background:
+  radial-gradient(circle at top,
+  rgba(34,197,94,.20),
+  rgba(14,165,233,.18),
+  transparent);
+}
+
+.logo{
+  width:220px;
+  max-width:100%;
+}
+
+h1{
+  margin-top:20px;
+  font-size:28px;
+  line-height:1.45;
+  font-weight:700;
+}
+
+.highlight{
+  display:inline-block;
+  margin:7px 0;
+  padding:7px 14px;
+  border-radius:10px;
+  background:linear-gradient(90deg,#22c55e,#0ea5e9);
+  color:#020617;
+}
+
+.sub{
+  margin-top:14px;
+  font-size:14px;
+  line-height:1.7;
+  color:#cbd5e1;
+}
+
+.tagline{
+  margin-top:10px;
+  font-size:13px;
+  color:#94a3b8;
+}
+
+.btn{
+  display:inline-block;
+  margin-top:24px;
+  padding:15px 20px;
+  border-radius:12px;
+  background:linear-gradient(90deg,#22c55e,#0ea5e9);
+  color:#020617;
+  font-weight:700;
+  text-decoration:none;
+  box-shadow:0 10px 30px rgba(14,165,233,.25);
+}
+
+/* SECTION */
+
+.section{
+  padding:28px 20px;
+  border-top:1px solid rgba(148,163,184,.08);
+}
+
+.title{
+  font-size:20px;
+  font-weight:700;
+  background:linear-gradient(90deg,#22c55e,#38bdf8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.text{
+  margin-top:10px;
+  font-size:14px;
+  line-height:1.7;
+  color:#cbd5e1;
+}
+
+.box{
+  margin-top:14px;
+  padding:15px;
+  border-radius:12px;
+  border:1px solid rgba(148,163,184,.12);
+  background:#0f172a;
+  color:#e2e8f0;
+  font-size:14px;
+}
+
+ul{
+  margin-top:14px;
+  padding-left:20px;
+}
+
+li{
+  margin-bottom:10px;
+  font-size:14px;
+  color:#e2e8f0;
+  line-height:1.6;
+}
+
+/* VIDEO */
+
+.video-wrap{
+  position:relative;
+  width:100%;
+  padding-bottom:56.25%;
+  overflow:hidden;
+  border-radius:22px;
+  box-shadow:0 15px 40px rgba(0,0,0,.35);
+  border:1px solid rgba(148,163,184,.10);
+}
+
+.video-wrap iframe{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  border:none;
+}
+
+/* DEMO */
+
+.demo-grid{
+  margin-top:18px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.demo-card{
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  padding:18px;
+  border-radius:18px;
+  background:
+  linear-gradient(
+  145deg,
+  rgba(15,23,42,.95),
+  rgba(2,6,23,.95)
+  );
+  border:1px solid rgba(148,163,184,.10);
+  box-shadow:
+  0 10px 30px rgba(0,0,0,.25),
+  inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+.demo-icon{
+  min-width:52px;
+  width:52px;
+  height:52px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  background:
+  linear-gradient(
+  135deg,
+  rgba(34,197,94,.18),
+  rgba(14,165,233,.18)
+  );
+  border:1px solid rgba(34,197,94,.20);
+}
+
+.demo-icon.blue{
+  border:1px solid rgba(14,165,233,.20);
+}
+
+.demo-content{
+  flex:1;
+}
+
+.demo-title{
+  font-size:16px;
+  font-weight:700;
+  color:#fff;
+}
+
+.demo-desc{
+  margin-top:6px;
+  font-size:13px;
+  line-height:1.6;
+  color:#94a3b8;
+}
+
+.demo-btn{
+  display:inline-block;
+  margin-top:14px;
+  padding:12px 18px;
+  border-radius:12px;
+  background:
+  linear-gradient(
+  90deg,
+  #22c55e,
+  #0ea5e9
+  );
+  color:#020617;
+  font-size:14px;
+  font-weight:700;
+  text-decoration:none;
+  box-shadow:0 10px 25px rgba(14,165,233,.18);
+}
+
+/* PRICE */
+
+.price-wrap{
+  display:flex;
+  justify-content:center;
+  margin-top:18px;
+}
+
+.price-card{
+  position:relative;
+  width:100%;
+  max-width:320px;
+  padding:24px;
+  border-radius:18px;
+  background:#0f172a;
+  border:1px solid rgba(34,197,94,.45);
+  text-align:center;
+  box-shadow:0 0 35px rgba(34,197,94,.12);
+}
+
+.badge{
+  position:absolute;
+  top:-12px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:5px 14px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+  background:linear-gradient(90deg,#22c55e,#0ea5e9);
+  color:#020617;
+}
+
+.old{
+  text-decoration:line-through;
+  color:#64748b;
+  font-size:13px;
+}
+
+.price{
+  margin-top:8px;
+  font-size:34px;
+  font-weight:700;
+  background:linear-gradient(90deg,#4ade80,#22d3ee);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.price-desc{
+  margin-top:10px;
+  font-size:13px;
+  color:#cbd5e1;
+}
+
+/* FAQ */
+
+.faq-item{
+  margin-top:18px;
+}
+
+.faq-q{
+  font-size:14px;
+  font-weight:700;
+  background:linear-gradient(90deg,#22c55e,#38bdf8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.faq-a{
+  margin-top:7px;
+  font-size:13px;
+  line-height:1.7;
+  color:#e2e8f0;
+}
+
+/* FOOTER */
+
+.footer{
+  padding:30px 20px;
+  text-align:center;
+  font-size:13px;
+  color:#94a3b8;
+}
+
+.space{
+  height:35px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<!-- HERO -->
+
+<div class="hero">
+
+<img 
+src="https://imersnesia.com/wp-content/uploads/2026/05/logoimerswamelsamping.png" 
+class="logo"
+alt="iMersWAMEL"
+>
+
+<h1>
+Bangun Semi Funnel<br>
+<span class="highlight">
+WhatsApp & Email
+</span><br>
+Tanpa Ribet Setup
+</h1>
+
+<div class="sub">
+Bikin lead gen page dengan flow dinamis
+hanya pakai AppScript + Vercel
+</div>
+
+<div class="tagline">
+Tanpa Setup Rumit • Tanpa Tools Bulanan Mahal
+</div>
+
+<a href="#harga" class="btn">
+🚀 Mulai Sekarang
+</a>
+
+</div>
+
+<!-- VIDEO -->
+
+<div class="section" style="border-top:none; padding-top:0;">
+
+<div class="video-wrap">
+
+<iframe 
+src="https://www.youtube.com/embed/p8aWatSemd4"
+title="iMersWAMEL Video"
+allowfullscreen>
+</iframe>
+
+</div>
+
+</div>
+
+<!-- PROBLEM -->
+
+<div class="section">
+
+<div class="title">
+Kenapa Banyak Pemula Stuck?
+</div>
+
+<div class="box">
+💸 Takut biaya tools bulanan mahal
+</div>
+
+<div class="box">
+⚙️ Bingung setup funnel & automation
+</div>
+
+<div class="box">
+📱 Terlalu banyak platform & dashboard
+</div>
+
+<div class="box">
+🔁 Akhirnya semua balik manual lagi
+</div>
+
+</div>
+
+<!-- SOLUTION -->
+
+<div class="section">
+
+<div class="title">
+Solusi Funnel Versi Simpel
+</div>
+
+<div class="text">
+iMersWAMEL dibuat untuk lo yang pengen mulai ngerti funnel WhatsApp & Email tanpa harus ribet setup tools mahal.
+</div>
+
+<div class="text">
+Cukup pakai AppScript + Vercel lalu langsung mulai bikin lead gen page sendiri.
+</div>
+
+</div>
+
+<!-- DEMO -->
+
+<div class="section">
+
+<div class="title">
+Live Demo
+</div>
+
+<div class="text">
+Lihat contoh implementasi funnel & ecosystem yang sudah berjalan.
+</div>
+
+<div class="demo-grid">
+
+<div class="demo-card">
+
+<div class="demo-icon">
+🚀
+</div>
+
+<div class="demo-content">
+
+<div class="demo-title">
+Video Demo iMersWAMEL
+</div>
+
+<div class="demo-desc">
+Lihat cara kerja autoresponder WhatsApp & Email secara langsung.
+</div>
+
+<a href="https://youtu.be/p8aWatSemd4" class="demo-btn">
+▶️ Tonton Demo
+</a>
+
+</div>
+
+</div>
+
+<div class="demo-card">
+
+<div class="demo-icon blue">
+🏢
+</div>
+
+<div class="demo-content">
+
+<div class="demo-title">
+Agency Reseller Right
+</div>
+
+<div class="demo-desc">
+Contoh ecosystem membership & akses reseller modern.
+</div>
+
+<a href="https://youtu.be/p8aWatSemd4" class="demo-btn">
+🔥 Lihat Ecosystem
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- CAMPAIGN -->
+
+<div class="section">
+
+<div class="title">
+Unlimited Dynamic Campaign
+</div>
+
+<div class="text">
+Bukan cuma 1 halaman lead gen.
+</div>
+
+<div class="box">
+🚀 domain.vercel.app/campaignA
+</div>
+
+<div class="box">
+🚀 domain.vercel.app/campaignB
+</div>
+
+<div class="box">
+🚀 domain.vercel.app/campaignC
+</div>
+
+<div class="text">
+Setiap campaign bisa punya flow berbeda:
+</div>
+
+<ul>
+<li>🎯 Redirect berbeda</li>
+<li>💬 Autoresponder berbeda</li>
+<li>🎨 CTA & Button berbeda</li>
+<li>⚡ Flow funnel berbeda</li>
+</ul>
+
+</div>
+
+<!-- FLOW -->
+
+<div class="section">
+
+<div class="title">
+Cara Kerja Funnel
+</div>
+
+<div class="box">
+📝 Lead isi form
+</div>
+
+<div class="box">
+💬 Auto kirim WhatsApp
+</div>
+
+<div class="box">
+📩 Auto kirim Email
+</div>
+
+<div class="box">
+🚀 Redirect otomatis
+</div>
+
+</div>
+
+<!-- BONUS -->
+
+<div class="section">
+
+<div class="title">
+Bonus Exclusive
+</div>
+
+<ul>
+<li>🎁 WA Generator</li>
+<li>🎁 Email Generator</li>
+<li>🎁 Template WA Siap Pakai</li>
+<li>🎁 Template Email HTML</li>
+<li>🎁 Sales Page Premium</li>
+<li>🎁 Access Page Premium</li>
+<li>🎁 Platform Membership</li>
+<li>🎁 Marketing Kit</li>
+<li>🎁 Grup Support</li>
+</ul>
+
+<div class="text">
+Lo juga dapet sales page & access page
+yang sama seperti pusat dan bebas dimodifikasi.
+</div>
+
+</div>
+
+<!-- PRICE -->
+
+<div class="section" id="harga">
+
+<div class="title">
+Harga Launching
+</div>
+
+<div class="price-wrap">
+
+<div class="price-card">
+
+<div class="badge">
+🔥 LIMITED ACCESS
+</div>
+
+<div class="old">
+Rp297.000
+</div>
+
+<div class="price">
+Rp49.000
+</div>
+
+<div class="price-desc">
+Sekali bayar • Tanpa subscription bulanan
+</div>
+
+<a href="https://imersfireship.vercel.app/im/imerswamel.html" class="btn">
+🚀 Ambil Sekarang
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- FAQ -->
+
+<div class="section">
+
+<div class="title">
+FAQ
+</div>
+
+<div class="faq-item">
+<div class="faq-q">
+Apakah ini full automation kompleks?
+</div>
+
+<div class="faq-a">
+Tidak. Ini semi funnel ringan untuk belajar dan menjalankan automation dasar.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-q">
+Bisa buat banyak campaign?
+</div>
+
+<div class="faq-a">
+Bisa. Semua campaign bersifat dinamis dan bisa diatur bebas.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-q">
+Perlu domain & hosting?
+</div>
+
+<div class="faq-a">
+Tidak wajib. Semua dibuat seringan mungkin untuk pemula.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-q">
+Cocok untuk pemula?
+</div>
+
+<div class="faq-a">
+Sangat cocok. Bahkan jika belum pernah bikin funnel sebelumnya.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-q">
+Bisa otomatis kirim WA & Email?
+</div>
+
+<div class="faq-a">
+Bisa. Semua berjalan otomatis setelah setup.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-q">
+Bisa dijual ulang?
+</div>
+
+<div class="faq-a">
+Ya. Sudah termasuk lisensi reseller rights.
+</div>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+© iMersWAMEL • by iMersnesia.com
+</div>
+
+<div class="space"></div>
+
+</div>
+
+</body>
+</html>
