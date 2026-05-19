@@ -136,6 +136,76 @@
                     </div>
                 </section>
 
+                <!-- Desain & Tampilan Section (NEW) -->
+                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm">
+                    <span class="section-label">Desain & Warna (Global)</span>
+                    <div class="sidebar-section">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="form-label" for="headingFont">Font Judul</label>
+                                <select id="headingFont" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs outline-none focus:ring-2 focus:ring-coral/50 transition cursor-pointer font-bold">
+                                    <option value="Inter">Inter</option>
+                                    <option value="Montserrat">Montserrat</option>
+                                    <option value="Poppins" selected>Poppins</option>
+                                    <option value="Playfair Display">Playfair Display</option>
+                                    <option value="Oswald">Oswald</option>
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Open Sans">Open Sans</option>
+                                    <option value="Lato">Lato</option>
+                                    <option value="Raleway">Raleway</option>
+                                    <option value="Ubuntu">Ubuntu</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="form-label" for="bodyFont">Font Teks Default</label>
+                                <select id="bodyFont" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs outline-none focus:ring-2 focus:ring-coral/50 transition cursor-pointer">
+                                    <option value="Inter" selected>Inter</option>
+                                    <option value="Montserrat">Montserrat</option>
+                                    <option value="Poppins">Poppins</option>
+                                    <option value="Playfair Display">Playfair Display</option>
+                                    <option value="Oswald">Oswald</option>
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Open Sans">Open Sans</option>
+                                    <option value="Lato">Lato</option>
+                                    <option value="Raleway">Raleway</option>
+                                    <option value="Ubuntu">Ubuntu</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Gradient Color Pickers -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            <div class="space-y-1">
+                                <label class="form-label">Warna Judul (H1)</label>
+                                <div class="flex items-center justify-between gap-2 p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 transition focus-within:ring-2 focus-within:ring-coral/50">
+                                    <input type="color" id="titleColor1" value="#1e293b" class="w-7 h-7 rounded cursor-pointer border-0 p-0 bg-transparent" title="Warna Kiri">
+                                    <span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Ke</span>
+                                    <input type="color" id="titleColor2" value="#1e293b" class="w-7 h-7 rounded cursor-pointer border-0 p-0 bg-transparent" title="Warna Kanan">
+                                </div>
+                                <p class="text-[9px] text-slate-400">Pilih 2 warna berbeda untuk efek Gradient.</p>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="form-label">Warna Tombol</label>
+                                <div class="flex items-center justify-between gap-2 p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 transition focus-within:ring-2 focus-within:ring-coral/50">
+                                    <input type="color" id="btnColor1" value="#f88379" class="w-7 h-7 rounded cursor-pointer border-0 p-0 bg-transparent" title="Warna Kiri">
+                                    <span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Ke</span>
+                                    <input type="color" id="btnColor2" value="#9333ea" class="w-7 h-7 rounded cursor-pointer border-0 p-0 bg-transparent" title="Warna Kanan">
+                                </div>
+                                <p class="text-[9px] text-slate-400">Solid atau Gradient elegan.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Teks Biasa -->
+                        <div class="mt-2">
+                            <label class="form-label" for="textColor">Warna Teks Default</label>
+                            <div class="flex items-center gap-3 p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 transition focus-within:ring-2 focus-within:ring-coral/50">
+                                <input type="color" id="textColor" value="#334155" class="w-8 h-8 rounded cursor-pointer border-0 p-0 bg-transparent">
+                                <span class="text-xs text-slate-500 font-mono font-bold" id="textColorHex">#334155</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Dynamic Item Sections: Files -->
                 <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm">
                     <div class="flex justify-between items-center mb-4">
@@ -378,16 +448,35 @@
             const sLink = document.getElementById('supportLink').value || '#';
             const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 
+            const headingFont = document.getElementById('headingFont').value || 'Poppins';
+            const bodyFont = document.getElementById('bodyFont').value || 'Inter';
+            const textColor = document.getElementById('textColor').value || '#1e293b';
+
+            const tColor1 = document.getElementById('titleColor1').value || '#1e293b';
+            const tColor2 = document.getElementById('titleColor2').value || '#1e293b';
+            const isTitleSolid = tColor1 === tColor2;
+            // Jika warnanya sama, pakai warna solid biasa. Jika beda, aktifkan efek teks gradient!
+            const titleGradientCSS = isTitleSolid
+                ? `color: ${tColor1};`
+                : `background: linear-gradient(135deg, ${tColor1}, ${tColor2}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;`;
+
+            const bColor1 = document.getElementById('btnColor1').value || '#f88379';
+            const bColor2 = document.getElementById('btnColor2').value || '#9333ea';
+            // Sama untuk tombol: Auto-deteksi solid vs gradient
+            const btnGradientCSS = bColor1 === bColor2
+                ? `background: ${bColor1};`
+                : `background: linear-gradient(135deg, ${bColor1}, ${bColor2});`;
+
             // Helper to generate HTML for dynamic lists
             const mapItems = (arr, tag) => arr.length > 0 ? `
                 <span class="section-tag">${tag}</span>
                 ${arr.map(m => `
                 <div class="card-item bg-white dark:bg-slate-800 dark:border-slate-700">
                     <div style="flex-grow:1; text-align:left;">
-                        <h3 contenteditable="true" class="text-slate-900 dark:text-slate-100" style="margin:0; font-size:16px; font-weight:800; outline:none;">${m.title}</h3>
+                        <h3 contenteditable="true" class="text-slate-900 dark:text-slate-100" style="margin:0; font-size:16px; font-weight:800; outline:none; font-family: var(--font-heading);">${m.title}</h3>
                         <p contenteditable="true" class="text-slate-500 dark:text-slate-400" style="margin:6px 0 0; font-size:12px; outline:none; line-height:1.4;">${m.desc}</p>
                     </div>
-                    <a href="${m.url || '#'}" class="btn-coral" style="background:#f88379; color:#fff; text-decoration:none; padding:12px 20px; border-radius:12px; font-weight:800; font-size:12px; display:inline-block; transition:opacity 0.2s;">${m.btnText}</a>
+                    <a href="${m.url || '#'}" class="btn-coral">${m.btnText}</a>
                 </div>`).join('')}
                 <div style="margin-bottom: 35px;"></div>
             ` : '';
@@ -407,7 +496,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"><\/script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Roboto:wght@400;700&family=Poppins:wght@400;600;700&family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Roboto:wght@400;700&family=Poppins:wght@400;600;700&family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Playfair+Display:wght@700&family=Oswald:wght@400;700&family=Raleway:wght@400;700&family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = { darkMode: 'class' };
         
@@ -420,24 +509,57 @@
         });
     <\/script>
     <style>
+        :root {
+            --font-heading: '${headingFont}', sans-serif;
+            --font-body: '${bodyFont}', sans-serif;
+            --color-primary: ${bColor1}; /* Dipakai sbg fallback warna link footer */
+            --color-text: ${textColor};
+        }
+
         /* Base Styles */
-        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+        body { font-family: var(--font-body); color: var(--color-text); transition: background-color 0.3s ease, color 0.3s ease; }
         .container { max-width: 600px; margin: 0 auto; text-align: center; }
-        h1 { font-size: clamp(2rem, 5vw, 2.5rem); font-weight: 800; margin: 0 0 16px; outline:none; letter-spacing:-1px; line-height: 1.2; }
+        
+        h1 { 
+            font-family: var(--font-heading); 
+            font-size: clamp(2rem, 5vw, 2.5rem); 
+            font-weight: 800; 
+            margin: 0 0 16px; 
+            outline:none; 
+            letter-spacing:-1px; 
+            line-height: 1.2; 
+            ${titleGradientCSS}
+        }
         .desc { font-size: 1.125rem; margin: 0 0 24px; outline:none; line-height: 1.6; }
         
         /* Components */
-        .section-tag { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: block; margin-bottom: 14px; text-align: left; letter-spacing:1px; }
+        .section-tag { font-family: var(--font-heading); font-size: 11px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: block; margin-bottom: 14px; text-align: left; letter-spacing:1px; }
         .card-item { border-radius: 20px; padding: 24px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; border-width: 1px; box-shadow: 0 4px 15px -3px rgba(0,0,0,0.05); border-color: #f1f5f9; transition: transform 0.2s; gap: 16px; }
         .card-item:hover { transform: translateY(-2px); }
         .dark .card-item { border-color: #1e293b; background-color: #0f172a; }
         
+        /* Button Global Styles */
+        .btn-coral {
+            ${btnGradientCSS}
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 12px;
+            display: inline-block;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.15);
+            border: none;
+        }
+        .btn-coral:hover { opacity: 0.9; transform: translateY(-1px); }
+
         /* Footer Area */
         .footer { margin-top: 80px; padding-top: 40px; border-top-width: 1px; border-color: #e2e8f0; }
         .dark .footer { border-color: #1e293b; }
         .badge { background: #f1f5f9; padding: 6px 16px; border-radius: 99px; font-size: 11px; font-weight: 800; color: #64748b; margin-bottom: 20px; display: inline-block; outline:none; }
         .dark .badge { background: #1e293b; color: #94a3b8; }
-        .support-link { color: #f88379; font-weight: 800; text-decoration: none; font-size: 20px; outline:none; display:inline-block; transition: opacity 0.2s; }
+        .support-link { color: var(--color-primary); font-weight: 800; text-decoration: none; font-size: 20px; outline:none; display:inline-block; transition: opacity 0.2s; }
         .support-link:hover { opacity: 0.8; }
         
         /* Editor Helpers */
@@ -477,9 +599,15 @@
             <select id="font-family-selector" class="tool-select">
                 <option value="">Pilih Font...</option>
                 <option value="Inter">Inter</option>
-                <option value="Roboto">Roboto</option>
-                <option value="Poppins">Poppins</option>
                 <option value="Montserrat">Montserrat</option>
+                <option value="Poppins">Poppins</option>
+                <option value="Playfair Display">Playfair Display</option>
+                <option value="Oswald">Oswald</option>
+                <option value="Roboto">Roboto</option>
+                <option value="Open Sans">Open Sans</option>
+                <option value="Lato">Lato</option>
+                <option value="Raleway">Raleway</option>
+                <option value="Ubuntu">Ubuntu</option>
             </select>
         </div>
 
@@ -710,6 +838,11 @@
         // Initialize with one module item to demonstrate UI
         window.onload = () => {
             window.addItem('modules');
+
+            // Listeners to update HEX code displays in the Design Settings sidebar
+            const tColor = document.getElementById('textColor');
+            const tHex = document.getElementById('textColorHex');
+            if(tColor && tHex) tColor.addEventListener('input', (e) => tHex.textContent = e.target.value);
         };
     </script>
 </body>
