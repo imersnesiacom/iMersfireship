@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iMersAccess Page - Ultimate Visual Editor</title>
+    
+    <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Configuration -->
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
                     colors: {
                         coral: {
                             DEFAULT: '#f88379',
@@ -21,26 +28,33 @@
             }
         }
     </script>
+    
     <style>
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
+        
         .card {
             transition: all 0.3s ease;
         }
+        
         #preview-frame {
             width: 100%;
-            height: 800px;
+            height: 80vh;
+            min-height: 600px;
             border-radius: 1.25rem;
             background: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: none;
         }
+        
+        /* Custom Scrollbar for a polished look */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .dark ::-webkit-scrollbar-thumb { background: #334155; }
         
+        /* Form Label Utility */
         .form-label {
             font-size: 0.7rem;
             font-weight: 700;
@@ -58,9 +72,20 @@
             flex-direction: column;
             gap: 1rem;
         }
+
+        /* Section Title Utility */
+        .section-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #334155;
+        }
+        .dark .section-label { color: #f1f5f9; }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-6 px-4 min-h-screen">
+    
     <div class="max-w-[1650px] mx-auto">
         <!-- HEADER UTAMA -->
         <header class="flex items-center justify-between mb-6 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
@@ -72,14 +97,15 @@
             </div>
             
             <div class="flex items-center gap-4">
-                <!-- Theme Toggle -->
-                <button type="button" onclick="window.toggleTheme()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all text-slate-600 dark:text-slate-300">
+                <!-- Theme Toggle Button -->
+                <button type="button" onclick="window.toggleTheme()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all text-slate-600 dark:text-slate-300" title="Toggle Theme">
                     <svg id="sun-icon" class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
                     <svg id="moon-icon" class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                 </button>
 
                 <div class="h-6 w-[1px] bg-slate-200 dark:bg-slate-700"></div>
 
+                <!-- Action Buttons -->
                 <div class="flex gap-2">
                     <button type="button" onclick="window.copyHTML()" class="px-5 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs font-bold rounded-xl hover:opacity-90 transition">Copy HTML</button>
                     <button type="button" onclick="window.downloadHTML()" class="px-5 py-2 bg-coral text-white text-xs font-bold rounded-xl hover:bg-coral-hover transition shadow-md shadow-coral/20">Download .html</button>
@@ -88,131 +114,188 @@
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <!-- SIDEBAR KIRI -->
-            <div class="lg:col-span-4 space-y-5 overflow-y-auto max-h-[88vh] pr-2 pb-10">
+            <!-- SIDEBAR KIRI (Input Data) -->
+            <div class="lg:col-span-4 space-y-5 overflow-y-auto max-h-[85vh] pr-2 pb-10">
                 
                 <!-- Basic Info Section -->
-                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm">
                     <span class="section-label">Informasi Utama</span>
                     <div class="sidebar-section">
                         <div>
-                            <label class="form-label">Judul Halaman</label>
-                            <input type="text" id="prodTitle" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-bold" value="Premium Masterclass 2024">
+                            <label class="form-label" for="prodTitle">Judul Halaman</label>
+                            <input type="text" id="prodTitle" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-bold outline-none focus:ring-2 focus:ring-coral/50 transition" value="Premium Masterclass 2024">
                         </div>
                         <div>
-                            <label class="form-label">Deskripsi</label>
-                            <textarea id="prodDesc" rows="2" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs">Akses materi eksklusif Anda di bawah ini secara lengkap.</textarea>
+                            <label class="form-label" for="prodDesc">Deskripsi</label>
+                            <textarea id="prodDesc" rows="2" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-coral/50 transition">Akses materi eksklusif Anda di bawah ini secara lengkap.</textarea>
                         </div>
                         <div>
-                            <label class="form-label">Image URL (Opsional)</label>
-                            <input type="text" id="prodImage" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" placeholder="https://example.com/image.jpg">
+                            <label class="form-label" for="prodImage">Image URL (Opsional)</label>
+                            <input type="text" id="prodImage" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-coral/50 transition" placeholder="https://example.com/image.jpg">
                         </div>
                     </div>
                 </section>
 
-                <!-- Dynamic Item Sections -->
-                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                <!-- Dynamic Item Sections: Files -->
+                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm">
                     <div class="flex justify-between items-center mb-4">
                         <span class="section-label m-0">Download Files</span>
-                        <button type="button" onclick="window.addItem('files')" class="text-[10px] font-black text-coral uppercase tracking-tighter">+ Tambah File</button>
+                        <button type="button" onclick="window.addItem('files')" class="text-[10px] font-black text-coral uppercase tracking-tighter hover:text-coral-hover transition">+ Tambah File</button>
                     </div>
                     <div id="files-list" class="space-y-4"></div>
                 </section>
 
-                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                <!-- Dynamic Item Sections: Modules -->
+                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm">
                     <div class="flex justify-between items-center mb-4">
                         <span class="section-label m-0">Modul E-Course</span>
-                        <button type="button" onclick="window.addItem('modules')" class="text-[10px] font-black text-coral uppercase tracking-tighter">+ Tambah Modul</button>
+                        <button type="button" onclick="window.addItem('modules')" class="text-[10px] font-black text-coral uppercase tracking-tighter hover:text-coral-hover transition">+ Tambah Modul</button>
                     </div>
                     <div id="modules-list" class="space-y-4"></div>
                 </section>
 
-                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                <!-- Dynamic Item Sections: Bonuses -->
+                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm">
                     <div class="flex justify-between items-center mb-4">
                         <span class="section-label m-0">Bonus Items</span>
-                        <button type="button" onclick="window.addItem('bonuses')" class="text-[10px] font-black text-coral uppercase tracking-tighter">+ Tambah Bonus</button>
+                        <button type="button" onclick="window.addItem('bonuses')" class="text-[10px] font-black text-coral uppercase tracking-tighter hover:text-coral-hover transition">+ Tambah Bonus</button>
                     </div>
                     <div id="bonuses-list" class="space-y-4"></div>
                 </section>
 
                 <!-- Footer Section -->
-                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                <section class="card p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm">
                     <span class="section-label">Footer & Support</span>
                     <div class="sidebar-section">
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="form-label">Versi</label>
-                                <input type="text" id="version" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" value="v1.0">
+                                <label class="form-label" for="version">Versi</label>
+                                <input type="text" id="version" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-coral/50 transition" value="v1.0">
                             </div>
                             <div>
-                                <label class="form-label">Teks Bantuan</label>
-                                <input type="text" id="supportText" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" value="Butuh Bantuan?">
+                                <label class="form-label" for="supportText">Teks Bantuan</label>
+                                <input type="text" id="supportText" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-coral/50 transition" value="Butuh Bantuan?">
                             </div>
                         </div>
                         <div>
-                            <label class="form-label">Link Admin (WA/Email)</label>
-                            <input type="text" id="supportLink" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" value="#">
+                            <label class="form-label" for="supportLink">Link Admin (WA/Email)</label>
+                            <input type="text" id="supportLink" class="form-input w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-coral/50 transition" value="#">
                         </div>
                     </div>
                 </section>
 
-                <button type="button" onclick="window.generate()" class="w-full py-4 bg-coral text-white font-black rounded-2xl hover:bg-coral-hover transition shadow-lg uppercase text-xs tracking-widest">Generate Preview</button>
+                <!-- Primary Action -->
+                <button type="button" onclick="window.generate()" class="w-full py-4 bg-coral text-white font-black rounded-2xl hover:bg-coral-hover transition shadow-lg shadow-coral/30 uppercase text-xs tracking-widest mt-4">Generate Preview</button>
+
+                <!-- Panduan Penggunaan -->
+                <div class="mt-6 p-5 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl shadow-sm">
+                    <h4 class="text-sm font-black text-blue-700 dark:text-blue-400 mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Panduan Penggunaan
+                    </h4>
+                    <ol class="list-decimal list-inside text-[11px] text-blue-800 dark:text-blue-300 space-y-2 leading-relaxed">
+                        <li>Isi informasi utama & daftar item di atas.</li>
+                        <li>Klik tombol <b>Generate Preview</b>.</li>
+                        <li>Edit teks, ubah font/warna langsung di layar kanan (Preview).</li>
+                        <li>Klik <b>Download .html</b> atau <b>Copy HTML</b> di pojok kanan atas.</li>
+                    </ol>
+                </div>
+
+                <!-- Informasi Lisensi -->
+                <div class="mt-4 p-5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl shadow-sm">
+                    <h4 class="text-sm font-black text-amber-700 dark:text-amber-400 mb-2 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        Lisensi Personal
+                    </h4>
+                    <p class="text-[11px] text-amber-800 dark:text-amber-300 leading-relaxed">
+                        Aplikasi ini berlisensi personal khusus pembeli paket <b>iMersfireship</b>. Jika Anda belum memiliki lisensi resmi, silakan beli di: 
+                        <a href="https://imersnesia.com" target="_blank" class="font-bold underline hover:text-amber-600 transition block mt-1">imersnesia.com</a>
+                    </p>
+                </div>
+
+                <!-- Developer Footer Highlight -->
+                <div class="mt-6 p-5 bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-700 rounded-2xl shadow-xl text-center border border-slate-700 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-coral/10 opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                    <p class="text-xs font-medium text-slate-300 relative z-10">
+                        Developed with <span class="text-red-500 animate-pulse inline-block">❤️</span> by 
+                        <span class="block mt-1 text-base font-black text-white tracking-wide">Terry Katar</span>
+                    </p>
+                    <a href="https://imersnesia.com" target="_blank" class="inline-block mt-3 px-5 py-2 bg-white/10 hover:bg-coral transition rounded-xl text-[10px] font-black text-white tracking-widest uppercase relative z-10">
+                        iMersnesia.com
+                    </a>
+                </div>
             </div>
 
             <!-- AREA PREVIEW KANAN -->
             <div class="lg:col-span-8">
-                <div id="empty-state" class="card h-[800px] flex flex-col items-center justify-center border-dashed border-2 border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 text-center px-10 rounded-2xl">
+                <!-- Empty State (Shown before generation) -->
+                <div id="empty-state" class="card h-[80vh] min-h-[600px] flex flex-col items-center justify-center border-dashed border-2 border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 text-center px-10 rounded-2xl">
                     <div class="w-20 h-20 bg-white dark:bg-slate-800 rounded-3xl flex items-center justify-center mb-6 shadow-sm">
                         <svg class="w-10 h-10 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </div>
                     <h3 class="text-slate-500 dark:text-slate-400 font-bold text-lg">Area Editor Visual</h3>
-                    <p class="text-slate-400 dark:text-slate-500 text-sm mt-2 max-w-sm">Isi data secara vertikal di kiri, lalu klik <b>Generate Preview</b>.</p>
+                    <p class="text-slate-400 dark:text-slate-500 text-sm mt-2 max-w-sm">Isi data secara vertikal di kiri, lalu klik <b>Generate Preview</b> untuk melihat hasilnya di sini.</p>
                 </div>
 
-                <div id="preview-wrapper" class="hidden">
+                <!-- Preview Iframe Container -->
+                <div id="preview-wrapper" class="hidden h-full flex flex-col">
                     <div class="flex items-center justify-between mb-4 px-2">
                         <div class="flex items-center gap-2">
                             <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                            <h2 class="text-sm font-black text-slate-400 uppercase tracking-widest">Editor Visual Aktif</h2>
+                            <h2 class="text-sm font-black text-slate-400 uppercase tracking-widest">Editor Visual Aktif (Bisa diketik langsung)</h2>
                         </div>
                     </div>
-                    <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl">
-                        <iframe id="preview-frame" class="w-full"></iframe>
+                    <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl flex-grow flex">
+                        <iframe id="preview-frame" title="Live Preview"></iframe>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- TOAST -->
-    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 px-6 py-3 bg-slate-900 text-white rounded-xl shadow-2xl opacity-0 transition-all duration-300 pointer-events-none z-50">Berhasil!</div>
+    <!-- TOAST NOTIFICATION SYSTEM -->
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 px-6 py-3 bg-slate-800 dark:bg-slate-100 text-white dark:text-slate-900 rounded-xl shadow-2xl opacity-0 transition-all duration-300 pointer-events-none z-[100] font-bold text-sm transform translate-y-4">
+        Message Here
+    </div>
 
     <script>
-        // State initialization
-        let state = {
+        /**
+         * State Management
+         * Holds the dynamic lists of items to be injected into the preview.
+         */
+        const state = {
             files: [],
             modules: [],
             bonuses: []
         };
         let isGenerated = false;
 
-        // Ensure functions are global for production environments like Vercel
+        /**
+         * Theme toggling functionality.
+         * Updates the host UI and posts a message to the iframe to keep them in sync.
+         */
         window.toggleTheme = function() {
             const html = document.documentElement;
             const isDark = html.classList.toggle('dark');
+            
+            // Sync with iframe if it exists
             const frame = document.getElementById('preview-frame');
-            if (frame && frame.contentWindow) {
+            if (frame && frame.contentWindow && isGenerated) {
                 frame.contentWindow.postMessage({ type: 'SYNC_THEME', theme: isDark ? 'dark' : 'light' }, '*');
             }
         };
 
+        /**
+         * Adds a new item to the specified list (files, modules, bonuses).
+         */
         window.addItem = function(type) {
             const id = Math.floor(Date.now() + Math.random() * 1000);
             const placeholders = {
-                files: { title: 'Download File', desc: 'Asset zip siap unduh.', btn: 'UNDUH', url: '#' },
-                modules: { title: '01. Modul Materi', desc: 'Materi video tutorial.', btn: 'BUKA', url: '#' },
-                bonuses: { title: 'Bonus Item', desc: 'Bonus eksklusif tambahan.', btn: 'KLAIM', url: '#' }
+                files: { title: 'Download File Baru', desc: 'Deskripsi aset yang akan diunduh.', btn: 'UNDUH', url: '#' },
+                modules: { title: 'Modul Materi Baru', desc: 'Deskripsi materi pembelajaran.', btn: 'BUKA', url: '#' },
+                bonuses: { title: 'Bonus Spesial', desc: 'Deskripsi bonus tambahan.', btn: 'KLAIM', url: '#' }
             };
+            
             state[type].push({ 
                 id, 
                 title: placeholders[type].title, 
@@ -223,53 +306,70 @@
             window.renderList(type);
         };
 
+        /**
+         * Removes an item from a list by ID.
+         */
         window.removeItem = function(type, id) {
             state[type] = state[type].filter(i => i.id !== id);
             window.renderList(type);
         };
 
+        /**
+         * Updates a specific field of an item in the state.
+         */
         window.updateItem = function(type, id, field, val) {
             const item = state[type].find(i => i.id === id);
             if(item) item[field] = val;
         };
 
+        /**
+         * Renders the HTML inputs for a specific list in the sidebar.
+         */
         window.renderList = function(type) {
             const container = document.getElementById(`${type}-list`);
             if(!container) return;
+            
             container.innerHTML = '';
             state[type].forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 relative group shadow-sm space-y-3 transition-all hover:ring-2 hover:ring-coral/20';
+                div.className = 'p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 relative group shadow-sm space-y-3 transition-all hover:ring-2 hover:ring-coral/30';
+                
+                // Construct inner HTML for item editing
                 div.innerHTML = `
                     <div class="sidebar-section">
                         <div>
                             <label class="form-label">Judul Item</label>
-                            <input type="text" value="${item.title}" oninput="window.updateItem('${type}', ${item.id}, 'title', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[11px] font-bold">
+                            <input type="text" value="${item.title}" oninput="window.updateItem('${type}', ${item.id}, 'title', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[12px] font-bold outline-none focus:border-coral transition">
                         </div>
                         <div>
                             <label class="form-label">Sub-Deskripsi</label>
-                            <input type="text" value="${item.desc}" oninput="window.updateItem('${type}', ${item.id}, 'desc', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[10px]">
+                            <input type="text" value="${item.desc}" oninput="window.updateItem('${type}', ${item.id}, 'desc', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[11px] outline-none focus:border-coral transition">
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
                                 <label class="form-label">Teks Tombol</label>
-                                <input type="text" value="${item.btnText}" oninput="window.updateItem('${type}', ${item.id}, 'btnText', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[10px]">
+                                <input type="text" value="${item.btnText}" oninput="window.updateItem('${type}', ${item.id}, 'btnText', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[11px] outline-none focus:border-coral transition">
                             </div>
                             <div>
                                 <label class="form-label">Link URL</label>
-                                <input type="text" value="${item.url}" oninput="window.updateItem('${type}', ${item.id}, 'url', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[10px]">
+                                <input type="text" value="${item.url}" oninput="window.updateItem('${type}', ${item.id}, 'url', this.value)" class="form-input w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[11px] outline-none focus:border-coral transition">
                             </div>
                         </div>
                     </div>
-                    <button type="button" onclick="window.removeItem('${type}', ${item.id})" class="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition shadow-md">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <button type="button" onclick="window.removeItem('${type}', ${item.id})" class="absolute -top-2 -right-2 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition shadow-md hover:bg-red-600 focus:outline-none" title="Hapus Item">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 `;
                 container.appendChild(div);
             });
         };
 
+        /**
+         * Generates the complete HTML string for the iframe.
+         * Injects Tailwind, custom styles, contenteditable logic, and a floating WYSIWYG toolbar.
+         */
         window.generateTemplate = function() {
+            // Retrieve values from form
             const title = document.getElementById('prodTitle').value || 'Judul Produk';
             const desc = document.getElementById('prodDesc').value || 'Deskripsi singkat.';
             const imgUrl = document.getElementById('prodImage').value || '';
@@ -278,33 +378,40 @@
             const sLink = document.getElementById('supportLink').value || '#';
             const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 
+            // Helper to generate HTML for dynamic lists
             const mapItems = (arr, tag) => arr.length > 0 ? `
                 <span class="section-tag">${tag}</span>
                 ${arr.map(m => `
                 <div class="card-item bg-white dark:bg-slate-800 dark:border-slate-700">
                     <div style="flex-grow:1; text-align:left;">
-                        <h3 contenteditable="true" class="text-slate-900 dark:text-slate-100" style="margin:0; font-size:15px; font-weight:800; outline:none;">${m.title}</h3>
-                        <p contenteditable="true" class="text-slate-500 dark:text-slate-400" style="margin:4px 0 0; font-size:11px; outline:none;">${m.desc}</p>
+                        <h3 contenteditable="true" class="text-slate-900 dark:text-slate-100" style="margin:0; font-size:16px; font-weight:800; outline:none;">${m.title}</h3>
+                        <p contenteditable="true" class="text-slate-500 dark:text-slate-400" style="margin:6px 0 0; font-size:12px; outline:none; line-height:1.4;">${m.desc}</p>
                     </div>
-                    <a href="${m.url || '#'}" class="btn-coral" style="background:#f88379; color:#fff; text-decoration:none; padding:10px 18px; border-radius:10px; font-weight:800; font-size:11px;">${m.btnText}</a>
+                    <a href="${m.url || '#'}" class="btn-coral" style="background:#f88379; color:#fff; text-decoration:none; padding:12px 20px; border-radius:12px; font-weight:800; font-size:12px; display:inline-block; transition:opacity 0.2s;">${m.btnText}</a>
                 </div>`).join('')}
-                <div style="margin-bottom: 30px;"></div>
+                <div style="margin-bottom: 35px;"></div>
             ` : '';
 
+            // Helper for optional hero image
             const imageTag = imgUrl ? `
-                <div style="margin: 30px auto; max-width: 480px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15);">
-                    <img src="${imgUrl}" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'">
+                <div style="margin: 30px auto; max-width: 500px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15);">
+                    <img src="${imgUrl}" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'" alt="Product Hero">
                 </div>
             ` : '';
 
+            // Constructing the final HTML string for the iframe.
+            // Note the use of <\/script> to prevent breaking the parent document.
             return `<!DOCTYPE html>
 <html lang="id" class="${currentTheme}">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"><\/script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Roboto:wght@400;700&family=Poppins:wght@400;600;700&family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;700&family=Lato:wght@400;700&family=Playfair+Display:wght@700&family=Oswald:wght@400;700&family=Raleway:wght@400;700&family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Roboto:wght@400;700&family=Poppins:wght@400;600;700&family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = { darkMode: 'class' };
+        
+        // Listen for theme changes from parent window
         window.addEventListener('message', (e) => {
             if (e.data.type === 'SYNC_THEME') {
                 if (e.data.theme === 'dark') document.documentElement.classList.add('dark');
@@ -313,85 +420,99 @@
         });
     <\/script>
     <style>
-        body { font-family: 'Inter', sans-serif; transition: all 0.3s ease; }
-        .container { max-width: 550px; margin: 0 auto; text-align: center; }
-        h1 { font-size: 38px; font-weight: 800; margin: 0 0 12px; outline:none; letter-spacing:-1px; }
-        .desc { font-size: 16px; margin: 0 0 20px; outline:none; }
-        .section-tag { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: block; margin-bottom: 12px; text-align: left; letter-spacing:1px; }
-        .card-item { border-radius: 18px; padding: 20px 24px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; border-width: 1px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border-color: #f1f5f9; }
-        .dark .card-item { border-color: #1e293b; }
+        /* Base Styles */
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+        .container { max-width: 600px; margin: 0 auto; text-align: center; }
+        h1 { font-size: clamp(2rem, 5vw, 2.5rem); font-weight: 800; margin: 0 0 16px; outline:none; letter-spacing:-1px; line-height: 1.2; }
+        .desc { font-size: 1.125rem; margin: 0 0 24px; outline:none; line-height: 1.6; }
+        
+        /* Components */
+        .section-tag { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: block; margin-bottom: 14px; text-align: left; letter-spacing:1px; }
+        .card-item { border-radius: 20px; padding: 24px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; border-width: 1px; box-shadow: 0 4px 15px -3px rgba(0,0,0,0.05); border-color: #f1f5f9; transition: transform 0.2s; gap: 16px; }
+        .card-item:hover { transform: translateY(-2px); }
+        .dark .card-item { border-color: #1e293b; background-color: #0f172a; }
+        
+        /* Footer Area */
         .footer { margin-top: 80px; padding-top: 40px; border-top-width: 1px; border-color: #e2e8f0; }
         .dark .footer { border-color: #1e293b; }
-        .badge { background: #f1f5f9; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; color: #64748b; margin-bottom: 15px; display: inline-block; outline:none; }
+        .badge { background: #f1f5f9; padding: 6px 16px; border-radius: 99px; font-size: 11px; font-weight: 800; color: #64748b; margin-bottom: 20px; display: inline-block; outline:none; }
         .dark .badge { background: #1e293b; color: #94a3b8; }
-        .support-link { color: #f88379; font-weight: 800; text-decoration: none; font-size: 18px; outline:none; }
-        [contenteditable]:hover { background: rgba(248,131,121,0.05); border-radius: 4px; }
+        .support-link { color: #f88379; font-weight: 800; text-decoration: none; font-size: 20px; outline:none; display:inline-block; transition: opacity 0.2s; }
+        .support-link:hover { opacity: 0.8; }
         
+        /* Editor Helpers */
+        [contenteditable]:hover { outline: 1px dashed #cbd5e1; outline-offset: 4px; border-radius: 4px; }
+        .dark [contenteditable]:hover { outline-color: #475569; }
+        [contenteditable]:focus { outline: 2px solid #f88379; outline-offset: 4px; border-radius: 4px; background: rgba(248,131,121,0.05); }
+        
+        /* Floating Toolbar (Removed on export) */
         #imers-toolbar { 
-            display:none; position:fixed; background:#fff; border:1px solid #e2e8f0; padding:12px; 
-            border-radius:14px; box-shadow:0 15px 35px rgba(0,0,0,0.2); z-index:9999; 
-            flex-direction:column; gap:10px; min-width:240px; color: #334155;
+            display:none; position:fixed; background:#fff; border:1px solid #e2e8f0; padding:16px; 
+            border-radius:16px; box-shadow:0 20px 40px -10px rgba(0,0,0,0.2); z-index:9999; 
+            flex-direction:column; gap:12px; min-width:260px; color: #334155;
+            font-family: sans-serif;
         }
         .dark #imers-toolbar { background: #0f172a; border-color: #1e293b; color: #f1f5f9; }
         .tool-row { display:flex; gap:8px; align-items:center; }
-        .tool-btn { padding:5px 12px; border:1px solid #e2e8f0; border-radius:6px; background:#fff; font-weight:bold; cursor:pointer; font-size:11px; }
+        .tool-btn { padding:6px 14px; border:1px solid #e2e8f0; border-radius:8px; background:#f8fafc; font-weight:bold; cursor:pointer; font-size:12px; transition: all 0.2s; }
+        .tool-btn:hover { background: #e2e8f0; }
         .dark .tool-btn { background: #1e293b; border-color: #334155; color: white; }
-        .tool-label { font-size:8px; font-weight:800; color:#94a3b8; text-transform:uppercase; margin-bottom:4px; display:block; }
-        select.tool-select { font-size:10px; padding:5px; border-radius:6px; border:1px solid #e2e8f0; width:100%; cursor:pointer; font-weight:bold; background: transparent; }
+        .dark .tool-btn:hover { background: #334155; }
+        .tool-label { font-size:9px; font-weight:800; color:#94a3b8; text-transform:uppercase; margin-bottom:6px; display:block; }
+        select.tool-select { font-size:12px; padding:8px; border-radius:8px; border:1px solid #e2e8f0; width:100%; cursor:pointer; font-weight:600; background: transparent; outline:none; }
+        .dark select.tool-select { border-color: #334155; color: white; background: #0f172a;}
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-16 px-4 md:px-12">
-    <div id="imers-toolbar">
-        <div style="border-bottom:1px solid #f1f5f9; padding-bottom:8px; display:flex; justify-content:space-between; align-items:center;" class="border-slate-200 dark:border-slate-800">
-            <span style="font-size:9px; font-weight:800; color:#f88379;">STYLING TOOLS</span>
-            <button onclick="document.getElementById('imers-toolbar').style.display='none'" style="border:none; background:none; cursor:pointer; color:#cbd5e1;">&times;</button>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-16 px-4 md:px-12 min-h-screen">
+    
+    <!-- WYSIWYG Editor Toolbar -->
+    <div id="imers-toolbar" class="editor-element">
+        <div style="border-bottom:1px solid #e2e8f0; padding-bottom:12px; display:flex; justify-content:space-between; align-items:center;" class="dark:border-slate-800">
+            <span style="font-size:10px; font-weight:800; color:#f88379; letter-spacing:0.5px;">TEXT STYLING TOOLS</span>
+            <button onclick="document.getElementById('imers-toolbar').style.display='none'" style="border:none; background:none; cursor:pointer; color:#94a3b8; font-size: 16px; font-weight:bold;">&times;</button>
         </div>
         
         <div>
             <span class="tool-label">Font Family</span>
-            <select id="font-family-selector" class="tool-select dark:border-slate-700">
+            <select id="font-family-selector" class="tool-select">
                 <option value="">Pilih Font...</option>
                 <option value="Inter">Inter</option>
                 <option value="Roboto">Roboto</option>
                 <option value="Poppins">Poppins</option>
                 <option value="Montserrat">Montserrat</option>
-                <option value="Open Sans">Open Sans</option>
-                <option value="Lato">Lato</option>
-                <option value="Playfair Display">Playfair</option>
-                <option value="Oswald">Oswald</option>
-                <option value="Raleway">Raleway</option>
-                <option value="Ubuntu">Ubuntu</option>
             </select>
         </div>
 
         <div>
             <span class="tool-label">Style & Solid Color</span>
             <div class="tool-row">
-                <button onclick="document.execCommand('bold', false, null)" class="tool-btn">B</button>
-                <button onclick="document.execCommand('italic', false, null)" class="tool-btn"><i>I</i></button>
-                <div style="width:1px; height:20px; background:#f1f5f9;" class="bg-slate-700"></div>
-                <input type="color" id="p-color" title="Solid Color" style="width:30px; height:30px; border:none; cursor:pointer; background:none;">
+                <button onclick="document.execCommand('bold', false, null)" class="tool-btn" title="Bold">B</button>
+                <button onclick="document.execCommand('italic', false, null)" class="tool-btn" title="Italic"><i>I</i></button>
+                <button onclick="document.execCommand('underline', false, null)" class="tool-btn" title="Underline"><u>U</u></button>
+                <div style="width:1px; height:24px; background:#e2e8f0;" class="dark:bg-slate-700"></div>
+                <input type="color" id="p-color" title="Text Color" style="width:32px; height:32px; border:none; cursor:pointer; background:none; padding:0; border-radius:4px;">
             </div>
         </div>
 
-        <div style="border-top:1px solid #f1f5f9; padding-top:8px;" class="border-slate-800">
-            <span class="tool-label">Gradient Mode</span>
+        <div style="border-top:1px solid #e2e8f0; padding-top:12px; margin-top:4px;" class="dark:border-slate-800">
+            <span class="tool-label">Gradient Mode (For Text)</span>
             <div class="tool-row">
-                <input type="color" id="g-color1" value="#f88379" style="width:24px; height:24px; border:none; cursor:pointer;">
-                <input type="color" id="g-color2" value="#9333ea" style="width:24px; height:24px; border:none; cursor:pointer;">
-                <button id="btn-apply-gradient" class="tool-btn" style="background:#f88379; color:#fff; border:none;">APPLY</button>
+                <input type="color" id="g-color1" value="#f88379" title="Color 1" style="width:28px; height:28px; border:none; cursor:pointer; padding:0; background:none;">
+                <input type="color" id="g-color2" value="#9333ea" title="Color 2" style="width:28px; height:28px; border:none; cursor:pointer; padding:0; background:none;">
+                <button id="btn-apply-gradient" class="tool-btn" style="background:#f88379; color:#fff; border:none; flex-grow:1;">Apply Gradient</button>
             </div>
-            <input type="range" id="g-angle" min="0" max="360" value="135" style="width:100%; height:4px; accent-color:#f88379; margin-top:8px;">
+            <input type="range" id="g-angle" min="0" max="360" value="135" title="Gradient Angle" style="width:100%; height:4px; accent-color:#f88379; margin-top:12px; cursor:pointer;">
         </div>
     </div>
 
+    <!-- Main Content Area -->
     <div class="container">
         <h1 contenteditable="true" class="text-slate-900 dark:text-slate-100">${title}</h1>
         <p class="desc text-slate-600 dark:text-slate-400" contenteditable="true">${desc}</p>
         
         ${imageTag}
         
-        <div style="margin-top: 30px;">
+        <div style="margin-top: 40px;">
             ${mapItems(state.modules, 'Modul Materi')}
             ${mapItems(state.files, 'Unduh Asset')}
             ${mapItems(state.bonuses, 'Bonus Eksklusif')}
@@ -399,22 +520,32 @@
 
         <div class="footer">
             <span class="badge" contenteditable="true">${ver}</span>
-            <p style="margin:0 0 10px; font-size:14px;" class="text-slate-500 dark:text-slate-500" contenteditable="true">${sText}</p>
+            <p style="margin:0 0 12px; font-size:15px;" class="text-slate-500 dark:text-slate-500" contenteditable="true">${sText}</p>
             <a href="${sLink}" class="support-link" contenteditable="true">Hubungi Admin &rarr;</a>
-            <div style="margin-top: 40px; font-size: 10px; font-weight: 700; text-transform:uppercase;" class="text-slate-400 dark:text-slate-700">Powered by iMersAccess Page</div>
+            <div style="margin-top: 50px; font-size: 11px; font-weight: 700; text-transform:uppercase; letter-spacing:1px;" class="text-slate-400 dark:text-slate-600">Powered by iMersAccess</div>
         </div>
     </div>
 
-    <script>
+    <!-- Editor Script Logic -->
+    <script class="editor-element">
         const toolbar = document.getElementById('imers-toolbar');
+        
+        // Show floating toolbar on text selection
         document.addEventListener('mouseup', (e) => {
             const sel = window.getSelection();
             if (sel.toString().length > 0) {
                 const rect = sel.getRangeAt(0).getBoundingClientRect();
                 toolbar.style.display = 'flex';
-                toolbar.style.left = rect.left + 'px';
-                if (rect.top < 180) {
-                    toolbar.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+                // Position logic to prevent going off-screen
+                let leftPos = rect.left;
+                if(leftPos + toolbar.offsetWidth > window.innerWidth) {
+                    leftPos = window.innerWidth - toolbar.offsetWidth - 20;
+                }
+                toolbar.style.left = Math.max(10, leftPos) + 'px';
+                
+                // Above or below selection
+                if (rect.top < 250) {
+                    toolbar.style.top = (rect.bottom + window.scrollY + 15) + 'px';
                 } else {
                     toolbar.style.top = (rect.top + window.scrollY - toolbar.offsetHeight - 15) + 'px';
                 }
@@ -422,27 +553,36 @@
                 toolbar.style.display = 'none';
             }
         });
+        
+        // Apply Font Family
         document.getElementById('font-family-selector').onchange = (e) => {
             const font = e.target.value;
             if(!font) return;
             document.execCommand('fontName', false, font);
         };
+        
+        // Apply Solid Color
         document.getElementById('p-color').oninput = (e) => {
             document.execCommand('foreColor', false, e.target.value);
         };
+        
+        // Apply Gradient to Text
         document.getElementById('btn-apply-gradient').onclick = () => {
             const c1 = document.getElementById('g-color1').value;
             const c2 = document.getElementById('g-color2').value;
             const ang = document.getElementById('g-angle').value;
             const sel = window.getSelection();
-            if (sel.rangeCount) {
+            if (sel.rangeCount && sel.toString().length > 0) {
                 const span = document.createElement('span');
                 span.style.background = 'linear-gradient(' + ang + 'deg, ' + c1 + ', ' + c2 + ')';
                 span.style.webkitBackgroundClip = 'text';
                 span.style.webkitTextFillColor = 'transparent';
                 span.style.display = 'inline-block';
+                
                 const range = sel.getRangeAt(0);
                 range.surroundContents(span);
+                sel.removeAllRanges(); // clear selection after applying
+                toolbar.style.display = 'none';
             }
         };
     <\/script>
@@ -450,63 +590,124 @@
 </html>`;
         };
 
+        /**
+         * Injects the generated template into the iframe for preview.
+         */
         window.generate = function() {
             const frame = document.getElementById('preview-frame');
             if(!frame) return;
+            
+            // Switch UI states
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('preview-wrapper').classList.remove('hidden');
+            
+            // Write to iframe
             const doc = frame.contentWindow.document;
             doc.open();
             doc.write(window.generateTemplate());
             doc.close();
-            document.getElementById('empty-state').classList.add('hidden');
-            document.getElementById('preview-wrapper').classList.remove('hidden');
+            
             isGenerated = true;
-            window.showToast("Preview Siap Diedit!");
+            window.showToast("Preview Siap! Anda bisa mengedit teks langsung di area preview.");
         };
 
+        /**
+         * Safely extracts the HTML from the iframe, removing editor-specific 
+         * elements and attributes so the final export is clean.
+         */
         window.getCleanHTML = function() {
             const frame = document.getElementById('preview-frame');
             if(!frame || !frame.contentWindow.document.body) return '';
-            let html = frame.contentWindow.document.documentElement.outerHTML;
-            html = html.replace(/contenteditable="true"/g, '');
-            html = html.replace(/<div id="imers-toolbar"[\s\S]*?<\/script>/g, '');
-            return html;
+            
+            // Clone the entire document inside the iframe to avoid modifying the live preview
+            const docClone = frame.contentWindow.document.documentElement.cloneNode(true);
+            
+            // 1. Remove elements marked explicitly as editor elements (toolbar, scripts)
+            const editorElements = docClone.querySelectorAll('.editor-element');
+            editorElements.forEach(el => el.remove());
+            
+            // 2. Remove all script tags (just to be safe, removing Tailwind config script too 
+            // is optional, but usually desired for a purely static output, though here we keep 
+            // the tailwind script in head for styling to work. We only remove scripts in body)
+            const bodyScripts = docClone.querySelector('body').querySelectorAll('script');
+            bodyScripts.forEach(el => el.remove());
+
+            // 3. Remove 'contenteditable' attributes
+            const editables = docClone.querySelectorAll('[contenteditable]');
+            editables.forEach(el => el.removeAttribute('contenteditable'));
+            
+            // Return formatted string
+            return '<!DOCTYPE html>\n<html lang="' + docClone.lang + '" class="' + docClone.className + '">\n' + docClone.innerHTML + '\n</html>';
         };
 
+        /**
+         * Copies the clean HTML to the clipboard.
+         */
         window.copyHTML = function() {
-            if(!isGenerated) { window.showToast("Generate Preview dulu!"); return; }
+            if(!isGenerated) { window.showToast("Generate Preview terlebih dahulu!"); return; }
             const clean = window.getCleanHTML();
+            
+            // Fallback copy mechanism
             const el = document.createElement('textarea');
             el.value = clean;
+            el.setAttribute('readonly', '');
+            el.style.position = 'absolute';
+            el.style.left = '-9999px';
             document.body.appendChild(el);
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            window.showToast("HTML Bersih Disalin!");
+            
+            window.showToast("HTML Bersih berhasil disalin ke Clipboard!");
         };
 
+        /**
+         * Triggers a download of the clean HTML file.
+         */
         window.downloadHTML = function() {
-            if(!isGenerated) { window.showToast("Generate Preview dulu!"); return; }
+            if(!isGenerated) { window.showToast("Generate Preview terlebih dahulu!"); return; }
             const clean = window.getCleanHTML();
+            
             const blob = new Blob([clean], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
+            
+            // Determine filename based on title
+            let filename = document.getElementById('prodTitle').value.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'page';
+            
             a.href = url;
-            a.download = 'imers-access-page.html';
+            a.download = `imers-${filename}.html`;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            window.showToast("File HTML sedang diunduh!");
         };
 
+        /**
+         * Custom Toast Notification System
+         */
+        let toastTimeout;
         window.showToast = function(msg) {
             const t = document.getElementById('toast');
             if(!t) return;
+            
+            clearTimeout(toastTimeout);
             t.innerText = msg;
+            
+            // Animate in
             t.style.opacity = '1';
             t.style.transform = 'translate(-50%, 0)';
-            setTimeout(() => {
+            
+            // Animate out
+            toastTimeout = setTimeout(() => {
                 t.style.opacity = '0';
-                t.style.transform = 'translate(-50%, 10px)';
-            }, 2000);
+                t.style.transform = 'translate(-50%, 1rem)';
+            }, 3000);
         };
 
+        // Initialize with one module item to demonstrate UI
         window.onload = () => {
             window.addItem('modules');
         };
