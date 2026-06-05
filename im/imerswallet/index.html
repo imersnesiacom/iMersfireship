@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iMersWallet - Your Financial Wallet Assistant</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0B0F19',
+                            darker: '#06080C',
+                            primary: '#10B981', // Emerald (similar to Jago/Dana)
+                            secondary: '#06B6D4', // Teal (similar to OVO/modern fintech)
+                            accent: '#F59E0B', // Amber warnings
+                            card: 'rgba(17, 24, 39, 0.7)',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: 0.6, transform: 'scale(1)' },
+                            '50%': { opacity: 1, transform: 'scale(1.03)' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #06080C;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10B981;
+        }
+        /* Custom styles for animations & effects */
+        .glassmorphism {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+        .box-glow-emerald {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.15);
+        }
+        .box-glow-teal {
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.15);
+        }
+        /* Reveal animation utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-brand-darker text-slate-100 font-sans overflow-x-hidden antialiased pb-20 md:pb-0">
+
+    <!-- 1. NAVBAR SECTION -->
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glassmorphism py-4 border-b border-white/5" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="#home" class="flex items-center space-x-3 group">
+                    <img src="https://imersnesia.com/wp-content/uploads/2026/05/Final-Logo-imerswallet-WA-only.webp" alt="iMersWallet Logo" class="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-110" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/2953/2953536.png';">
+                    <span class="text-xl font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent tracking-wide">iMers<span class="text-brand-primary">Wallet</span></span>
+                </a>
+
+                <!-- Desktop Navigation Menu -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-sm font-semibold text-brand-primary transition-colors hover:text-white">Home</a>
+                    <a href="#features" class="text-sm font-semibold text-slate-300 transition-colors hover:text-brand-primary">Features</a>
+                    <a href="#how-it-works" class="text-sm font-semibold text-slate-300 transition-colors hover:text-brand-primary">Cara Kerja</a>
+                    <a href="#dashboard" class="text-sm font-semibold text-slate-300 transition-colors hover:text-brand-primary">Dashboard</a>
+                    <a href="#pricing" class="text-sm font-semibold text-slate-300 transition-colors hover:text-brand-primary">Harga</a>
+                    <a href="#faq" class="text-sm font-semibold text-slate-300 transition-colors hover:text-brand-primary">FAQ</a>
+                </nav>
+
+                <!-- Action Buttons -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#demo" class="text-sm font-semibold text-slate-300 hover:text-white transition-colors">Coba Demo</a>
+                    <a href="#demo" target="_blank" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary text-brand-darker font-bold text-sm shadow-md hover:shadow-brand-primary/20 hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Mulai Gratis
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Hamburger -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-slate-300 hover:text-white focus:outline-none focus:text-white" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Side Menu -->
+        <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-brand-dark/95 backdrop-blur-lg flex flex-col justify-center items-center space-y-6 text-xl transition-all duration-300 opacity-0 transform translate-x-full">
+            <button id="close-menu-btn" class="absolute top-6 right-6 text-slate-300 hover:text-white">
+                <i class="fa-solid fa-xmark text-3xl"></i>
+            </button>
+            <a href="#home" class="mobile-nav-link text-brand-primary font-semibold">Home</a>
+            <a href="#features" class="mobile-nav-link text-slate-300 hover:text-brand-primary font-semibold">Features</a>
+            <a href="#how-it-works" class="mobile-nav-link text-slate-300 hover:text-brand-primary font-semibold">Cara Kerja</a>
+            <a href="#dashboard" class="mobile-nav-link text-slate-300 hover:text-brand-primary font-semibold">Dashboard</a>
+            <a href="#pricing" class="mobile-nav-link text-slate-300 hover:text-brand-primary font-semibold">Harga</a>
+            <a href="#faq" class="mobile-nav-link text-slate-300 hover:text-brand-primary font-semibold">FAQ</a>
+            <div class="pt-6 flex flex-col gap-4 w-64">
+                <a href="#demo" class="mobile-nav-link w-full text-center py-3 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 transition">Coba Demo</a>
+                <a href="https://chat.whatsapp.com/LWR3aWcIYAN0LRKLm0692j" target="_blank" class="w-full text-center py-3 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary text-brand-darker font-bold flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-xl"></i> Mulai Gratis
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. HERO SECTION -->
+    <section id="home" class="relative pt-32 pb-24 md:pt-48 md:pb-36 overflow-hidden">
+        <!-- Radial Gradient Glow Backgrounds -->
+        <div class="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-brand-primary/10 blur-[120px] pointer-events-none"></div>
+        <div class="absolute top-1/3 right-1/4 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] rounded-full bg-brand-secondary/10 blur-[150px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                <!-- Hero Left Content -->
+                <div class="lg:col-span-7 text-center lg:text-left space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glassmorphism text-xs font-semibold text-brand-primary tracking-wide mb-2 animate-pulse-glow">
+                        <span class="w-2 h-2 rounded-full bg-brand-primary animate-ping"></span>
+                        <i class="fa-solid fa-sparkles"></i> Your Financial Wallet Assistant.
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+                        Track Your Money Through <span class="bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent text-glow">WhatsApp.</span>
+                    </h1>
+                    <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Catat pemasukan dan pengeluaran semudah mengetik chat ke teman langsung dari WhatsApp. Pantau cashflow Anda melalui dashboard interaktif, dapatkan laporan cerdas, dan biarkan asisten AI mengelolanya.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                        <a href="#demo" target="_blank" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-primary to-brand-secondary text-brand-darker font-bold text-md shadow-lg shadow-brand-primary/20 hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-bolt"></i> Mulai Sekarang Gratis
+                        </a>
+                        <a href="#demo" class="px-8 py-4 rounded-2xl border border-slate-700 hover:border-slate-500 bg-brand-dark/40 hover:bg-slate-800/80 text-white font-semibold text-md transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-circle-play text-brand-primary"></i> Coba Interactive Demo
+                        </a>
+                    </div>
+                    <!-- Mini Stats Grid -->
+                    <div class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-800/80 max-w-md mx-auto lg:mx-0">
+                        <div class="text-center lg:text-left">
+                            <div class="flex items-center justify-center lg:justify-start gap-2 text-brand-primary font-bold">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-1">Auto Analytics</p>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <div class="flex items-center justify-center lg:justify-start gap-2 text-brand-secondary font-bold">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-1">PDF Reports</p>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <div class="flex items-center justify-center lg:justify-start gap-2 text-brand-accent font-bold">
+                                <i class="fa-solid fa-bell"></i>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-1">Budget Reminder</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Right Interactive Mockups -->
+                <div class="lg:col-span-5 relative flex justify-center items-center">
+                    <!-- Smartphone Mockup Mock Container -->
+                    <div class="relative w-72 sm:w-80 h-[560px] rounded-[40px] border-8 border-slate-800 bg-brand-darker shadow-2xl shadow-emerald-500/10 overflow-hidden z-20 flex flex-col">
+                        <!-- Top notch and Status bar -->
+                        <div class="h-6 w-full bg-slate-900 flex justify-between items-center px-6 text-[10px] text-slate-400">
+                            <span>17.03</span>
+                            <div class="w-20 h-4 bg-black rounded-b-xl absolute top-0 left-1/2 -translate-x-1/2"></div>
+                            <div class="flex gap-1.5 items-center">
+                                <i class="fa-solid fa-signal"></i>
+                                <i class="fa-solid fa-wifi"></i>
+                                <i class="fa-solid fa-battery-three-quarters"></i>
+                            </div>
+                        </div>
+                        <!-- Virtual WhatsApp Header inside phone -->
+                        <div class="bg-[#075E54] py-3 px-4 flex items-center justify-between shadow-sm">
+                            <div class="flex items-center gap-2">
+                                <img src="https://imersnesia.com/wp-content/uploads/2026/05/Final-Logo-imerswallet-WA-only.webp" alt="Asisten Finansial Logo" class="w-8 h-8 rounded-full object-contain bg-transparent" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/2953/2953536.png';">
+                                <div>
+                                    <h4 class="text-xs font-bold text-white">iMersWallet Assistant</h4>
+                                    <p class="text-[9px] text-emerald-100 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span> Online
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 text-white text-xs">
+                                <i class="fa-solid fa-video"></i>
+                                <i class="fa-solid fa-phone"></i>
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                        <!-- Whatsapp Live simulation messages -->
+                        <div class="flex-1 p-3 space-y-3 bg-[#efeae2] overflow-y-auto font-sans flex flex-col text-[11px] select-none">
+                            <div class="self-center bg-[#d1f4cc]/80 text-slate-700 px-3 py-1 rounded-md text-[9px] text-center shadow-sm">
+                                <i class="fa-solid fa-lock text-[8px] mr-1"></i> Messages are fully end-to-end encrypted.
+                            </div>
+                            <!-- Live interactive bubble indicators inside phone mock -->
+                            <div class="self-start bg-white text-slate-800 max-w-[85%] p-2 rounded-r-lg rounded-bl-lg shadow-sm relative pb-4">
+                                Halo! Saya asisten iMersWallet. Anda bisa langsung chat format seperti ini untuk mencatat uang: <br>
+                                <strong class="text-brand-dark font-semibold">"pemasukan 2jt gajian"</strong> atau <strong class="text-brand-dark font-semibold">"pengeluaran 50rb makan siang"</strong>.
+                                <span class="absolute bottom-0.5 right-1.5 text-[8px] text-slate-400">17.01</span>
+                            </div>
+                            <div class="self-end bg-[#d9fdd3] text-slate-800 max-w-[85%] p-2 rounded-l-lg rounded-br-lg shadow-sm relative pb-4">
+                                Beli masakan Padang 300000
+                                <span class="absolute bottom-0.5 right-1.5 text-[8px] text-slate-400">17.03 <i class="fa-solid fa-check-double text-sky-400"></i></span>
+                            </div>
+                            <div class="self-start bg-white text-slate-800 max-w-[85%] p-2.5 rounded-r-lg rounded-bl-lg shadow-sm relative pb-5 pr-8 min-w-[180px]">
+                                <p class="font-bold text-slate-900 mb-2">✅ Pencatatan Berhasil!</p>
+                                <div class="space-y-0.5 text-slate-700">
+                                    <div>📂 <strong>KANTONG:</strong> <strong>PRIBADI</strong></div>
+                                    <div>💰 <strong>TIPE:</strong> <strong>PENGELUARAN</strong></div>
+                                    <div>📝 <strong>Kategori:</strong> Lainnya</div>
+                                    <div>💬 <strong>Catatan:</strong> Masakan padang</div>
+                                    <div>💸 <strong>Nominal:</strong> <strong>Rp300.000</strong></div>
+                                </div>
+                                <span class="absolute bottom-0.5 right-1.5 text-[8px] text-slate-400">17.03</span>
+                            </div>
+                        </div>
+                        <!-- Virtual keyboard text area inside phone -->
+                        <div class="p-2 bg-slate-900 border-t border-slate-800 flex items-center gap-2">
+                            <div class="flex-1 bg-slate-800 rounded-full px-3 py-1.5 text-slate-400 text-[10px] flex items-center justify-between">
+                                <span>Tulis pesan finansial...</span>
+                                <i class="fa-regular fa-face-smile text-slate-400"></i>
+                            </div>
+                            <div class="w-7 h-7 rounded-full bg-brand-primary flex items-center justify-center text-brand-darker">
+                                <i class="fa-solid fa-microphone text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Card UI Element 1: Saldo Card -->
+                    <div class="absolute -top-6 -left-12 sm:-left-20 glassmorphism p-4 rounded-2xl w-48 shadow-lg shadow-emerald-500/5 animate-float z-30">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[10px] uppercase font-bold text-slate-400">Total Saldo</span>
+                            <div class="w-6 h-6 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xs">
+                                <i class="fa-solid fa-arrow-up-right-dots"></i>
+                            </div>
+                        </div>
+                        <h4 class="text-lg font-bold text-white">Rp 5.250.000</h4>
+                        <span class="text-[9px] text-emerald-400 font-semibold"><i class="fa-solid fa-arrow-up mr-0.5"></i> +12% bulan ini</span>
+                    </div>
+
+                    <!-- Floating Card UI Element 2: Budget Warning -->
+                    <div class="absolute bottom-16 -right-12 sm:-right-20 glassmorphism p-3.5 rounded-2xl w-48 shadow-lg shadow-amber-500/5 animate-float z-30" style="animation-delay: 2s;">
+                        <div class="flex gap-2.5 items-center mb-1.5">
+                            <div class="w-6 h-6 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400 text-xs">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-amber-400">Peringatan Budget</span>
+                        </div>
+                        <p class="text-[10px] text-slate-300">Budget kopi tersisa 10%!</p>
+                    </div>
+
+                    <!-- Floating Card UI Element 3: AI Insight Notification -->
+                    <div class="absolute -bottom-8 -left-8 glassmorphism p-3 rounded-2xl w-52 shadow-lg shadow-cyan-500/5 animate-float z-30" style="animation-delay: 4s;">
+                        <div class="flex gap-2 items-center">
+                            <div class="w-5 h-5 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-[10px]">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-cyan-400">AI Financial Insight</span>
+                        </div>
+                        <p class="text-[9px] text-slate-300 mt-1">Anda bisa hemat Rp350K dengan kurangi jajan minggu ini.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. TRUST / STATS SECTION -->
+    <section class="py-12 bg-brand-dark border-y border-slate-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Stat Card 1 -->
+                <div class="glassmorphism p-6 rounded-2xl text-center hover:scale-[1.03] transition-all duration-300 relative group overflow-hidden box-glow-emerald">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="text-brand-primary text-3xl mb-1"><i class="fa-solid fa-receipt"></i></div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white">10.000+</h3>
+                    <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Transaksi Tercatat</p>
+                </div>
+                <!-- Stat Card 2 -->
+                <div class="glassmorphism p-6 rounded-2xl text-center hover:scale-[1.03] transition-all duration-300 relative group overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="text-brand-primary text-3xl mb-1"><i class="fa-solid fa-users"></i></div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white">1.500+</h3>
+                    <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Pengguna Aktif</p>
+                </div>
+                <!-- Stat Card 3 -->
+                <div class="glassmorphism p-6 rounded-2xl text-center hover:scale-[1.03] transition-all duration-300 relative group overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-secondary to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="text-brand-secondary text-3xl mb-1"><i class="fa-solid fa-gauge-high"></i></div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white">99%</h3>
+                    <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Lebih Cepat</p>
+                </div>
+                <!-- Stat Card 4 -->
+                <div class="glassmorphism p-6 rounded-2xl text-center hover:scale-[1.03] transition-all duration-300 relative group overflow-hidden box-glow-teal">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-secondary to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="text-brand-secondary text-3xl mb-1"><i class="fa-solid fa-clock"></i></div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white">24/7</h3>
+                    <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Auto Report Sync</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. FEATURES SECTION -->
+    <section id="features" class="py-24 relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-brand-primary/5 blur-[150px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Header Features -->
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="text-xs font-bold text-brand-primary tracking-widest uppercase py-1 px-3 bg-brand-primary/10 rounded-full">Fitur Unggulan</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                    Sistem Finansial Paling Praktis & Cerdas
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base">
+                    Segala kemudahan mencatat keuangan terintegrasi dalam satu platform dengan dashboard modern premium yang dapat diakses kapan saja.
+                </p>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Feature 1: WhatsApp Finance Tracker -->
+                <div class="glassmorphism p-8 rounded-3xl hover:-translate-y-2 transition-all duration-300 border border-white/5 relative group overflow-hidden box-glow-emerald">
+                    <div class="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center text-brand-primary text-xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">WhatsApp Finance Tracker</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Cukup kirim format pesan biasa di WhatsApp Anda, asisten iMersWallet secara real-time menguraikan dan mencatatnya.
+                    </p>
+                </div>
+
+                <!-- Feature 2: Smart Budget Reminder -->
+                <div class="glassmorphism p-8 rounded-3xl hover:-translate-y-2 transition-all duration-300 border border-white/5 relative group overflow-hidden">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-400 text-xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Smart Budget Reminder</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Dapatkan peringatan otomatis di WhatsApp saat pengeluaran Anda untuk kategori tertentu mendekati batas budget bulanan.
+                    </p>
+                </div>
+
+                <!-- Feature 3: AI Financial Insight -->
+                <div class="glassmorphism p-8 rounded-3xl hover:-translate-y-2 transition-all duration-300 border border-white/5 relative group overflow-hidden box-glow-teal">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 text-xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">AI Financial Insight</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Asisten AI menganalisis pengeluaran Anda dan memberikan saran kustom untuk memaksimalkan tabungan setiap bulannya.
+                    </p>
+                </div>
+
+                <!-- Feature 4: PDF Report -->
+                <div class="glassmorphism p-8 rounded-3xl hover:-translate-y-2 transition-all duration-300 border border-white/5 relative group overflow-hidden">
+                    <div class="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400 text-xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Download PDF Report</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Unduh laporan arus kas, rincian kategori, dan ringkasan bulanan dengan satu klik dalam bentuk PDF premium yang rapi.
+                    </p>
+                </div>
+
+                <!-- Feature 5: Auto Email Report -->
+                <div class="glassmorphism p-8 rounded-3xl hover:-translate-y-2 transition-all duration-300 border border-white/5 relative group overflow-hidden">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Auto Email Report</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Laporan keuangan mingguan dan bulanan akan terkirim secara otomatis ke email Anda tanpa perlu diekspor manual.
+                    </p>
+                </div>
+
+                <!-- Feature 6: Cashflow Analytics -->
+                <div class="glassmorphism p-8 rounded-3xl hover:-translate-y-2 transition-all duration-300 border border-white/5 relative group overflow-hidden">
+                    <div class="w-12 h-12 rounded-2xl bg-brand-secondary/10 flex items-center justify-center text-brand-secondary text-xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Cashflow Analytics</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Pantau proporsi pemasukan dan pengeluaran melalui grafik interaktif yang mudah dipahami di dashboard pribadi Anda.
+                    </p>
+                </div>
+
+                <!-- Feature 7: Multi Wallet -->
+                <div class="glassmorphism p-8 rounded-3xl hover:-translate-y-2 transition-all duration-300 border border-white/5 relative group overflow-hidden">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Multi Wallet System</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Kelola dompet fisik, rekening bank digital, e-wallet (OVO, Dana, dll) secara terpisah dalam satu asisten terpusat.
+                    </p>
+                </div>
+
+                <!-- Feature 8: Multi User Collaboration -->
+                <div class="glassmorphism p-8 rounded-3xl hover:-translate-y-2 transition-all duration-300 border border-white/5 relative group overflow-hidden box-glow-teal">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 text-xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-people-group"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Multi User System</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Undang pasangan, keluarga, atau staf karyawan Anda untuk mencatat pengeluaran bersama dari nomor WhatsApp masing-masing ke satu dashboard terpusat.
+                    </p>
+                </div>
+
+                <!-- Feature 9: Smart Excel Export -->
+                <div class="glassmorphism p-8 rounded-3xl hover:-translate-y-2 transition-all duration-300 border border-white/5 relative group overflow-hidden box-glow-emerald">
+                    <div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-400 text-xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-file-excel"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Export Excel / CSV</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Butuh pengolahan data lebih lanjut? Ekspor riwayat transaksi lengkap Anda ke Microsoft Excel dalam hitungan detik.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. HOW IT WORKS SECTION -->
+    <section id="how-it-works" class="py-24 bg-brand-dark relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-20 space-y-4">
+                <span class="text-xs font-bold text-brand-secondary tracking-widest uppercase py-1 px-3 bg-brand-secondary/10 rounded-full">Cara Kerja</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
+                    4 Langkah Finansial Tanpa Ribet
+                </h2>
+                <p class="text-slate-400 text-sm">
+                    Mencatat keuangan semudah mengirim chat kepada asisten pribadi Anda.
+                </p>
+            </div>
+
+            <!-- Timeline Steps Container -->
+            <div class="relative">
+                <!-- Center Line for Desktop Timeline -->
+                <div class="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-brand-primary via-brand-secondary to-slate-800 h-full"></div>
+
+                <div class="space-y-16 lg:space-y-24">
+                    <!-- Step 1 -->
+                    <div class="flex flex-col lg:flex-row items-center justify-between relative">
+                        <div class="w-full lg:w-[45%] lg:text-right space-y-4">
+                            <span class="text-4xl font-black bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent">01</span>
+                            <h3 class="text-xl font-bold text-white">Kirim Chat WhatsApp</h3>
+                            <p class="text-slate-400 text-sm">
+                                Ketik pengeluaran atau pemasukan yang Anda lakukan seperti biasa di WhatsApp, misalnya: <span class="text-brand-primary font-mono text-xs">"beli bensin 25rb"</span>.
+                            </p>
+                            <!-- Visual Sample Chat bubble inside step -->
+                            <div class="inline-flex flex-col items-end gap-1 w-full pt-2">
+                                <div class="bg-[#d9fdd3] text-slate-800 text-xs py-2 px-3.5 rounded-l-xl rounded-br-xl shadow-md font-sans">
+                                    beli bensin 25rb
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden lg:flex w-12 h-12 rounded-full bg-brand-dark border-4 border-brand-primary items-center justify-center text-white font-bold z-20 absolute left-1/2 -translate-x-1/2">
+                            <i class="fa-solid fa-message text-xs"></i>
+                        </div>
+                        <div class="w-full lg:w-[45%] pt-8 lg:pt-0">
+                            <div class="p-6 rounded-2xl glassmorphism border border-brand-primary/20 flex items-center justify-center">
+                                <i class="fa-brands fa-whatsapp text-6xl text-brand-primary animate-bounce"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flex flex-col lg:flex-row-reverse items-center justify-between relative">
+                        <div class="w-full lg:w-[45%] space-y-4">
+                            <span class="text-4xl font-black bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent">02</span>
+                            <h3 class="text-xl font-bold text-white">AI Parser Membaca Transaksi</h3>
+                            <p class="text-slate-400 text-sm">
+                                AI pintar kami langsung memproses pesan teks Anda, mendeteksi nominal uang, deskripsi, serta mengelompokkannya ke dalam kategori yang sesuai.
+                            </p>
+                        </div>
+                        <div class="hidden lg:flex w-12 h-12 rounded-full bg-brand-dark border-4 border-brand-primary items-center justify-center text-white font-bold z-20 absolute left-1/2 -translate-x-1/2">
+                            <i class="fa-solid fa-brain text-xs"></i>
+                        </div>
+                        <div class="w-full lg:w-[45%] pt-8 lg:pt-0">
+                            <div class="p-6 rounded-2xl glassmorphism border border-cyan-500/20 flex flex-col items-center gap-2">
+                                <div class="text-center font-mono text-xs text-brand-secondary bg-brand-secondary/10 px-3 py-1.5 rounded-lg">
+                                    [AI PARSING]... Nominal: 25.000 | Kategori: Transportasi
+                                </div>
+                                <i class="fa-solid fa-gears text-5xl text-brand-secondary animate-spin mt-2" style="animation-duration: 6s"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex flex-col lg:flex-row items-center justify-between relative">
+                        <div class="w-full lg:w-[45%] lg:text-right space-y-4">
+                            <span class="text-4xl font-black bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent">03</span>
+                            <h3 class="text-xl font-bold text-white">Sinkronisasi Ke Dashboard</h3>
+                            <p class="text-slate-400 text-sm">
+                                Data transaksi tercatat langsung disinkronkan ke dalam dashboard iMersWallet Anda secara instan tanpa tunda.
+                            </p>
+                        </div>
+                        <div class="hidden lg:flex w-12 h-12 rounded-full bg-brand-dark border-4 border-brand-secondary items-center justify-center text-white font-bold z-20 absolute left-1/2 -translate-x-1/2">
+                            <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                        </div>
+                        <div class="w-full lg:w-[45%] pt-8 lg:pt-0">
+                            <div class="p-6 rounded-2xl glassmorphism border border-purple-500/20 flex justify-center items-center">
+                                <i class="fa-solid fa-rotate text-5xl text-purple-400 animate-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="flex flex-col lg:flex-row-reverse items-center justify-between relative">
+                        <div class="w-full lg:w-[45%] space-y-4">
+                            <span class="text-4xl font-black bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent">04</span>
+                            <h3 class="text-xl font-bold text-white">Visual Analytics & Auto Report</h3>
+                            <p class="text-slate-400 text-sm">
+                                Laporan grafis interaktif langsung diperbarui. Anda bisa memantau tren pengeluaran, mengekspor Excel, atau mengunduh laporan PDF bulanan.
+                            </p>
+                        </div>
+                        <div class="hidden lg:flex w-12 h-12 rounded-full bg-brand-dark border-4 border-brand-secondary items-center justify-center text-white font-bold z-20 absolute left-1/2 -translate-x-1/2">
+                            <i class="fa-solid fa-chart-line text-xs"></i>
+                        </div>
+                        <div class="w-full lg:w-[45%] pt-8 lg:pt-0">
+                            <div class="p-6 rounded-2xl glassmorphism border border-emerald-500/20 flex justify-center items-center">
+                                <i class="fa-solid fa-file-invoice-dollar text-5xl text-brand-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. DASHBOARD PREVIEW SECTION & 9. REPORT/ANALYTICS -->
+    <section id="dashboard" class="py-24 relative overflow-hidden">
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full bg-brand-primary/5 blur-[160px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Header section -->
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="text-xs font-bold text-brand-primary tracking-widest uppercase py-1 px-3 bg-brand-primary/10 rounded-full">Interactive Dashboard Preview</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
+                    Dashboard Keuangan Premium Anda
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base">
+                    Tampilan dashboard modern, informatif, dan sepenuhnya responsif layaknya perbankan digital premium papan atas.
+                </p>
+            </div>
+
+            <!-- Dashboard Main Container Grid -->
+            <div class="glassmorphism p-4 sm:p-8 rounded-3xl border border-white/10 shadow-2xl box-glow-emerald">
+                <!-- Dashboard Top Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Main Balance Card -->
+                    <div class="bg-gradient-to-br from-brand-dark to-slate-900 border border-white/5 p-6 rounded-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <i class="fa-solid fa-wallet text-6xl"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Total Saldo</span>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" id="dashboard-balance">Rp 4.880.000</h3>
+                        <div class="flex items-center gap-1.5 mt-3 text-xs text-brand-primary">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                            <span>Stabil bulan ini</span>
+                        </div>
+                    </div>
+                    <!-- Monthly Income Card -->
+                    <div class="bg-gradient-to-br from-brand-dark to-slate-900 border border-white/5 p-6 rounded-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <i class="fa-solid fa-circle-down text-6xl"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Total Pemasukan</span>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-brand-primary tracking-tight" id="dashboard-income">Rp 5.000.000</h3>
+                        <div class="flex items-center gap-1.5 mt-3 text-xs text-brand-primary">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Gajian & Pendapatan Sampingan</span>
+                        </div>
+                    </div>
+                    <!-- Monthly Expense Card -->
+                    <div class="bg-gradient-to-br from-brand-dark to-slate-900 border border-white/5 p-6 rounded-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <i class="fa-solid fa-circle-up text-6xl"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Total Pengeluaran</span>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-red-400 tracking-tight" id="dashboard-expense">Rp 120.000</h3>
+                        <div class="flex items-center gap-1.5 mt-3 text-xs text-red-400">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>Pengeluaran Kopi & Operasional</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Charts and Tables Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Left: Analytics Line & Bar Chart -->
+                    <div class="lg:col-span-8 bg-brand-dark/50 border border-white/5 p-6 rounded-2xl">
+                        <div class="flex justify-between items-center mb-6">
+                            <h4 class="font-bold text-white text-base flex items-center gap-2">
+                                <i class="fa-solid fa-chart-simple text-brand-primary"></i> Tren Arus Kas Bulanan
+                            </h4>
+                            <div class="flex gap-2">
+                                <button class="px-3 py-1 rounded bg-brand-primary/10 text-brand-primary text-xs font-bold border border-brand-primary/20">Monthly</button>
+                                <button class="px-3 py-1 rounded hover:bg-slate-800 text-slate-400 text-xs transition">Yearly</button>
+                            </div>
+                        </div>
+                        <div class="h-64 sm:h-80 flex items-center justify-center">
+                            <!-- Live Canvas Chart -->
+                            <canvas id="cashflowChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Right: Doughnut Category Chart & Budget Indicator -->
+                    <div class="lg:col-span-4 bg-brand-dark/50 border border-white/5 p-6 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-white text-base mb-6 flex items-center gap-2">
+                                <i class="fa-solid fa-pie-chart text-brand-secondary"></i> Alokasi Pengeluaran
+                            </h4>
+                            <div class="h-44 flex items-center justify-center mb-6">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Budget progress bars -->
+                        <div class="space-y-4">
+                            <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Progress Budget Kategori</h5>
+                            <!-- Budget 1 -->
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-300 font-semibold">Makanan & Minuman</span>
+                                    <span class="text-slate-400"><strong id="food-budget-spent">Rp 120.000</strong> / Rp 1.500.000</span>
+                                </div>
+                                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-brand-primary rounded-full transition-all duration-500" id="food-budget-progress" style="width: 8%"></div>
+                                </div>
+                            </div>
+                            <!-- Budget 2 -->
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-300 font-semibold">Transportasi</span>
+                                    <span class="text-slate-400"><strong id="trans-budget-spent">Rp 0</strong> / Rp 1.000.000</span>
+                                </div>
+                                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-brand-secondary rounded-full transition-all duration-500" id="trans-budget-progress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard bottom block: Recent Transactions list -->
+                <div class="mt-8 bg-brand-dark/50 border border-white/5 p-6 rounded-2xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <h4 class="font-bold text-white text-base flex items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left text-brand-primary"></i> Transaksi Terbaru
+                        </h4>
+                        <!-- Export Actions inside reports dashboard -->
+                        <div class="flex gap-2">
+                            <button id="download-report-btn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-all duration-300 flex items-center gap-2 border border-white/5">
+                                <i class="fa-solid fa-file-pdf text-red-400"></i> Unduh PDF
+                            </button>
+                            <button class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-all duration-300 flex items-center gap-2 border border-white/5">
+                                <i class="fa-solid fa-file-excel text-green-400"></i> Ekspor Excel
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Table wrapper -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 text-xs uppercase font-bold">
+                                    <th class="py-3 px-4">Deskripsi</th>
+                                    <th class="py-3 px-4">Kategori</th>
+                                    <th class="py-3 px-4">Waktu</th>
+                                    <th class="py-3 px-4 text-right">Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transaction-log-body" class="divide-y divide-slate-800/50 text-slate-300">
+                                <!-- Default baseline transactions -->
+                                <tr class="hover:bg-white/5 transition-colors">
+                                    <td class="py-3.5 px-4 font-semibold text-white">Gaji Bulanan Utama</td>
+                                    <td class="py-3.5 px-4"><span class="px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 text-xs">Pemasukan</span></td>
+                                    <td class="py-3.5 px-4 text-xs text-slate-400">Hari ini, 09:00 WIB</td>
+                                    <td class="py-3.5 px-4 text-right text-brand-primary font-bold">+Rp 5.000.000</td>
+                                </tr>
+                                <tr class="hover:bg-white/5 transition-colors">
+                                    <td class="py-3.5 px-4 font-semibold text-white">Kopi & Cemilan Kantor</td>
+                                    <td class="py-3.5 px-4"><span class="px-2 py-1 rounded bg-red-500/10 text-red-400 text-xs">Makanan & Minuman</span></td>
+                                    <td class="py-3.5 px-4 text-xs text-slate-400">Hari ini, 09:30 WIB</td>
+                                    <td class="py-3.5 px-4 text-right text-red-400 font-bold">-Rp 120.000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. WHATSAPP DEMO SECTION -->
+    <section id="demo" class="py-24 bg-brand-dark relative overflow-hidden">
+        <div class="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 rounded-full bg-brand-secondary/10 blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Demo Information Text Content left -->
+                <div class="lg:col-span-5 space-y-6 text-center lg:text-left">
+                    <span class="text-xs font-bold text-brand-primary tracking-widest uppercase py-1 px-3 bg-brand-primary/10 rounded-full">Interactive Simulation</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
+                        Coba Langsung Integrasi Real-Time!
+                    </h2>
+                    <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+                        Klik tombol chat pilihan di bawah untuk mensimulasikan pesan WhatsApp ke asisten iMersWallet. Lihat bagaimana chatbot merespons secara instan dan memperbarui saldo serta grafik kategori di dashboard!
+                    </p>
+
+                    <!-- Interactive Command Chips/Buttons -->
+                    <div class="pt-4 space-y-3">
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Pilih Perintah Simulasi:</p>
+                        <div class="flex flex-wrap gap-2 justify-center lg:justify-start">
+                            <button onclick="simulateMessage('Beli masakan Padang 300000', 300000, 'PENGELUARAN', 'PRIBADI', 'Lainnya', 'Masakan padang')" class="chat-preset-btn px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 hover:border-brand-primary border border-transparent text-xs font-semibold text-slate-200 transition-all duration-300 text-left flex items-center gap-2">
+                                🍱 Beli Masakan Padang Rp300K (Pribadi)
+                            </button>
+                            <button onclick="simulateMessage('Beli bahan baku toko terigu 50000', 50000, 'PENGELUARAN', 'BISNIS', 'Lainnya', 'Bahan baku toko terigu')" class="chat-preset-btn px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 hover:border-brand-primary border border-transparent text-xs font-semibold text-slate-200 transition-all duration-300 text-left flex items-center gap-2">
+                                🥖 Beli Terigu Toko Rp50K (Bisnis)
+                            </button>
+                            <button onclick="simulateMessage('Gaji bulanan masuk 5000000', 5000000, 'PEMASUKAN', 'PRIBADI', 'Gaji', 'Gaji bulanan utama')" class="chat-preset-btn px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 hover:border-brand-primary border border-transparent text-xs font-semibold text-slate-200 transition-all duration-300 text-left flex items-center gap-2">
+                                📥 Gaji Bulanan Rp5M (Pribadi)
+                            </button>
+                            <button onclick="simulateMessage('Beli bensin motor 25000', 25000, 'PENGELUARAN', 'PRIBADI', 'Transportasi', 'Bensin motor')" class="chat-preset-btn px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 hover:border-brand-primary border border-transparent text-xs font-semibold text-slate-200 transition-all duration-300 text-left flex items-center gap-2">
+                                🚗 Beli Bensin Rp25K (Pribadi)
+                            </button>
+                        </div>
+                        <button onclick="resetSimulation()" class="text-xs text-brand-secondary underline mt-4 block hover:text-white transition">
+                            <i class="fa-solid fa-rotate-left"></i> Reset Grafik & Saldo Ke Awal
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Simulation Phone Render right -->
+                <div class="lg:col-span-7 flex justify-center">
+                    <div class="w-full max-w-md h-[540px] rounded-[32px] border-4 border-slate-800 bg-brand-darker flex flex-col overflow-hidden relative shadow-2xl box-glow-teal">
+                        <!-- Top status bar inside simulated device -->
+                        <div class="h-6 w-full bg-slate-950 flex justify-between items-center px-4 text-[10px] text-slate-400">
+                            <span>17.03</span>
+                            <div class="flex gap-1.5 items-center">
+                                <i class="fa-solid fa-signal"></i>
+                                <i class="fa-solid fa-wifi"></i>
+                                <i class="fa-solid fa-battery-three-quarters"></i>
+                            </div>
+                        </div>
+
+                        <!-- Virtual Header -->
+                        <div class="bg-[#075E54] py-3 px-4 flex items-center justify-between text-white">
+                            <div class="flex items-center gap-2">
+                                <img src="https://imersnesia.com/wp-content/uploads/2026/05/Final-Logo-imerswallet-WA-only.webp" alt="Asisten Finansial Logo" class="w-8 h-8 rounded-full object-contain bg-transparent" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/2953/2953536.png';">
+                                <div>
+                                    <h4 class="text-xs font-bold">iMersWallet AI Assistant</h4>
+                                    <p class="text-[9px] text-emerald-100 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block animate-pulse"></span> Online
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 text-xs">
+                                <i class="fa-solid fa-video"></i>
+                                <i class="fa-solid fa-phone"></i>
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+
+                        <!-- Chat Messages Window Arena -->
+                        <div id="simulated-chat-window" class="flex-1 p-4 space-y-4 bg-[#efeae2] overflow-y-auto font-sans flex flex-col text-xs scroll-smooth">
+                            <div class="self-center bg-[#d1f4cc]/80 text-slate-700 px-3 py-1 rounded-md text-[9px] text-center shadow-sm">
+                                <i class="fa-solid fa-lock text-[8px] mr-1"></i> Mulai chat asisten finansial virtual Anda di bawah.
+                            </div>
+
+                            <div class="self-start bg-white text-slate-800 max-w-[85%] p-2.5 rounded-r-lg rounded-bl-lg shadow-sm">
+                                Halo! Saya bot iMersWallet. Silakan ketik perintah transaksimu dengan menekan salah satu tombol pilihan di sebelah kiri!
+                            </div>
+                        </div>
+
+                        <!-- Input container showing type simulated text -->
+                        <div class="p-2.5 bg-slate-900 border-t border-slate-800 flex items-center gap-2">
+                            <div class="flex-1 bg-slate-800 rounded-full px-4 py-2 text-slate-400 text-xs flex items-center justify-between">
+                                <span id="simulated-input-box" class="italic text-slate-500">Pilih tombol di sebelah kiri...</span>
+                                <i class="fa-regular fa-face-smile text-slate-400"></i>
+                            </div>
+                            <button id="simulated-send-btn" class="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center text-brand-darker hover:scale-105 active:scale-95 transition-all">
+                                <i class="fa-solid fa-paper-plane text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. SMART FEATURES SECTION -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-brand-primary/10 blur-[130px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="text-xs font-bold text-brand-primary tracking-widest uppercase py-1 px-3 bg-brand-primary/10 rounded-full">Keamanan & Otomasi</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
+                    Proteksi Maksimal & Integrasi Instan
+                </h2>
+                <p class="text-slate-400 text-sm">
+                    Fitur cerdas terkanggih untuk menjamin keamanan catatan finansial Anda tanpa hambatan.
+                </p>
+            </div>
+
+            <!-- Smart Automation Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Smart Budget Card -->
+                <div class="glassmorphism p-6 rounded-2xl border border-white/5 relative overflow-hidden group hover:scale-[1.02] transition-transform box-glow-emerald">
+                    <div class="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary text-lg mb-4">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h4 class="font-bold text-white text-base mb-2">Authorized Number Security</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Hanya nomor telepon yang terdaftar dan terverifikasi OTP yang dapat melakukan pencatatan finansial demi menghindari manipulasi data oleh pihak lain.
+                    </p>
+                </div>
+
+                <!-- Saving Reminder -->
+                <div class="glassmorphism p-6 rounded-2xl border border-white/5 relative overflow-hidden group hover:scale-[1.02] transition-transform">
+                    <div class="w-10 h-10 rounded-xl bg-brand-secondary/10 flex items-center justify-center text-brand-secondary text-lg mb-4">
+                        <i class="fa-solid fa-piggy-bank"></i>
+                    </div>
+                    <h4 class="font-bold text-white text-base mb-2">Smart Saving Suggestion</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Mengidentifikasi pola pemborosan secara berkala dan otomatis menyarankan sisa dana untuk disimpan ke dalam kantong tabungan impian Anda.
+                    </p>
+                </div>
+
+                <!-- Auto PDF Report PDF -->
+                <div class="glassmorphism p-6 rounded-2xl border border-white/5 relative overflow-hidden group hover:scale-[1.02] transition-transform box-glow-teal">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 text-lg mb-4">
+                        <i class="fa-solid fa-file-invoice"></i>
+                    </div>
+                    <h4 class="font-bold text-white text-base mb-2">Auto-Generated PDF Report</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Dapatkan kiriman PDF rangkuman bulanan secara langsung tanpa delay, siap dicetak atau dilampirkan untuk pengajuan bisnis.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. TESTIMONIAL SECTION -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="text-xs font-bold text-brand-primary tracking-widest uppercase py-1 px-3 bg-brand-primary/10 rounded-full">Testimoni Pengguna</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
+                    Apa Kata Mereka Tentang Kami?
+                </h2>
+                <p class="text-slate-400 text-sm">
+                    Dengarkan kepuasan langsung dari para pebisnis, profesional, dan UMKM yang terbantu keuangannya.
+                </p>
+            </div>
+
+            <!-- Testimonial Interactive Carousel/Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Testi 1 -->
+                <div class="glassmorphism p-8 rounded-3xl relative flex flex-col justify-between hover:scale-[1.02] transition-transform">
+                    <div class="text-amber-400 text-sm mb-4">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-sm text-slate-300 italic mb-6">
+                        "Sekarang catat uang tinggal kirim chat WA. Praktis sekali ga perlu buka aplikasi ribet pas lagi sibuk di jalan. Dashboard asistennya mantap!"
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold text-xs">
+                            RH
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Rian Hidayat</h4>
+                            <p class="text-[10px] text-slate-400">Pemilik Kedai Kopi</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testi 2 -->
+                <div class="glassmorphism p-8 rounded-3xl relative flex flex-col justify-between hover:scale-[1.02] transition-transform border border-brand-primary/20 box-glow-emerald">
+                    <div class="text-amber-400 text-sm mb-4">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-sm text-slate-300 italic mb-6">
+                        "Dashboard-nya keren banget seperti aplikasi bank digital premium. Fitur download PDF-nya rapi untuk laporan keuangan usaha kecil saya."
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-brand-primary flex items-center justify-center text-brand-darker font-bold text-xs">
+                            AS
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Anisa S.</h4>
+                            <p class="text-[10px] text-brand-primary font-bold">Freelance Designer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testi 3 -->
+                <div class="glassmorphism p-8 rounded-3xl relative flex flex-col justify-between hover:scale-[1.02] transition-transform">
+                    <div class="text-amber-400 text-sm mb-4">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-sm text-slate-300 italic mb-6">
+                        "Asisten AI insight-nya beneran bantu buat mengidentifikasi pengeluaran impulsif saya. Rekomendasi hematnya sangat logis!"
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold text-xs">
+                            WD
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Wawan D.</h4>
+                            <p class="text-[10px] text-slate-400">Karyawan Swasta</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 12. PRICING SECTION -->
+    <section id="pricing" class="py-24 bg-brand-dark relative overflow-hidden">
+        <div class="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-brand-primary/10 blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Header pricing -->
+            <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
+                <span class="text-xs font-bold text-brand-primary tracking-widest uppercase py-1 px-3 bg-brand-primary/10 rounded-full">Paket Harga</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
+                    Satu Harga untuk Akses Selamanya
+                </h2>
+                <p class="text-slate-400 text-sm">
+                    Tanpa biaya bulanan atau tahunan tersembunyi. Dapatkan seluruh fitur asisten keuangan premium iMersWallet selamanya.
+                </p>
+            </div>
+
+            <!-- Single Lifetime Pricing Card -->
+            <div class="max-w-3xl mx-auto">
+                <div class="glassmorphism p-8 sm:p-12 rounded-3xl border border-brand-primary relative hover:scale-[1.01] transition-all duration-300 box-glow-emerald flex flex-col md:flex-row gap-8 items-center justify-between">
+                    <span class="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-brand-primary to-brand-secondary text-brand-darker font-extrabold text-[10px] uppercase tracking-wider px-4 py-1.5 rounded-full shadow-lg">🔥 RESELLER RIGHT</span>
+                    
+                    <div class="space-y-6 flex-1">
+                        <div>
+                            <span class="text-xs font-bold text-brand-primary uppercase tracking-wider block mb-1">PREMIUM PRO</span>
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-5xl font-black text-white">Rp Under 40K</span>
+                                <span class="text-xs text-brand-primary bg-brand-primary/10 px-2 py-1 rounded-md font-bold">Sekali Bayar</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-3">Sempurna untuk personal, UMKM, dan profesional yang ingin melacak & mengoptimalkan cashflow tanpa batas kuota.</p>
+                        </div>
+                        
+                        <div class="border-t border-slate-800 pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-300">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-brand-primary"></i>
+                                <span>Nomor WhatsApp Terdaftar</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-brand-primary"></i>
+                                <span>Pencatatan Transaksi Unlimited</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-brand-primary"></i>
+                                <span>Premium Dashboard Access</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-brand-primary"></i>
+                                <span>Laporan PDF & Excel Bulanan Bisa Harian</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-brand-primary"></i>
+                                <span>Fitur Multi User Untuk Chat Ke ChatBOT</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-brand-primary"></i>
+                                <span>Bisa dijual Kembali Hak Yang Sama Untuk Pembeli Anda</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-auto flex flex-col items-center">
+                        <a href="https://chat.whatsapp.com/LWR3aWcIYAN0LRKLm0692j" target="_blank" class="w-full md:w-64 text-center py-4 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary text-brand-darker font-extrabold text-sm block hover:scale-[1.03] transition-transform shadow-lg shadow-brand-primary/25">
+                            Join Waiting List Sekarang
+                        </a>
+                        <span class="text-[10px] text-slate-500 mt-2"><i class="fa-solid fa-shield-halved mr-1 text-brand-primary"></i> Special Price 24 Jam </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 13. FAQ SECTION -->
+    <section id="faq" class="py-24 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="text-xs font-bold text-brand-primary tracking-widest uppercase py-1 px-3 bg-brand-primary/10 rounded-full">FAQ</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
+                    Pertanyaan Yang Sering Diajukan
+                </h2>
+                <p class="text-slate-400 text-sm">
+                    Temukan jawaban atas semua kebingungan operasional platform iMersWallet Anda di sini.
+                </p>
+            </div>
+
+            <!-- Accordion List -->
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="glassmorphism rounded-2xl overflow-hidden border border-white/5">
+                    <button class="w-full text-left p-6 flex justify-between items-center text-slate-100 font-bold text-sm sm:text-base focus:outline-none" onclick="toggleAccordion(1)">
+                        <span class="bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent font-extrabold">Bagaimana cara kerja pencatatan keuangan dari WhatsApp?</span>
+                        <i id="faq-icon-1" class="fa-solid fa-chevron-down text-brand-primary transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-content-1" class="hidden px-6 pb-6 text-slate-400 text-xs sm:text-sm leading-relaxed">
+                        Anda hanya perlu menambahkan nomor WhatsApp asisten resmi iMersWallet ke kontak Anda. Setelah melakukan verifikasi cepat via login, Anda sudah bisa langsung mengetik pengeluaran secara bebas (Contoh: "bayar makan siang 45rb") dan bot kami otomatis menerjemahkannya ke database dashboard Anda.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 (UPDATED WITH GOOGLE SHEET STORAGE ANSWER) -->
+                <div class="glassmorphism rounded-2xl overflow-hidden border border-white/5">
+                    <button class="w-full text-left p-6 flex justify-between items-center text-slate-100 font-bold text-sm sm:text-base focus:outline-none" onclick="toggleAccordion(2)">
+                        <span class="bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent font-extrabold">Apakah data keuangan pribadi saya aman?</span>
+                        <i id="faq-icon-2" class="fa-solid fa-chevron-down text-brand-primary transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-content-2" class="hidden px-6 pb-6 text-slate-400 text-xs sm:text-sm leading-relaxed">
+                        Tentu saja sangat aman! iMersWallet tidak menyimpan data transaksi di server kami pribadi, melainkan <strong>terintegrasi langsung menggunakan penyimpanan Google Sheets milik Anda sendiri</strong>. Anda memegang kendali penuh 100% atas keamanan data, privasi, serta akses data finansial Anda tanpa khawatir terjadi kebocoran data eksternal.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="glassmorphism rounded-2xl overflow-hidden border border-white/5">
+                    <button class="w-full text-left p-6 flex justify-between items-center text-slate-100 font-bold text-sm sm:text-base focus:outline-none" onclick="toggleAccordion(3)">
+                        <span class="bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent font-extrabold">Apakah iMersWallet mendukung multi-user dan kolaborasi tim?</span>
+                        <i id="faq-icon-3" class="fa-solid fa-chevron-down text-brand-primary transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-content-3" class="hidden px-6 pb-6 text-slate-400 text-xs sm:text-sm leading-relaxed">
+                        Ya, iMersWallet mendukung fitur Multi-User. Melalui paket Premium Pro Lifetime ini, Anda bisa menambahkan nomor WhatsApp pasangan, keluarga, atau staf karyawan Anda untuk berkontribusi mencatat pengeluaran dan pemasukan bersama di satu dashboard terpusat.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="glassmorphism rounded-2xl overflow-hidden border border-white/5">
+                    <button class="w-full text-left p-6 flex justify-between items-center text-slate-100 font-bold text-sm sm:text-base focus:outline-none" onclick="toggleAccordion(4)">
+                        <span class="bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent font-extrabold">Apakah laporan otomatis bisa diekspor ke Excel / PDF?</span>
+                        <i id="faq-icon-4" class="fa-solid fa-chevron-down text-brand-primary transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-content-4" class="hidden px-6 pb-6 text-slate-400 text-xs sm:text-sm leading-relaxed">
+                        Tentu! Anda bisa mengunduh ringkasan pengeluaran dan pemasukan bulanan Anda ke format PDF dengan tata letak profesional atau mengekspor rincian riwayat lengkap ke Microsoft Excel (.xlsx) kapan saja dari dashboard.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 14. CTA SECTION -->
+    <section class="py-24 relative overflow-hidden bg-gradient-to-t from-brand-dark to-brand-darker border-t border-slate-900">
+        <!-- Background Glowing Orb -->
+        <div class="absolute inset-x-0 bottom-0 h-80 bg-brand-primary/10 blur-[150px] pointer-events-none rounded-t-full"></div>
+
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
+                Mulai Kelola Keuangan Lebih <span class="bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent text-glow">Mudah & Otomatis</span>
+            </h2>
+            <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+                Gunakan asisten finansial cerdas berbasis WhatsApp terbaik untuk memantau setiap rupiah yang Anda hasilkan dan belanjakan sekarang juga.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+                <a href="https://chat.whatsapp.com/LWR3aWcIYAN0LRKLm0692j" target="_blank" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-primary to-brand-secondary text-brand-darker font-extrabold text-sm sm:text-base shadow-xl shadow-brand-primary/20 hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-xl"></i> Mulai Sekarang Secara Gratis
+                </a>
+                <a href="#demo" class="px-8 py-4 rounded-2xl border border-slate-800 hover:border-slate-600 text-white font-semibold text-sm sm:text-base transition-all duration-300">
+                    Coba Interactive Demo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 15. FOOTER -->
+    <footer class="bg-brand-darker text-slate-400 py-16 border-t border-slate-900 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <!-- Footer Brand Column -->
+                <div class="space-y-4">
+                    <a href="#" class="flex items-center space-x-3 group">
+                        <img src="https://imersnesia.com/wp-content/uploads/2026/05/Final-Logo-imerswallet-WA-only.webp" alt="iMersWallet Logo" class="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-110" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/2953/2953536.png';">
+                        <span class="text-base font-extrabold text-white tracking-wide">iMers<span class="text-brand-primary">Wallet</span></span>
+                    </a>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Asisten finansial digital premium modern berbasis AI WhatsApp Ledger untuk kemudahan tracking cashflow Anda.
+                    </p>
+                    <!-- Social icons -->
+                    <div class="flex space-x-4 pt-2">
+                        <a href="#" class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center hover:text-brand-primary transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center hover:text-brand-primary transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center hover:text-brand-primary transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!-- Navigation Column -->
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Navigasi</h4>
+                    <ul class="space-y-2.5 text-xs">
+                        <li><a href="#home" class="hover:text-brand-primary transition-colors">Home</a></li>
+                        <li><a href="#features" class="hover:text-brand-primary transition-colors">Fitur Utama</a></li>
+                        <li><a href="#how-it-works" class="hover:text-brand-primary transition-colors">Cara Kerja</a></li>
+                        <li><a href="#dashboard" class="hover:text-brand-primary transition-colors">Dashboard Preview</a></li>
+                    </ul>
+                </div>
+
+                <!-- Products/Licensing -->
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Produk & Layanan</h4>
+                    <ul class="space-y-2.5 text-xs">
+                        <li><a href="#pricing" class="hover:text-brand-primary transition-colors">Paket Lifetime</a></li>
+                        <li><a href="#demo" class="hover:text-brand-primary transition-colors">Interactive Demo</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support & Contact -->
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Hubungi Kami</h4>
+                    <ul class="space-y-2.5 text-xs">
+                        <li><span class="flex items-center gap-2"><i class="fa-solid fa-envelope text-brand-primary"></i> support@imersnesia.com</span></li>
+                        <li><span class="flex items-center gap-2"><i class="fa-brands fa-whatsapp text-brand-primary text-base"></i> +62 877-7264-2997</span></li>
+                        <li><span class="flex items-center gap-2"><i class="fa-solid fa-map-pin text-brand-primary"></i> Bogor, Indonesia</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright Block -->
+            <div class="border-t border-slate-900 pt-8 text-center text-xs text-slate-600 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p>&copy; 2026 iMersWallet. Hak Cipta Dilindungi Undang-Undang.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-brand-primary transition-colors">Kebijakan Privasi</a>
+                    <a href="#" class="hover:text-brand-primary transition-colors">Syarat & Ketentuan</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- sticky bottom mobile premium navigation bar dengan icon warna warni -->
+    <div class="md:hidden fixed bottom-0 inset-x-0 z-50 px-4 pb-4 pt-2 bg-gradient-to-t from-brand-darker via-brand-darker/95 to-transparent">
+        <div class="glassmorphism rounded-2xl px-2 py-2 flex justify-around items-center border border-white/10 shadow-2xl shadow-brand-primary/15 relative">
+            
+            <!-- Tab 1: Home -->
+            <a href="#home" class="flex flex-col items-center justify-center w-12 py-1 transition-all active:scale-95 group">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-house text-base"></i>
+                </div>
+                <span class="text-[9px] font-bold text-emerald-400 mt-0.5">Home</span>
+            </a>
+
+            <!-- Tab 2: Fitur -->
+            <a href="#features" class="flex flex-col items-center justify-center w-12 py-1 transition-all active:scale-95 group">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-wand-magic-sparkles text-base"></i>
+                </div>
+                <span class="text-[9px] font-semibold text-slate-400 mt-0.5 group-hover:text-cyan-300">Features</span>
+            </a>
+
+            <!-- Tab 3: Central Pulse Glowing Action Button (Demo / Chat AI) -->
+            <div class="relative -top-5">
+                <!-- Ping effect -->
+                <span class="absolute top-0 left-0 w-14 h-14 rounded-full bg-brand-primary/30 animate-ping -z-10"></span>
+                <a href="#demo" class="w-14 h-14 rounded-full bg-gradient-to-tr from-brand-primary to-brand-secondary flex items-center justify-center text-brand-darker shadow-lg shadow-brand-primary/40 hover:scale-110 active:scale-95 transition-all duration-300">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                </a>
+                <span class="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-black text-brand-primary whitespace-nowrap tracking-wide uppercase">Coba Demo</span>
+            </div>
+
+            <!-- Tab 4: Harga -->
+            <a href="#pricing" class="flex flex-col items-center justify-center w-12 py-1 transition-all active:scale-95 group">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-tags text-base"></i>
+                </div>
+                <span class="text-[9px] font-semibold text-slate-400 mt-0.5 group-hover:text-amber-300">Harga</span>
+            </a>
+
+            <!-- Tab 5: FAQ -->
+            <a href="#faq" class="flex flex-col items-center justify-center w-12 py-1 transition-all active:scale-95 group">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-circle-question text-base"></i>
+                </div>
+                <span class="text-[9px] font-semibold text-slate-400 mt-0.5 group-hover:text-purple-300">FAQ</span>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC SECTION -->
+    <script>
+        // Hamburger Menu Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        // Open Menu
+        function openMenu() {
+            mobileMenu.classList.remove('hidden');
+            setTimeout(() => {
+                mobileMenu.classList.remove('opacity-0', 'translate-x-full');
+            }, 50);
+        }
+
+        // Close Menu
+        function closeMenu() {
+            mobileMenu.classList.add('opacity-0', 'translate-x-full');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300);
+        }
+
+        mobileMenuBtn.addEventListener('click', openMenu);
+        closeMenuBtn.addEventListener('click', closeMenu);
+        mobileNavLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+        // Sticky Header / Navbar Blur Event
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-3', 'shadow-2xl');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-3', 'shadow-2xl');
+            }
+        });
+
+        // FAQ Accordion Handler
+        function toggleAccordion(id) {
+            const content = document.getElementById(`faq-content-${id}`);
+            const icon = document.getElementById(`faq-icon-${id}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        // ==========================================
+        // DYNAMIC FINANCIAL STATE & CHART SIMULATOR
+        // ==========================================
+        let financialState = {
+            balance: 4880000,
+            income: 5000000,
+            expense: 120000,
+            foodSpent: 120000,
+            transportSpent: 0,
+            otherSpent: 0,
+            monthlyLabels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni'],
+            incomeData: [4000000, 4200000, 4500000, 4800000, 5000000, 5000000],
+            expenseData: [800000, 950000, 1100000, 750000, 1200000, 120000]
+        };
+
+        let cashflowChartObj = null;
+        let categoryChartObj = null;
+
+        // Initialize Charts with Baseline Data
+        function initCharts() {
+            // Cashflow Line & Bar Chart
+            const ctxCashflow = document.getElementById('cashflowChart').getContext('2d');
+            cashflowChartObj = new Chart(ctxCashflow, {
+                type: 'line',
+                data: {
+                    labels: financialState.monthlyLabels,
+                    datasets: [
+                        {
+                            label: 'Pemasukan',
+                            data: financialState.incomeData,
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 201, 0.05)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3
+                        },
+                        {
+                            label: 'Pengeluaran',
+                            data: financialState.expenseData,
+                            borderColor: '#EF4444',
+                            backgroundColor: 'transparent',
+                            tension: 0.4,
+                            borderWidth: 2,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#94a3b8', font: { size: 10 } }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: '#94a3b8', font: { size: 9 } },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        },
+                        x: {
+                            ticks: { color: '#94a3b8', font: { size: 9 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Expense Category Doughnut Chart
+            const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+            categoryChartObj = new Chart(ctxCategory, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Makanan', 'Transportasi', 'Lainnya'],
+                    datasets: [{
+                        data: [financialState.foodSpent, financialState.transportSpent, financialState.otherSpent],
+                        backgroundColor: ['#10B981', '#06B6D4', '#F59E0B'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#94a3b8', font: { size: 9 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Live update dashboard UI figures & progress
+        function updateDashboardUI() {
+            document.getElementById('dashboard-balance').textContent = `Rp ${financialState.balance.toLocaleString('id-ID')}`;
+            document.getElementById('dashboard-income').textContent = `Rp ${financialState.income.toLocaleString('id-ID')}`;
+            document.getElementById('dashboard-expense').textContent = `Rp ${financialState.expense.toLocaleString('id-ID')}`;
+            
+            // Food Progress
+            document.getElementById('food-budget-spent').textContent = `Rp ${financialState.foodSpent.toLocaleString('id-ID')}`;
+            let progressPct = (financialState.foodSpent / 1500000) * 100;
+            document.getElementById('food-budget-progress').style.width = `${Math.min(progressPct, 100)}%`;
+
+            // Transport Progress
+            document.getElementById('trans-budget-spent').textContent = `Rp ${financialState.transportSpent.toLocaleString('id-ID')}`;
+            let transProgressPct = (financialState.transportSpent / 100000) * 100;
+            document.getElementById('trans-budget-progress').style.width = `${Math.min(transProgressPct, 100)}%`;
+
+            // Redraw charts
+            if (cashflowChartObj && categoryChartObj) {
+                // Update cashflow dataset latest index (Juni)
+                cashflowChartObj.data.datasets[0].data[5] = financialState.income;
+                cashflowChartObj.data.datasets[1].data[5] = financialState.expense;
+                cashflowChartObj.update();
+
+                // Update category doughnut
+                categoryChartObj.data.datasets[0].data = [
+                    financialState.foodSpent,
+                    financialState.transportSpent,
+                    financialState.otherSpent
+                ];
+                categoryChartObj.update();
+            }
+        }
+
+        // Simulated chat interaction
+        function simulateMessage(text, amount, type, kantong, category, catatan) {
+            const chatWindow = document.getElementById('simulated-chat-window');
+            const inputBox = document.getElementById('simulated-input-box');
+            
+            // Set user virtual typing text
+            inputBox.textContent = text;
+            inputBox.classList.remove('italic', 'text-slate-500');
+            inputBox.classList.add('text-white');
+
+            // Format current WhatsApp time (e.g. 17.03)
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '.');
+
+            // Send action simulator delay
+            setTimeout(() => {
+                // Append User bubble to chat window
+                const userBubble = document.createElement('div');
+                userBubble.className = 'self-end bg-[#d9fdd3] text-slate-800 max-w-[85%] p-2.5 rounded-l-lg rounded-br-lg shadow-sm relative pb-4 animate-slide-up font-sans';
+                userBubble.innerHTML = `
+                    ${text}
+                    <span class="absolute bottom-0.5 right-1.5 text-[8px] text-slate-400">${timeStr} <i class="fa-solid fa-check-double text-sky-400"></i></span>
+                `;
+                chatWindow.appendChild(userBubble);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+
+                // Reset typing label
+                inputBox.textContent = 'Pilih tombol di sebelah kiri...';
+                inputBox.classList.add('italic', 'text-slate-500');
+                inputBox.classList.remove('text-white');
+
+                // Trigger Bot parser typing response delay
+                setTimeout(() => {
+                    // Update global financial state variables
+                    if (type === 'PEMASUKAN') {
+                        financialState.income += amount;
+                        financialState.balance += amount;
+                    } else {
+                        financialState.expense += amount;
+                        financialState.balance -= amount;
+                        if (category === 'Makanan & Minuman') {
+                            financialState.foodSpent += amount;
+                        } else if (category === 'Transportasi') {
+                            financialState.transportSpent += amount;
+                        } else {
+                            financialState.otherSpent += amount;
+                        }
+                    }
+
+                    // Append bot success bubble
+                    const botBubble = document.createElement('div');
+                    botBubble.className = 'self-start bg-white text-slate-800 max-w-[85%] p-2.5 rounded-r-lg rounded-bl-lg shadow-sm relative pb-5 pr-8 min-w-[180px] animate-slide-up font-sans';
+                    
+                    botBubble.innerHTML = `
+                        <p class="font-bold text-slate-900 mb-2">✅ Pencatatan Berhasil!</p>
+                        <div class="space-y-0.5 text-slate-700">
+                            <div>📂 <strong>KANTONG:</strong> <strong>${kantong}</strong></div>
+                            <div>💰 <strong>TIPE:</strong> <strong>${type}</strong></div>
+                            <div>📝 <strong>Kategori:</strong> ${category}</div>
+                            <div>💬 <strong>Catatan:</strong> ${catatan}</div>
+                            <div>💸 <strong>Nominal:</strong> <strong>Rp${amount.toLocaleString('id-ID').replace(/\s/g, '')}</strong></div>
+                        </div>
+                        <span class="absolute bottom-0.5 right-1.5 text-[8px] text-slate-400">${timeStr}</span>
+                    `;
+                    chatWindow.appendChild(botBubble);
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+
+                    // Append transaction log row to dashboard list
+                    const tableBody = document.getElementById('transaction-log-body');
+                    const newRow = document.createElement('tr');
+                    newRow.className = 'hover:bg-white/5 transition-colors animate-slide-up';
+                    
+                    let isIncome = type === 'PEMASUKAN';
+                    let badgeClass = isIncome ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400';
+                    let amountPref = isIncome ? `+Rp ${amount.toLocaleString('id-ID')}` : `-Rp ${amount.toLocaleString('id-ID')}`;
+                    let colorClass = isIncome ? 'text-brand-primary' : 'text-red-400';
+
+                    newRow.innerHTML = `
+                        <td class="py-3.5 px-4 font-semibold text-white">${catatan}</td>
+                        <td class="py-3.5 px-4"><span class="px-2 py-1 rounded ${badgeClass} text-xs">${category}</span></td>
+                        <td class="py-3.5 px-4 text-xs text-slate-400">Hari ini, ${now.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})} WIB</td>
+                        <td class="py-3.5 px-4 text-right ${colorClass} font-bold">${amountPref}</td>
+                    `;
+                    tableBody.insertBefore(newRow, tableBody.firstChild);
+
+                    // Update live visual indicators on main dashboard preview
+                    updateDashboardUI();
+
+                }, 1000);
+
+            }, 400);
+        }
+
+        // Clear and Reset baseline states
+        function resetSimulation() {
+            financialState = {
+                balance: 4880000,
+                income: 5000000,
+                expense: 120000,
+                foodSpent: 120000,
+                transportSpent: 0,
+                otherSpent: 0,
+                monthlyLabels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni'],
+                incomeData: [4000000, 4200000, 4500000, 4800000, 5000000, 5000000],
+                expenseData: [800000, 950000, 1100000, 750000, 1200000, 120000]
+            };
+
+            const tableBody = document.getElementById('transaction-log-body');
+            tableBody.innerHTML = `
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-3.5 px-4 font-semibold text-white">Gaji Bulanan Utama</td>
+                    <td class="py-3.5 px-4"><span class="px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 text-xs">Pemasukan</span></td>
+                    <td class="py-3.5 px-4 text-xs text-slate-400">Hari ini, 09:00 WIB</td>
+                    <td class="py-3.5 px-4 text-right text-brand-primary font-bold">+Rp 5.000.000</td>
+                </tr>
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-3.5 px-4 font-semibold text-white">Kopi & Cemilan Kantor</td>
+                    <td class="py-3.5 px-4"><span class="px-2 py-1 rounded bg-red-500/10 text-red-400 text-xs">Makanan & Minuman</span></td>
+                    <td class="py-3.5 px-4 text-xs text-slate-400">Hari ini, 09:30 WIB</td>
+                    <td class="py-3.5 px-4 text-right text-red-400 font-bold">-Rp 120.000</td>
+                </tr>
+            `;
+
+            const chatWindow = document.getElementById('simulated-chat-window');
+            chatWindow.innerHTML = `
+                <div class="self-center bg-[#d1f4cc]/80 text-slate-700 px-3 py-1 rounded-md text-[9px] text-center shadow-sm">
+                    <i class="fa-solid fa-lock text-[8px] mr-1"></i> Mulai chat asisten finansial virtual Anda di bawah.
+                </div>
+                <div class="self-start bg-white text-slate-800 max-w-[85%] p-2.5 rounded-r-lg rounded-bl-lg shadow-sm font-sans">
+                    Halo! Saya bot iMersWallet. Silakan ketik perintah transaksimu dengan menekan salah satu tombol pilihan di sebelah kiri!
+                </div>
+            `;
+
+            updateDashboardUI();
+        }
+
+        // Window load initializer
+        window.onload = function() {
+            initCharts();
+            updateDashboardUI();
+
+            // Simple reveal scroll animations using Intersection Observer
+            const sections = document.querySelectorAll('section');
+            const observerOptions = {
+                root: null,
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                section.classList.add('reveal');
+                observer.observe(section);
+            });
+
+            // Mock PDF generator download indicator
+            document.getElementById('download-report-btn').addEventListener('click', function() {
+                const btn = this;
+                btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Menyiapkan PDF...`;
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    btn.innerHTML = `<i class="fa-solid fa-circle-check text-green-400"></i> Berhasil Diunduh!`;
+                    setTimeout(() => {
+                        btn.innerHTML = `<i class="fa-solid fa-file-pdf text-red-400"></i> Unduh PDF`;
+                        btn.disabled = false;
+                    }, 2000);
+                }, 1500);
+            });
+        }
+    </script>
+</body>
+</html>
